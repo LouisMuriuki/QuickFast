@@ -3,13 +3,14 @@ import express from "express";
 import cors from "cors"
 import * as dotenv from "dotenv"
 import authRoute from "./routes/authRoute.ts"
+import userRoute from "./routes/userRoute.ts"
 dotenv.config()
 const app = express();
 
 app.use(cors())
 
-app.use("/api/v1/auth",authRoute);
-// app.use("/api/v1/users",);
+app.use("fastinvoice/api/v1/auth",authRoute);
+app.use("fastinvoice/api/v1/users",userRoute);
 
 const StartServer = () => {
   try {
