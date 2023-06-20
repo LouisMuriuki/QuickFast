@@ -1,5 +1,14 @@
 import Client from "../mongo/models/ClientSchema.ts";
 
+const addClient = async (req: any , res: any) => {
+  try {
+    const newClient = await Client.create(req.body);
+    res.status(500).json({ success: true, data: newClient });
+  } catch (error) {
+    res.status(500).json({ success: true, data: error });
+  }
+};
+
 const getClient = async (req: { params: { id: any } }, res: any) => {
   const { id } = req.params;
   try {
@@ -9,7 +18,7 @@ const getClient = async (req: { params: { id: any } }, res: any) => {
     res.status(500).json({ success: true, data: error });
   }
 };
-const getClients = async (req: any, res: any) => {
+const getClients = async (req: { query: { page: number; limit: number; }; }, res: any) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const skip = (page - 1) * limit;
@@ -18,7 +27,7 @@ const getClients = async (req: any, res: any) => {
     if (req.query.page) {
       const doclength = await Client.countDocuments();
       if (skip >= doclength) {
-        console.log("no such page");
+        res.status(500).json({ success: true,data:"no such page"});
       }
     }
     const currentClients = Client.find({}).skip(skip).limit(limit);
@@ -58,4 +67,4 @@ const deleteClient = async (req: { params: { id: any } }, res: any) => {
   }
 };
 
-export { getClient, getClients, updateClient, deleteClient };
+export { addClient, getClient, getClients, updateClient, deleteClient };
