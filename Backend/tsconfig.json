@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
+    "noEmit": true,
     "esModuleInterop": true,
-    "module": "CommonJS",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "allowImportingTsExtensions":true,
   },
   "ts-node": {
     "esm": true,

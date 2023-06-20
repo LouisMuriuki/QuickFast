@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const Connect = (url) => {
+const Connect = (url:any) => {
   mongoose
     .connect(url)
     .then(() => console.log("coonected"))
