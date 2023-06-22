@@ -1,7 +1,14 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import React,{useContext} from "react";
+import { Link } from "react-router-dom";
+import { Button } from "antd";
+import AuthContext from "../../Context/AuthContext";
 
 const AppNav = () => {
+  const {setLoginOpen,setRegisterOpen}=useContext(AuthContext)
+  
+  const OpenModal=()=>{
+    
+  }
   return (
     <div className="flex">
       <nav>
@@ -57,21 +64,21 @@ const AppNav = () => {
                     to="/#"
                     className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
                   >
-                   Louis Muriuki
+                    Louis Muriuki
                   </Link>
-                  <Link
-                    to="/#"
+                  <Button
+                    type="link"
+                    onClick={()=>setLoginOpen(true)}
                     className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
                   >
                     Login
-                  </Link>
-                  <Link
-                    to="/#"
-                    className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
-                  >
-
+                  </Button>
+                  <Button onClick={()=>setRegisterOpen(true)} className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200">
+                    Sign up
+                  </Button>
+                  <Button className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200">
                     Upgrade Now
-                  </Link>
+                  </Button>
                 </div>
               </div>
             </div>

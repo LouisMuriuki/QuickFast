@@ -5,6 +5,8 @@ import type { ThemeConfig, MenuProps } from "antd";
 import {Link, Outlet } from "react-router-dom";
 import AppNav from "../components/Navbar/AppNav";
 import { CommentOutlined } from "@ant-design/icons";
+import Login from "../components/login/Login";
+import Register from "../components/register/register";
 
 const { Header, Content, Footer } = Layout;
 
@@ -48,6 +50,8 @@ const MainLayout = () => {
           <div className="" style={{ background: colorBgContainer }}>
             <Outlet />
           </div>
+          <Login/>
+          <Register/>
           <FloatButton icon={<CommentOutlined />} />
         </Content>
         <Footer style={{ textAlign: "center" }}>
