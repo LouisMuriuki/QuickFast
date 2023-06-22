@@ -3,21 +3,45 @@ import MainModal from "../Reusables/MainModal";
 import { Form, Input, Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
 import { useMutation } from "@tanstack/react-query";
-import { userRegister } from "../../api/authCalls";
+import { userLogin, userRegister } from "../../api/authCalls";
 
 const Register = () => {
-  const { setRegisterOpen, setLoginOpen, registeropen } =
+  const { setRegisterOpen, setLoginOpen, registeropen, setAuth } =
     useContext(AuthContext);
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const LoginMutation = useMutation({
+    mutationFn: userLogin,
+    onSuccess(data) {
+      console.log(data);
+      if (data.status === 200) {
+        setAuth({
+          accessToken: "",
+          refreshToken: "",
+          userId: data.loggedInUser._id,
+        });
+        setRegisterOpen(false)
+      } else {
+      }
+    },
+    onError(error: { message: string }) {
+      console.log(error.message);
+    },
+  });
+
   const RegisterMutation = useMutation({
     mutationFn: userRegister,
     onSuccess(data) {
       console.log(data);
-      if (data.status === 200) {
+      if (data.status === "200") {
+        console.log("i tried")
+        LoginMutation.mutate({
+          email: data?.newUser.email,
+          password: data?.newUser.password,
+        });
       } else {
       }
     },
@@ -122,6 +146,7 @@ const Register = () => {
 
           <Form.Item>
             <Button
+              loading={RegisterMutation.isLoading}
               type="primary"
               htmlType="submit"
               className="w-full border-blue-500 text-blue-500"

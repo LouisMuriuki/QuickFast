@@ -31,7 +31,7 @@ const getClients = async (req: { query: { page: number; limit: number; }; }, res
       }
     }
     const currentClients = Client.find({}).skip(skip).limit(limit);
-    res.status(200).json({ success: true, data: currentClients });
+    res.status(200).json({ success: true, data: {currentClients,status:200} });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }

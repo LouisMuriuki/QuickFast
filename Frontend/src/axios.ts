@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "fastinvoice/api/v1/";
+const baseURL = "http://localhost:5000/fastinvoice/api/v1/";
 export const axiosPrivate = axios.create({
   baseURL: baseURL,
   timeout: 10000,

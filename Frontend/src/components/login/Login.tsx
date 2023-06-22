@@ -10,7 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //   const { openNotificationWithIcon, contextHolder } =useContext(NotificationContext);
-  const LoginMutation = useMutation({
+   const LoginMutation = useMutation({
     mutationFn: userLogin,
     onSuccess(data) {
       console.log(data);
