@@ -57,6 +57,8 @@ export const SettingsContext = createContext<SettingsContextType>({
 const SettingsContextProvider = ({ children }: any) => {
   const [bizinfo, setBizInfo] = useState(initialBizInfo);
   const [customizeinfo, setCustomizeInfo] = useState(initialCustomizeInfo);
+  console.log(bizinfo)
+  console.log(customizeinfo)
   return (
     <SettingsContext.Provider
       value={{ bizinfo, setBizInfo, customizeinfo, setCustomizeInfo }}

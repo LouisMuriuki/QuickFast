@@ -57,19 +57,20 @@ const AppNav = () => {
                     to="/#"
                     className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
                   >
-                    Invoices
+                   Louis Muriuki
                   </Link>
                   <Link
                     to="/#"
                     className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
                   >
-                    Estimates
+                    Login
                   </Link>
                   <Link
                     to="/#"
                     className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
                   >
-                    Clients
+
+                    Upgrade Now
                   </Link>
                 </div>
               </div>

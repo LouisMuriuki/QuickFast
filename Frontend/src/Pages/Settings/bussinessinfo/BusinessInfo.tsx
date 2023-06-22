@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import FormComponent from "../../../components/Reusables/FormComponent";
-import { fromlabels } from "../../../components/constants/Constants";
+import { fromlabels } from "../../../constants/Constants";
 import { Upload, message } from "antd";
 import axios from "axios";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
@@ -89,7 +89,7 @@ const BusinessInfo = () => {
           </Upload>
         </div>
       </div>
-      <FormComponent fromlabels={fromlabels} />
+      <FormComponent fromlabels={fromlabels} origin="settings" />
     </div>
   );
 };

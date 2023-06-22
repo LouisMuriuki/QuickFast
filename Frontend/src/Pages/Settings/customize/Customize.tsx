@@ -7,7 +7,7 @@ import { SettingsContext } from "../../../Context/SettingsContext";
 import {
   customizeTextArea,
   customizelabels,
-} from "../../../components/constants/Constants";
+} from "../../../constants/Constants";
 const { Option } = Select;
 const countries = clm.getAllCountries();
 const Customize = () => {

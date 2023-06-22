@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Form, Input } from "antd";
 import { FormContext } from "../../Context/FormContext";
+import { SettingsContext } from "../../Context/SettingsContext";
 interface fromlabels {
   name: string;
   label: string;
@@ -20,12 +21,16 @@ interface tolabels {
 interface FormProps {
   fromlabels?: fromlabels[];
   tolabels?: tolabels[];
+  origin: string;
 }
-const FormComponent = ({ fromlabels, tolabels }: FormProps) => {
+const FormComponent = ({ fromlabels, tolabels, origin }: FormProps) => {
   const { fromdata, todata, setFromdata, setTodata } = useContext(FormContext);
+  const { setBizInfo } = useContext(SettingsContext);
 
   const FromChange = (name: any, value: any) => {
-    setFromdata((prev) => ({ ...prev, [name]: value }));
+    origin === "settings"
+      ? setBizInfo((prev) => ({ ...prev, [name]: value }))
+      : setFromdata((prev) => ({ ...prev, [name]: value }));
   };
   const ToChange = (name: any, value: any) => {
     setTodata((prev) => ({ ...prev, [name]: value }));
@@ -56,7 +61,7 @@ const FormComponent = ({ fromlabels, tolabels }: FormProps) => {
                   <Input
                     placeholder={labels.placeholder}
                     className="flex w-full"
-                    defaultValue={fromdata &&fromdata[labels?.name]}
+                    defaultValue={fromdata && fromdata[labels?.name]}
                     onChange={(e) => {
                       FromChange(labels.name, e.target.value);
                     }}
@@ -79,7 +84,7 @@ const FormComponent = ({ fromlabels, tolabels }: FormProps) => {
                   <Input
                     placeholder={labels.placeholder}
                     className="flex w-full"
-                    defaultValue={todata &&todata[labels?.name]}
+                    defaultValue={todata && todata[labels?.name]}
                     onChange={(e) => {
                       ToChange(labels.name, e.target.value);
                     }}
