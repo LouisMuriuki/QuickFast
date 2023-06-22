@@ -14,6 +14,8 @@ import InvoiceGen from "./Pages/invoicegen/InvoiceGen";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
+    // <Route element={<Persistlogin />}>
+    //       <Route element={<RequireAuth />}>
     <Route path="/" element={<MainLayout />}>
       <Route path="invoices">
         <Route index element={<Invoices />} />

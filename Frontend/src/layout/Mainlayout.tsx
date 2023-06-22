@@ -6,7 +6,7 @@ import {Link, Outlet } from "react-router-dom";
 import AppNav from "../components/Navbar/AppNav";
 import { CommentOutlined } from "@ant-design/icons";
 import Login from "../components/login/Login";
-import Register from "../components/register/register";
+import Register from "../components/register/Register";
 
 const { Header, Content, Footer } = Layout;
 

@@ -2,14 +2,39 @@ import React, { useState, useContext } from "react";
 import MainModal from "../Reusables/MainModal";
 import { Form, Input, Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
+import { useMutation } from "@tanstack/react-query";
+import { userLogin } from "../../api/authCalls";
 
 const Login = () => {
-  const { setLoginOpen, loginopen } = useContext(AuthContext);
+  const { setLoginOpen,setRegisterOpen, loginopen } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (values: any) => {
+  //   const { openNotificationWithIcon, contextHolder } =useContext(NotificationContext);
+  const LoginMutation = useMutation({
+    mutationFn: userLogin,
+    onSuccess(data) {
+      console.log(data);
+      if (data.statis === 200) {
+      } else {
+      }
+    },
+    onError(error: { message: string }) {
+      console.log(error.message);
+    },
+  });
+
+  const handleSubmit = (values: { email: string; password: string }) => {
+    LoginMutation.mutate({
+      email: values.email,
+      password: values.password,
+    });
     console.log("Form submitted:", values);
   };
+
+  const SignUp=()=>{
+    setLoginOpen(false)
+    setRegisterOpen(true)
+  }
   return (
     <div>
       <MainModal isOpen={loginopen} setIsOpen={setLoginOpen} title="Login">
@@ -64,6 +89,11 @@ const Login = () => {
               </Button>
             </Form.Item>
           </Form>
+          <div>
+            <p>
+              Don't have an account? <Button onClick={SignUp}>Sign up</Button>
+            </p>
+          </div>
         </div>
       </MainModal>
     </div>
