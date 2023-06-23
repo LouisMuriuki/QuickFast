@@ -1,12 +1,13 @@
 import React, { useState, useContext } from "react";
 import MainModal from "../Reusables/MainModal";
-import { Form, Input, Button } from "antd";
+import { Form, Input, message,Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
 import { useMutation } from "@tanstack/react-query";
 import { userLogin } from "../../api/authCalls";
 
 const Login = () => {
-  const { setLoginOpen,setRegisterOpen, loginopen } = useContext(AuthContext);
+  const { setLoginOpen,setRegisterOpen, loginopen,setAuth } = useContext(AuthContext);
+  const [messageApi, contextHolder] = message.useMessage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //   const { openNotificationWithIcon, contextHolder } =useContext(NotificationContext);
@@ -14,12 +15,28 @@ const Login = () => {
     mutationFn: userLogin,
     onSuccess(data) {
       console.log(data);
-      if (data.statis === 200) {
+      if (data.status === 200) {
+        setAuth({
+            accessToken:data.accessToken,
+            refreshToken:data.refreshToken,
+            userId:data.data._id,
+            username:data.data.username
+        })
+        localStorage.setItem("Invoice_AccessToken",data.accessToken)
+        localStorage.setItem("Invoice_RefreshToken",data.refreshToken)
+        setLoginOpen(false)
       } else {
+        messageApi.open({
+          type: "error",
+          content: "Login failed, Please try again ",
+        });
       }
     },
     onError(error: { message: string }) {
-      console.log(error.message);
+        messageApi.open({
+            type: "error",
+            content: error.message,
+          });
     },
   });
 
@@ -37,6 +54,7 @@ const Login = () => {
   }
   return (
     <div>
+        {contextHolder}
       <MainModal isOpen={loginopen} setIsOpen={setLoginOpen} title="Login">
         <div className="flex-col justify-center  flex items-center">
           <h3 className="text-2xl font-bold mb-5">Login to your Account</h3>

@@ -1,52 +1,44 @@
-import React, { useState, useContext } from "react";
+import  { useState, useContext } from "react";
 import MainModal from "../Reusables/MainModal";
-import { Form, Input, Button } from "antd";
+import { Form, Input, message, Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
 import { useMutation } from "@tanstack/react-query";
-import { userLogin, userRegister } from "../../api/authCalls";
+import { userRegister } from "../../api/authCalls";
 
 const Register = () => {
   const { setRegisterOpen, setLoginOpen, registeropen, setAuth } =
     useContext(AuthContext);
+  const [messageApi, contextHolder] = message.useMessage();
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const LoginMutation = useMutation({
-    mutationFn: userLogin,
-    onSuccess(data) {
-      console.log(data);
-      if (data.status === 200) {
-        setAuth({
-          accessToken: "",
-          refreshToken: "",
-          userId: data.loggedInUser._id,
-        });
-        setRegisterOpen(false)
-      } else {
-      }
-    },
-    onError(error: { message: string }) {
-      console.log(error.message);
-    },
-  });
-
   const RegisterMutation = useMutation({
     mutationFn: userRegister,
-    onSuccess(data) {
+    onSuccess: (data) => {
       console.log(data);
-      if (data.status === "200") {
-        console.log("i tried")
-        LoginMutation.mutate({
-          email: data?.newUser.email,
-          password: data?.newUser.password,
+      if (data.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: "Account Created, Please Login ",
         });
+        setTimeout(() => {
+          setRegisterOpen(false);
+          setLoginOpen(true);
+        }, 1000);
       } else {
+        messageApi.open({
+          type: "error",
+          content: "Account Creation failed, Please try again ",
+        });
       }
     },
     onError(error: { message: string }) {
-      console.log(error.message);
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
     },
   });
 
@@ -73,6 +65,7 @@ const Register = () => {
       setIsOpen={setRegisterOpen}
       title="Register"
     >
+      {contextHolder}
       <div className="flex flex-col justify-center items-center">
         <h3 className="text-2xl font-bold mb-5">Sign Up</h3>
         <p className="text-lg font-semibold flex self  mb-5">

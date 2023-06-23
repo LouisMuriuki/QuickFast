@@ -2,6 +2,7 @@ import User from "../mongo/models/UserSchema.js";
 import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
+import RefreshToken from "../mongo/models/refreshTokenSchema.ts";
 dotenv.config();
 
 const registerUser = async (
@@ -10,68 +11,93 @@ const registerUser = async (
 ) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
-    res.status(500).json({ sucess: false, data: "some fields are missing" });
+    return res
+      .status(500)
+      .json({ sucess: false, data: "some fields are missing" });
   }
   try {
+    const existinguser = await User.findOne({ email });
+
+    if (existinguser) {
+      return res
+        .status(409)
+        .json({ success: false, data: "User already exists" });
+    }
+
     const newUser = await User.create({
       username,
       email,
       password: CryptoJS.AES.encrypt(
         password,
-        process.env.SECRET_KEY
+        process.env.PASSWORD_SECRET_KEY
       ).toString(),
     });
-    const decryptPassword = CryptoJS.AES.decrypt(
-      newUser.password,
-      process.env.SECRET_KEY
-    ).toString(CryptoJS.enc.Utf8);
-    res.status(200).json({ success: true, data: { newUser, status: 200 } });
+
+    return res.status(200).json({ success: true, data: newUser, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    return res.status(500).json({
+      success: false,
+      data: "An error occurred while registering the user",
+    });
   }
 };
 
 const loginUser = async (
-  req: { body: { email: any; password: any } },
+  req: { body: { email: string; password: string } },
   res: any
 ) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(500).json({ success: false, data: "somefileds are missing" });
   }
+
   try {
     const loggedInUser = await User.findOne({ email });
     !loggedInUser &&
-      res.status(400).json({ sucess: true, data: "User does not exist" });
+      res.status(400).json({ success: true, data: "User does not exist" });
 
     const decryptPassword = CryptoJS.AES.decrypt(
       loggedInUser.password,
-      process.env.SECRET_KEY
+      process.env.PASSWORD_SECRET_KEY
     ).toString(CryptoJS.enc.Utf8);
-   //case where we login with hashed password
-    if (password.length > 25) {
-      if (loggedInUser.password !== password) {
-        res.status(500).json({ sucess: true, data: "Invalid Password" });
-      }
-    } else {
-      if (decryptPassword !== password) {
-        res.status(500).json({ sucess: true, data: "Invalid Password" });
-      }
+    //case where we login with hashed password
+
+    if (decryptPassword !== password) {
+      return res.status(500).json({ sucess: true, data: "Invalid Password" });
     }
 
     const accessToken = jwt.sign(
       {
         id: loggedInUser._id,
-        isAdmin: loggedInUser.isAdmin,
+        email: loggedInUser.email,
       },
-      process.env.JWTSECRET,
+      process.env.ACCESS_TOKEN_SECRET_KEY,
       { expiresIn: "3d" }
     );
-    res
-      .status(200)
-      .json({ sucess: true, data: { loggedInUser, accessToken, status: 200 } });
+
+    const refreshToken = jwt.sign(
+      {
+        id: loggedInUser._id,
+        email: loggedInUser.email,
+      },
+      process.env.REFRESH_TOKEN_SECRET_KEY,
+      {
+        expiresIn: "30d",
+      }
+    );
+    RefreshToken.create({
+      userid: loggedInUser._id,
+      refreshToken: refreshToken,
+    });
+    res.status(200).json({
+      success: true,
+      data: loggedInUser,
+      accessToken,
+      refreshToken,
+      status: 200,
+    });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, data: error });
   }
 };
 

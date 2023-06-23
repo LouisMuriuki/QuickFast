@@ -3,11 +3,13 @@ interface authProps {
   accessToken: string;
   refreshToken: string;
   userId: string;
+  username:string
 }
 const initialauth: authProps = {
   accessToken: "",
   refreshToken: "",
   userId: "",
+  username:""
 };
 interface contextProps {
   accountlocked: boolean;
@@ -37,6 +39,7 @@ export const AuthContextprovider = ({ children }: any) => {
     accessToken: "",
     refreshToken: "",
     userId: "",
+    username:""
   });
   return (
     <AuthContext.Provider
