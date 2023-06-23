@@ -9,15 +9,16 @@ const VerifyToken = (
   next: NextFunction
 ) => {
   const token = req.headers.authorization;
+  console.log(token)
   if (!token) {
     return res
       .status(401)
       .json({ message: "Access denied. No token provided." });
   }
   try {
-    jwt.verify(token, process.env.JWTSECRET, (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY, (err, user) => {
       if (err) {
-        return res.status(403).json("Token is not valid");
+        return res.status(403).json({message:"Token is not valid"});
       }
       console.log(user);
       req.user = user;

@@ -4,7 +4,7 @@ import Invoice from "../mongo/models/invoiceSchema.ts";
 const addInvoice = async (req: { body: any }, res: any) => {
   try {
     const newInvoice = await Invoice.create(req.body);
-    res.status(200).json({ success: true, data: newInvoice });
+    res.status(200).json({ success: true, data: newInvoice,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -15,7 +15,7 @@ const getInvoice = async (req: { params: { id: any } }, res: any) => {
 
   try {
     const currentInvoice = await Invoice.findById({ id });
-    res.status(200).json({ success: true, data: currentInvoice });
+    res.status(200).json({ success: true, data: currentInvoice,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -36,7 +36,7 @@ const getInvoices = async (
       }
     }
     const AllInvoices = await Invoice.find({}).skip(skip).limit(limit);
-    res.status(200).json({ success: true, data: AllInvoices });
+    res.status(200).json({ success: true, data: AllInvoices,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -46,7 +46,7 @@ const deleteInvoice = async (req: { params: { id: any } }, res: any) => {
   const { id } = req.params;
   try {
     const currentInvoice = await Invoice.findByIdAndDelete({ id });
-    res.status(200).json({ success: true, data: currentInvoice });
+    res.status(200).json({ success: true, data: currentInvoice,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -123,7 +123,7 @@ const updateInvoice = async (
       upsert: true, //important
       runValidators: true,
     });
-    res.status(200).json({ success: true, data: currentInvoice });
+    res.status(200).json({ success: true, data: currentInvoice ,status:200});
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }

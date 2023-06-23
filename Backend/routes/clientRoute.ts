@@ -3,7 +3,7 @@ import { addClient, deleteClient, getClient, getClients, updateClient } from "..
 import { VerifyToken, verifyTokenandAuthorization } from "../middleware/Verify.ts"
 const router=express.Router()
 
-router.post("/addclient",verifyTokenandAuthorization, addClient)
+router.post("/addclient", addClient)
 router.get("/getclient",verifyTokenandAuthorization,getClient)
 router.get("/getclients",verifyTokenandAuthorization,getClients)
 router.put("/updateclient",verifyTokenandAuthorization,updateClient)

@@ -4,7 +4,7 @@ import Estimate from "../mongo/models/estimateSchema.ts";
 const addEstimate = async (req: { body: any }, res: any) => {
   try {
     const newEstimate = await Estimate.create(req.body);
-    res.status(200).json({ success: true, data: newEstimate });
+    res.status(200).json({ success: true, data: newEstimate,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -16,7 +16,7 @@ const getEstimate = async (req: { params: { id: any } }, res: any) => {
 
   try {
     const currentEstimate = await Estimate.findById({ id });
-    res.status(200).json({ success: true, data: currentEstimate });
+    res.status(200).json({ success: true, data: currentEstimate,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -38,7 +38,7 @@ const getEstimates = async (
       }
     }
     const AllEstimates = await Estimate.find({}).skip(skip).limit(limit);
-    res.status(200).json({ success: true, data: AllEstimates });
+    res.status(200).json({ success: true, data: AllEstimates,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -49,7 +49,7 @@ const deleteEstimate = async (req: { params: { id: any } }, res: any) => {
   const { id } = req.params;
   try {
     const currentEstimate = await Estimate.findByIdAndDelete({ id });
-    res.status(200).json({ success: true, data: currentEstimate });
+    res.status(200).json({ success: true, data: currentEstimate ,status:200});
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -127,7 +127,7 @@ const updateEstimate = async (
       upsert: true, //important
       runValidators: true,
     });
-    res.status(200).json({ success: true, data: currentEstimate });
+    res.status(200).json({ success: true, data: currentEstimate,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }

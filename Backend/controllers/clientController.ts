@@ -3,7 +3,7 @@ import Client from "../mongo/models/ClientSchema.ts";
 const addClient = async (req: any , res: any) => {
   try {
     const newClient = await Client.create(req.body);
-    res.status(500).json({ success: true, data: newClient });
+    res.status(200).json({ success: true, data: newClient,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -13,7 +13,7 @@ const getClient = async (req: { params: { id: any } }, res: any) => {
   const { id } = req.params;
   try {
     const currentClient = await Client.findById(id);
-    res.status(200).json({ success: true, data: currentClient });
+    res.status(200).json({ success: true, data: currentClient,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -31,7 +31,7 @@ const getClients = async (req: { query: { page: number; limit: number; }; }, res
       }
     }
     const currentClients = Client.find({}).skip(skip).limit(limit);
-    res.status(200).json({ success: true, data: {currentClients,status:200} });
+    res.status(200).json({ success: true, data:currentClients,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -51,7 +51,7 @@ const updateClient = async (
       upsert: true, //important
       runValidators: true,
     });
-    res.status(200).json({ success: true, data: updatedClient });
+    res.status(200).json({ success: true, data: updatedClient,status:200 });
   } catch (error) {
     res.status(500).json({ success: false, data: error });
   }
@@ -61,7 +61,7 @@ const deleteClient = async (req: { params: { id: any } }, res: any) => {
   try {
     const { id } = req.params;
     const deletedClient = await Client.findByIdAndDelete(id);
-    res.status(201).json({ success: true });
+    res.status(201).json({ success: true,status:200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
