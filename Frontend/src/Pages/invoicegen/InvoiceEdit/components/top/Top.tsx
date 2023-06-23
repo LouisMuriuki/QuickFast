@@ -4,7 +4,7 @@ import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
 import axios from "axios";
 import type { RcFile } from "antd/es/upload/interface";
-import { FormContext } from "../../../../../Context/FormContext";
+import { FormContext } from "../../../../../Context/InvoiceFormContext";
 
 const beforeUpload = (file: RcFile) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";

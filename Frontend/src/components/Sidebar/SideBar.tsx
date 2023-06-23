@@ -2,7 +2,7 @@ import { useContext } from "react";
 import ViewOptions from "./components/Email";
 import Currency from "./components/Currency";
 // import Tax from "./components/Tax";
-import { FormContext } from "../../Context/FormContext";
+import { FormContext } from "../../Context/InvoiceFormContext";
 import Download from "./components/Download";
 // import Discount from "./components/Discount";
 

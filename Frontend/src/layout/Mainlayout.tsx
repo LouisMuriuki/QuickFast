@@ -1,12 +1,11 @@
-"use client";
-import React, { ReactNode } from "react";
-import { Breadcrumb, Layout, Menu, theme, ConfigProvider, FloatButton } from "antd";
-import type { ThemeConfig, MenuProps } from "antd";
+import { Breadcrumb, Layout, theme, ConfigProvider, FloatButton } from "antd";
+import type { ThemeConfig,  } from "antd";
 import {Link, Outlet } from "react-router-dom";
 import AppNav from "../components/Navbar/AppNav";
 import { CommentOutlined } from "@ant-design/icons";
 import Login from "../components/login/Login";
 import Register from "../components/register/Register";
+import AddClient from "../Pages/clients/components/AddClient";
 
 const { Header, Content, Footer } = Layout;
 
@@ -52,6 +51,7 @@ const MainLayout = () => {
           </div>
           <Login/>
           <Register/>
+          <AddClient/>
           <FloatButton icon={<CommentOutlined />} />
         </Content>
         <Footer style={{ textAlign: "center" }}>

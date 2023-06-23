@@ -1,5 +1,5 @@
-import React, { ReactNode, useState } from 'react';
-import { Button, Modal } from 'antd';
+import { ReactNode} from 'react';
+import { Modal } from 'antd';
 interface MainModalProps{
   children:ReactNode,
   isOpen:boolean,
@@ -7,12 +7,6 @@ interface MainModalProps{
   title:string
 }
 const MainModal = ({children, isOpen,setIsOpen,title}:MainModalProps) => {
-
-
-  const showModal = () => {
-    setIsOpen(true);
-  };
-
   const handleOk = () => {
     setIsOpen(false);
   };

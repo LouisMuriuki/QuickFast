@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { Form, Input } from "antd";
-import { FormContext } from "../../Context/FormContext";
+import { FormContext } from "../../Context/InvoiceFormContext";
 import { SettingsContext } from "../../Context/SettingsContext";
+import ExtrasContext from "../../Context/ExtrasContext";
 interface fromlabels {
   name: string;
   label: string;
@@ -26,15 +27,18 @@ interface FormProps {
 const FormComponent = ({ fromlabels, tolabels, origin }: FormProps) => {
   const { fromdata, todata, setFromdata, setTodata } = useContext(FormContext);
   const { setBizInfo } = useContext(SettingsContext);
-
+  const { setClientData} = useContext(ExtrasContext);
   const FromChange = (name: any, value: any) => {
     origin === "settings"
       ? setBizInfo((prev) => ({ ...prev, [name]: value }))
       : setFromdata((prev) => ({ ...prev, [name]: value }));
   };
   const ToChange = (name: any, value: any) => {
-    setTodata((prev) => ({ ...prev, [name]: value }));
+    origin === "Add Client"
+      ? setClientData((prev) => ({ ...prev, [name]: value }))
+      : setTodata((prev) => ({ ...prev, [name]: value }));
   };
+
   return (
     <div className="flex flex-col w-full">
       <Form

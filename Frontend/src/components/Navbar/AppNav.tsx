@@ -1,11 +1,11 @@
-import React,{useContext} from "react";
+import {useContext} from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
 
 const AppNav = () => {
   const {setLoginOpen,setRegisterOpen}=useContext(AuthContext)
-  
+
   const OpenModal=()=>{
     
   }
@@ -67,16 +67,15 @@ const AppNav = () => {
                     Louis Muriuki
                   </Link>
                   <Button
-                    type="link"
                     onClick={()=>setLoginOpen(true)}
-                    className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
+                    className="flex items-center justify-center text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
                   >
                     Login
                   </Button>
-                  <Button onClick={()=>setRegisterOpen(true)} className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200">
+                  <Button onClick={()=>setRegisterOpen(true)} className="flex items-center justify-center text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200">
                     Sign up
                   </Button>
-                  <Button className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200">
+                  <Button className="flex items-center justify-center text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200">
                     Upgrade Now
                   </Button>
                 </div>
