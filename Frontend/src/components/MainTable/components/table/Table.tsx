@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react'
-import { Input,Space,Button, } from 'antd'
+import { Input,Space,Button,Table } from 'antd'
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { DownloadOutlined } from "@ant-design/icons";
+
 import type {
     FilterValue,
     SorterResult,
@@ -47,7 +48,7 @@ import type {
   }
  
  
-const DataTable = () => {
+const DataTable = (props: TableListProps) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
@@ -237,7 +238,52 @@ const DataTable = () => {
         }
       ];
 
-     
+      const handleTableChange = (
+        pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        sorter: SorterResult<DataType> | SorterResult<DataType>[]
+      ) => {
+        console.log(pagination);
+        if (props.setTableInfo !== undefined && props.setTableInfo !== null) {
+          props?.setTableInfo({
+            pagination: {
+              ...props.tableInfo.pagination,
+              ...pagination, // Update current page, pageSize, and other pagination options
+            },
+            filters: filters as Record<string, FilterValue>, // Cast filters as Record<string, FilterValue>
+            ...sorter,
+          });
+        }
+    
+        // `dataSource` is useless since `pageSize` changed
+        if (pagination.pageSize !== (props?.tableInfo?.pagination?.pageSize ?? 0)) {
+          props.data = [];
+        }
+      };
+      console.log(props.data);
+    
+      let MainColumn: ColumnType<DataType>[]  | undefined;
+    
+      if (props.headervalue &&
+        props?.headervalue==="Pending"&&location.pathname === "/visitors/") {
+        MainColumn = Pendingvisitorcolumns;
+      }else if(props.headervalue &&
+        props?.headervalue==="Approved"&&location.pathname === "/visitors/"){
+          MainColumn =Approvedvisitorcolumns;
+        }
+       else if (location.pathname === "/meetings/") {
+        MainColumn = meetingscolumns;
+      } else if (
+        props.name &&
+        props?.name &&
+        location.pathname === `/staff/${props?.name}`
+      ) {
+        MainColumn = staffmeetingscolumns;
+      } else {
+        MainColumn = columns;
+      }
+      console.log(props);
+    
     
    
   return (

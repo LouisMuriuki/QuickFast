@@ -19,6 +19,7 @@ app.use("/fastinvoice/api/v1/client",clientRoute);
 app.use("/fastinvoice/api/v1/users",userRoute);
 app.use("/fastinvoice/api/v1/estimate",estimateRoute);
 app.use("/fastinvoice/api/v1/invoice",invoiceRoute);
+app.use("/fastinvoice/api/v1/token",invoiceRoute);
 
 const StartServer = () => {
   try {
