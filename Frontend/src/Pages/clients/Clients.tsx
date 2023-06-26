@@ -14,7 +14,7 @@ const Clients = () => {
           onClick={() => {
             setClientmodalIsOpen(true);
           }}
-          className="border-blue-500 bg-blue-500 text-white hover:text-white"
+          className="border-blue-500 bg-blue-500 text-white "
         >
           Add Client
         </Button>

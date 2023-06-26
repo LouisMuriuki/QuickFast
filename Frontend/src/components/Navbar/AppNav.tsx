@@ -1,14 +1,14 @@
-import {useContext} from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
 
 const AppNav = () => {
-  const {setLoginOpen,setRegisterOpen}=useContext(AuthContext)
+  const { setLoginOpen, setRegisterOpen, auth } = useContext(AuthContext);
 
-  const OpenModal=()=>{
-    
-  }
+  const accessTokenString = localStorage.getItem("Invoice_AccessToken");
+
+  const OpenModal = () => {};
   return (
     <div className="flex">
       <nav>
@@ -64,20 +64,42 @@ const AppNav = () => {
                     to="/#"
                     className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
                   >
-                    Louis Muriuki
+                    {auth.username}
                   </Link>
-                  <Button
-                    onClick={()=>setLoginOpen(true)}
-                    className="flex items-center justify-center text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200"
-                  >
-                    Login
-                  </Button>
-                  <Button onClick={()=>setRegisterOpen(true)} className="flex items-center justify-center text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200">
-                    Sign up
-                  </Button>
-                  <Button className="flex items-center justify-center text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200">
-                    Upgrade Now
-                  </Button>
+                  {auth.accessToken ? (
+                    <Button
+                      
+                      onClick={() => setLoginOpen(true)}
+                      className="flex items-center justify-center text border-red-500 bg-red-500 hover:bg-red-500 text-white 0 hover:text-white px-3 py-2 rounded-md transition duration-200"
+                    >
+                      LogOut
+                    </Button>
+                  ) : (
+                    <Button
+                      type="primary"
+                      onClick={() => setLoginOpen(true)}
+                      className="flex items-center justify-center text border-blue-500 bg-blue-500 text-white 0 hover:text-white px-3 py-2 rounded-md transition duration-200"
+                    >
+                      Login
+                    </Button>
+                  )}
+                  {!auth.userId && (
+                    <Button
+                      type="primary"
+                      onClick={() => setRegisterOpen(true)}
+                      className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200"
+                    >
+                      Sign up
+                    </Button>
+                  )}
+                  {
+                    <Button
+                      type="primary"
+                      className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200"
+                    >
+                      Upgrade Now
+                    </Button>
+                  }
                 </div>
               </div>
             </div>
