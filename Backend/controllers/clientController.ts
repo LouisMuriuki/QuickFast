@@ -22,16 +22,18 @@ const getClients = async (req: { query: { page: number; limit: number; }; }, res
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const skip = (page - 1) * limit;
+  let doclength
 
   try {
     if (req.query.page) {
-      const doclength = await Client.countDocuments();
+      doclength = await Client.countDocuments();
       if (skip >= doclength) {
         return res.status(500).json({ success: false,data:"no such page"});
       }
     }
     const currentClients = await Client.find({}).skip(skip).limit(limit);
-    return res.status(200).json({ success: true, data:currentClients,status:200 });
+    return res.status(200).json({ success: true, data:currentClients,status:200,total: doclength,
+      current: page, });
   } catch (error) {
     return res.status(500).json({ success: false, data: error });
   }

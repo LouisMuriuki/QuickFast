@@ -1,6 +1,6 @@
 import { Form, Select, Input, Divider, InputNumber } from "antd";
 import { useContext } from "react";
-import { FormContext } from "../../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../../Context/InvoiceFormContext";
 const options = [
   {
     value: "none",
@@ -16,7 +16,7 @@ const options = [
   // },
 ];
 const Tax = () => {
-  const { forminfo, setFormInfo } = useContext(FormContext);
+  const { forminfo, setFormInfo } = useContext(InvoiceFormContext);
   const onChange = (value: string) => {
     if(value==="none"){
       setFormInfo((prev) => ({ ...prev, mainTax: 0}));

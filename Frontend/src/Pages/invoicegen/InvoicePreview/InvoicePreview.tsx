@@ -1,12 +1,12 @@
 import { useContext} from "react";
-import { FormContext } from "../../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../../Context/InvoiceFormContext";
 import { Divider } from "antd";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 
 const InvoicePreview = () => {
   let number = [0];
-  const { forminfo, todata, fromdata, description } = useContext(FormContext);
+  const { forminfo, todata, fromdata, description } = useContext(InvoiceFormContext);
   number = forminfo?.terms === "none" ? [0] : (forminfo?.terms?.match(/\d+/g) || []).map(Number);
   console.log(number);
   const formattedDate = dayjs(forminfo?.date).format("dddd, MMMM DD, YYYY");

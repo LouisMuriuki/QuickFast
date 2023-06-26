@@ -111,7 +111,7 @@ interface FormContextType {
   setDescription: React.Dispatch<React.SetStateAction<Description[]>>;
 }
 
-export const FormContext = createContext<FormContextType>({
+export const InvoiceFormContext = createContext<FormContextType>({
   segmentedoptions: [],
   setSegmentedOptions: () => {},
   selectedoptions: "",
@@ -160,7 +160,7 @@ const FormContextProvider = ({ children }: any) => {
     description,
   ]);
   return (
-    <FormContext.Provider
+    <InvoiceFormContext.Provider
       value={{
         segmentedoptions,
         setSegmentedOptions,
@@ -179,7 +179,7 @@ const FormContextProvider = ({ children }: any) => {
       }}
     >
       {children}
-    </FormContext.Provider>
+    </InvoiceFormContext.Provider>
   );
 };
 

@@ -1,8 +1,11 @@
 import React from 'react'
+import MainTable from '../../components/MainTable/MainTable'
 
 const Estimates = () => {
   return (
-    <div>Estimates</div>
+    <div>
+      <MainTable/>
+    </div>
   )
 }
 

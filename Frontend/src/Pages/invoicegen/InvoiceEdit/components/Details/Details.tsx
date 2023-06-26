@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { DatePicker, Input, Select, Form } from "antd";
 import type { DatePickerProps } from "antd";
-import { FormContext } from "../../../../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../../../../Context/InvoiceFormContext";
 import dayjs from "dayjs";
 import useWindowDimensions from "../../../../../hooks/useWindoDimensions";
 let dateString = new Date().toLocaleDateString();
@@ -12,7 +12,7 @@ let day = dateParts[1].length === 1 ? "0" + dateParts[1] : dateParts[1];
 let formattedDate = year + "/" + month + "/" + day;
 const InvoiceDetails = () => {
   const { width } = useWindowDimensions();
-  const { forminfo, setFormInfo } = useContext(FormContext);
+  const { forminfo, setFormInfo } = useContext(InvoiceFormContext);
   const onChange: DatePickerProps["onChange"] = (date, dateString) => {
     console.log(date, dateString);
     //@ts-ignore

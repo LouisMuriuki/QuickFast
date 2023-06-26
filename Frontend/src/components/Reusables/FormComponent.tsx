@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext,useState } from "react";
 import { Form, Input } from "antd";
-import { FormContext } from "../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
 import { SettingsContext } from "../../Context/SettingsContext";
 import ExtrasContext from "../../Context/ExtrasContext";
 interface fromlabels {
@@ -25,9 +25,10 @@ interface FormProps {
   origin: string;
 }
 const FormComponent = ({ fromlabels, tolabels, origin }: FormProps) => {
-  const { fromdata, todata, setFromdata, setTodata } = useContext(FormContext);
+  const { fromdata, todata, setFromdata, setTodata } = useContext(InvoiceFormContext);
   const { setBizInfo } = useContext(SettingsContext);
-  const { setClientData} = useContext(ExtrasContext);
+  const [data,setData]=useState()
+  const { clientdata,setClientData} = useContext(ExtrasContext);
   const FromChange = (name: any, value: any) => {
     origin === "settings"
       ? setBizInfo((prev) => ({ ...prev, [name]: value }))
@@ -38,6 +39,8 @@ const FormComponent = ({ fromlabels, tolabels, origin }: FormProps) => {
       ? setClientData((prev) => ({ ...prev, [name]: value }))
       : setTodata((prev) => ({ ...prev, [name]: value }));
   };
+  console.log(clientdata)
+  
 
   return (
     <div className="flex flex-col w-full">
@@ -46,7 +49,7 @@ const FormComponent = ({ fromlabels, tolabels, origin }: FormProps) => {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
+        initialValues={{ clientdata }}
         // onFinish={onFinish}
         // onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -58,6 +61,7 @@ const FormComponent = ({ fromlabels, tolabels, origin }: FormProps) => {
                 <Form.Item
                   label={labels.label}
                   name={labels.name}
+                  
                   rules={[
                     { required: labels.required, message: labels.message },
                   ]}
@@ -65,7 +69,8 @@ const FormComponent = ({ fromlabels, tolabels, origin }: FormProps) => {
                   <Input
                     placeholder={labels.placeholder}
                     className="flex w-full"
-                    defaultValue={fromdata && fromdata[labels?.name]}
+                    value={clientdata&&clientdata[labels?.name]}
+                    defaultValue={clientdata&&clientdata[labels?.name]||fromdata && fromdata[labels?.name]}
                     onChange={(e) => {
                       FromChange(labels.name, e.target.value);
                     }}

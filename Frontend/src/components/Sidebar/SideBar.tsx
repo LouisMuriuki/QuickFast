@@ -2,12 +2,12 @@ import { useContext } from "react";
 import ViewOptions from "./components/Email";
 import Currency from "./components/Currency";
 // import Tax from "./components/Tax";
-import { FormContext } from "../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
 import Download from "./components/Download";
 // import Discount from "./components/Discount";
 
 const SideBar = () => {
-  const { generateinvoicetype } = useContext(FormContext);
+  const { generateinvoicetype } = useContext(InvoiceFormContext);
   return (
     <div className="flex flex-col py-16 px-4">
       <div className="mb-10">

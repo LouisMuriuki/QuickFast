@@ -4,7 +4,7 @@ import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
 import axios from "axios";
 import type { RcFile } from "antd/es/upload/interface";
-import { FormContext } from "../../../../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../../../../Context/InvoiceFormContext";
 
 const beforeUpload = (file: RcFile) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -18,7 +18,7 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M;
 };
 const Top = () => {
-  const { forminfo, setFormInfo } = useContext(FormContext);
+  const { forminfo, setFormInfo } = useContext(InvoiceFormContext);
   const [loading, setLoading] = useState(false);
   const upload_preset=import.meta.env.VITE_UPLOAD_PRESET
   const cloudinary_name=import.meta.env.VITE_CLOUDINARY_NAME

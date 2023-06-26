@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import InvoiceTop from "./InvoiceTop";
 import InvoiceEdit from "./InvoiceEdit/InvoiceEdit";
-import { FormContext } from "../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
 import InvoicePreview from "./InvoicePreview/InvoicePreview";
 import SideBar from "../../components/Sidebar/SideBar";
 
 const InvoiceGen = () => {
-  const { selectedoptions } = useContext(FormContext);
+  const { selectedoptions } = useContext(InvoiceFormContext);
 
   return (
     <div className=" max-w-full  flex container ">

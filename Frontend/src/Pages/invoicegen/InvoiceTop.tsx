@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Segmented, Button, Space } from "antd";
-import { FormContext } from "../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
 
 const InvoiceTop = () => {
   const {
@@ -9,7 +9,7 @@ const InvoiceTop = () => {
     setSelectedOptions,
     generateinvoicetype,
     setgenerateInvoiceType,
-  } = useContext(FormContext);
+  } = useContext(InvoiceFormContext);
 
   return (
     <div className="flex flex-row ite justify-between pt-4 pb-2">

@@ -1,5 +1,5 @@
 import { Button, TablePaginationConfig } from "antd";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ExtrasContext from "../../Context/ExtrasContext";
 import { FilterValue } from "antd/es/table/interface";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -49,12 +49,13 @@ const Clients = () => {
       `client/getclients?page=${page}&limit=${limit}`,
       { headers: { Authorization: "Bearer " + auth.accessToken } }
     );
+    console.log(res)
     setTableInfo({
       ...tableInfo,
       pagination: {
         ...tableInfo.pagination,
-        total: res?.data?.data.totalDocs,
-        current: res?.data?.data.currentPage,
+        total: res?.data?.total,
+        current: res?.data?.current,
       },
     });
     return res.data;
@@ -70,7 +71,11 @@ const Clients = () => {
       }),
   });
 
-  console.log(GetClientsQuery.data);
+  console.log(GetClientsQuery?.data?.data);
+
+  useEffect(()=>{
+    setData(GetClientsQuery?.data?.data)
+  },[GetClientsQuery.data])
 
   return (
     <div className="flex flex-col">

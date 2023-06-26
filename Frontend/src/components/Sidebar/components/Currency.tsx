@@ -1,12 +1,12 @@
 import { Select, Space, Divider } from "antd";
 import clm from "country-locale-map";
 import { useContext } from "react";
-import { FormContext } from "../../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../../Context/InvoiceFormContext";
 const { Option } = Select;
 const countries = clm.getAllCountries();
 
 const Currency = () => {
-  const { setFormInfo } = useContext(FormContext);
+  const { setFormInfo } = useContext(InvoiceFormContext);
   const locale=clm.getLocaleByName("Kenya")
   console.log(locale)
   const handleChange = (value: string) => {

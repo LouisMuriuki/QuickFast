@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { Input } from "antd";
-import { FormContext } from "../../../../../Context/InvoiceFormContext";
+import { InvoiceFormContext } from "../../../../../Context/InvoiceFormContext";
 
 const { TextArea } = Input;
 
 const Notes = () => {
-  const { forminfo, setFormInfo } = useContext(FormContext);
+  const { forminfo, setFormInfo } = useContext(InvoiceFormContext);
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     console.log("Change:", e.target.value);
     setFormInfo((prev) => ({ ...prev, notes: e.target.value }));
