@@ -5,7 +5,7 @@ const router=express.Router()
 
 router.post("/addclient", addClient)
 router.get("/getclient",verifyTokenandAuthorization,getClient)
-router.get("/getclients",verifyTokenandAuthorization,getClients)
+router.get("/getclients", getClients)
 router.put("/updateclient",verifyTokenandAuthorization,updateClient)
 router.delete("/getclient",verifyTokenandAuthorization,deleteClient)
 

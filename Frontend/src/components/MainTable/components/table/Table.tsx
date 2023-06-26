@@ -17,7 +17,7 @@ import type {
   } from "antd/es/table";
 
   interface DataType{
-    id?:string,
+    _id?:string,
     name?:string,
     date?:Date,
     total_paid?:number,
@@ -264,25 +264,25 @@ const DataTable = (props: TableListProps) => {
     
       let MainColumn: ColumnType<DataType>[]  | undefined;
     
-      if (props.headervalue &&
-        props?.headervalue==="Pending"&&location.pathname === "/visitors/") {
-        MainColumn = Pendingvisitorcolumns;
-      }else if(props.headervalue &&
-        props?.headervalue==="Approved"&&location.pathname === "/visitors/"){
-          MainColumn =Approvedvisitorcolumns;
-        }
-       else if (location.pathname === "/meetings/") {
-        MainColumn = meetingscolumns;
-      } else if (
-        props.name &&
-        props?.name &&
-        location.pathname === `/staff/${props?.name}`
-      ) {
-        MainColumn = staffmeetingscolumns;
-      } else {
-        MainColumn = columns;
-      }
-      console.log(props);
+      // if (props.headervalue &&
+      //   props?.headervalue==="Pending"&&location.pathname === "/visitors/") {
+      //   MainColumn = Pendingvisitorcolumns;
+      // }else if(props.headervalue &&
+      //   props?.headervalue==="Approved"&&location.pathname === "/visitors/"){
+      //     MainColumn =Approvedvisitorcolumns;
+      //   }
+      //  else if (location.pathname === "/meetings/") {
+      //   MainColumn = meetingscolumns;
+      // } else if (
+      //   props.name &&
+      //   props?.name &&
+      //   location.pathname === `/staff/${props?.name}`
+      // ) {
+      //   MainColumn = staffmeetingscolumns;
+      // } else {
+      //   MainColumn = columns;
+      // }
+      // console.log(props);
     
     
    
@@ -296,11 +296,11 @@ const DataTable = (props: TableListProps) => {
         pagination={props?.tableInfo?.pagination}
         loading={props?.loading}
         onChange={handleTableChange}
-        expandable={
-          location.pathname === `/staff/${props?.name}`
-            ? { expandedRowRender, defaultExpandedRowKeys: ["0"] }
-            : undefined
-        }
+        // expandable={
+        //   location.pathname === `/staff/${props?.name}`
+        //     ? { expandedRowRender, defaultExpandedRowKeys: ["0"] }
+        //     : undefined
+        // }
       />
     </div>
   )

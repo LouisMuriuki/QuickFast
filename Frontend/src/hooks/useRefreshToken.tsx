@@ -5,9 +5,9 @@ function UseRefreshToken() {
   const { auth, setAuth } = useAuth();
   const refresh = async () => {
     try {
-      const refreshToken = sessionStorage.getItem("mkrshTn");
+      const refreshToken = localStorage.getItem("mkrshTn");
       const response = await axiosInstance.post(
-        `mk_refresh_token_information/${refreshToken}`,
+        `refreshToken/${refreshToken}`,
         {
           headers: { Authorization: "Bearer " + auth?.accessToken },
         }

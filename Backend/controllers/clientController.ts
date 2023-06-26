@@ -5,7 +5,7 @@ const addClient = async (req: any , res: any) => {
     const newClient = await Client.create(req.body);
     res.status(200).json({ success: true, data: newClient,status:200 });
   } catch (error) {
-    res.status(500).json({ success: true, data: error });
+    res.status(500).json({ success: false, data: error });
   }
 };
 
@@ -15,7 +15,7 @@ const getClient = async (req: { params: { id: any } }, res: any) => {
     const currentClient = await Client.findById(id);
     res.status(200).json({ success: true, data: currentClient,status:200 });
   } catch (error) {
-    res.status(500).json({ success: true, data: error });
+    res.status(500).json({ success: false, data: error });
   }
 };
 const getClients = async (req: { query: { page: number; limit: number; }; }, res: any) => {
@@ -27,13 +27,13 @@ const getClients = async (req: { query: { page: number; limit: number; }; }, res
     if (req.query.page) {
       const doclength = await Client.countDocuments();
       if (skip >= doclength) {
-        res.status(500).json({ success: true,data:"no such page"});
+        return res.status(500).json({ success: false,data:"no such page"});
       }
     }
-    const currentClients = Client.find({}).skip(skip).limit(limit);
-    res.status(200).json({ success: true, data:currentClients,status:200 });
+    const currentClients = await Client.find({}).skip(skip).limit(limit);
+    return res.status(200).json({ success: true, data:currentClients,status:200 });
   } catch (error) {
-    res.status(500).json({ success: true, data: error });
+    return res.status(500).json({ success: false, data: error });
   }
 };
 
