@@ -5,13 +5,15 @@ import Currency from "./components/Currency";
 import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
 import Download from "./components/Download";
 // import Discount from "./components/Discount";
-
-const SideBar = () => {
+interface props{
+state:string
+}
+const SideBar = ({state}:props) => {
   const { generateinvoicetype } = useContext(InvoiceFormContext);
   return (
     <div className="flex flex-col py-16 px-4">
       <div className="mb-10">
-        {generateinvoicetype === "Email" ? <ViewOptions /> : <Download />}
+        {generateinvoicetype === "Email" ? <ViewOptions /> : <Download state={state }/>}
       </div>
       {/* <div className="mb-10">
         <Tax />

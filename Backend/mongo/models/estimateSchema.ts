@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { ClientSchema } from "./ClientSchema.ts";
 
 const estimateSchema = new mongoose.Schema({
-  clientId: { type: String, required: true, unique: true },
   ownerId: { type: String, required: true, unique: true },
   status:{type:String,default:"Open"},
   estimate: [

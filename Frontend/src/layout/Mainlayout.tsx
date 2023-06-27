@@ -41,12 +41,12 @@ const MainLayout = () => {
         <Header style={{ display: "flex" }}>
           <AppNav />
         </Header>
-        <Content style={{ padding: "0 50px" }}>
+        <Content className="overflow-hidden" style={{ padding: "0 50px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
             <Link to="/new">New</Link>
           </Breadcrumb>
-          <div className="" style={{ background: colorBgContainer }}>
+          <div className="w-[90%]" style={{ background: colorBgContainer }}>
             <Outlet />
           </div>
           <Login/>

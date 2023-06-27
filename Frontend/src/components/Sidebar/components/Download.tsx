@@ -1,12 +1,81 @@
 import { Divider, Button } from "antd";
 import easyinvoice from "easyinvoice";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { InvoiceFormContext } from "../../../Context/InvoiceFormContext";
 import dayjs from "dayjs";
-const Download = () => {
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import useAuth from "../../../hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
+interface stateprops {
+  state: string;
+}
+
+interface dataProps {
+  ownerId: string;
+  invoice: any;
+}
+const Download = ({ state }: stateprops) => { 
+  const { auth } = useAuth();
+  const [data, setData] = useState<dataProps>({
+    ownerId: auth?.accessToken,
+    invoice: [],
+  });
+  const { forminfo, todata, fromdata, description } =
+    useContext(InvoiceFormContext);
+ 
+  console.log(auth)
+
+  const axiosprivate = useAxiosPrivate();
+  useEffect(() => {
+    setData({
+      ownerId: auth?.userId,
+      invoice: [{ fromdata, ...todata,ownerId:auth?.userId, forminfo, description }],
+    });
+  }, [state, fromdata, todata, forminfo, description, auth]);
+
+  const uploadInvoice = async () => {
+    const res = await axiosprivate.post(
+      "/invoice/createinvoice",
+      JSON.stringify(data),
+      {
+        headers: { Authorization: "Bearer " + auth.accessToken },
+      }
+    );
+    console.log(res);
+    return res.data;
+  };
+
+  const uploadEstimates = async () => {
+    const res = await axiosprivate.post(
+      "/estimate/createestimate",
+      JSON.stringify(data),
+      {
+        headers: { Authorization: "Bearer " + auth.accessToken },
+      }
+    );
+    console.log(res);
+    return res.data;
+  };
+
+  const uploadMutation = useMutation({
+    mutationFn: state === "invoice" ? uploadInvoice : uploadEstimates,
+    onSuccess(data) {
+      console.log(data);
+      if (data.status === 200) {
+      }
+    },
+    onError(error: { message: string }) {
+      console.log(error.message);
+    },
+  });
+
+  const handleSubmit = () => {
+    uploadMutation.mutate();
+  };
+
   let number = [0];
   const [loading, setLoading] = useState(false);
-  const { forminfo, todata, fromdata, description } = useContext(InvoiceFormContext);
+
   number =
     forminfo?.terms === "none"
       ? [0]
@@ -135,7 +204,10 @@ const Download = () => {
         <Button
           type="primary"
           loading={loading}
-          onClick={Download}
+          onClick={() => {
+            handleSubmit();
+            Download();
+          }}
           className="flex items-center w-full justify-center bg-blue-500 text-white"
         >
           Download

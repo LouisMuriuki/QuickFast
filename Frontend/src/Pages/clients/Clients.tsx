@@ -78,7 +78,7 @@ const Clients = () => {
   },[GetClientsQuery.data])
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-7xl">
       <div className="flex items-center justify-between w-full m-10">
         <h2 className="text-2xl font-bold">Clients</h2>
         <Button

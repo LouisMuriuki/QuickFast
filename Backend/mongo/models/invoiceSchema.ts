@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { ClientSchema } from "./ClientSchema.ts";
 
 const invoiceSchema = new mongoose.Schema({
-  clientId: { type: String, required: true, unique: true },
   ownerId: { type: String, required: true, unique: true },
   status:{type:String,default:"Pending"},
   invoice: [
@@ -18,7 +17,7 @@ const invoiceSchema = new mongoose.Schema({
         country: { type: String },
       },
       todata: { type: ClientSchema },
-      Forminfo: {
+      forminfo: {
         title: { type: String },
         logo: { type: String },
         number: { type: String },
@@ -35,7 +34,7 @@ const invoiceSchema = new mongoose.Schema({
         currency: { type: String },
         locale: { type: String },
       },
-      Description: {
+      description: {
         description: { type: String },
         rate: { type: Number },
         qty: { type: Number },
