@@ -17,6 +17,15 @@ const getUsers = async (req: any, res: any) => {
   try {
     if (req.query.page) {
       doclength = await User.countDocuments();
+      if (doclength === 0) {
+        return res.status(200).json({
+          success: true,
+          data: [],
+          status: 200,
+          total: doclength,
+          current: page,
+        });
+      }
       if (skip >= doclength) {
         console.log("no such page");
       }

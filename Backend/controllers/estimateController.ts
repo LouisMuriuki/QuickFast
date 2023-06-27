@@ -21,10 +21,10 @@ const getEstimate = async (req: { params: { id: any } }, res: any) => {
 };
 
 const getEstimates = async (
-  req: { query: { page: number; limit: number ,id:string} },
+  req: { query: { page: number; limit: number; id: string } },
   res: any
 ) => {
-  const ownerId=req.query.id
+  const ownerId = req.query.id;
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const skip = (page - 1) * limit;
@@ -32,20 +32,29 @@ const getEstimates = async (
   try {
     if (req.query.page) {
       doclength = await Estimate.countDocuments();
+      if (doclength === 0) {
+        return res.status(200).json({
+          success: true,
+          data: [],
+          status: 200,
+          total: doclength,
+          current: page,
+        });
+      }
       if (skip >= doclength) {
         return res.status(500).json({ success: true, data: "no such page" });
       }
     }
-    const AllEstimates = await Estimate.find({ownerId}).skip(skip).limit(limit);
-    return res
-      .status(200)
-      .json({
-        success: true,
-        data: AllEstimates,
-        status: 200,
-        total: doclength,
-        current: page,
-      });
+    const AllEstimates = await Estimate.find({ ownerId })
+      .skip(skip)
+      .limit(limit);
+    return res.status(200).json({
+      success: true,
+      data: AllEstimates,
+      status: 200,
+      total: doclength,
+      current: page,
+    });
   } catch (error) {
     return res.status(500).json({ success: false, data: error });
   }

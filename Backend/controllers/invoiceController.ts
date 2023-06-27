@@ -33,6 +33,15 @@ const getInvoices = async (
   try {
     if (req.query.page) {
       doclength = await Invoice.countDocuments();
+      if (doclength === 0) {
+        return res.status(200).json({
+          success: true,
+          data: [],
+          status: 200,
+          total: doclength,
+          current: page,
+        });
+      }
       if (skip >= doclength) {
         res.status(500).json({ success: true, data: "no such page" });
       }

@@ -65,7 +65,7 @@ const Estimates = () => {
        data={data}
        setTableInfo={setTableInfo}
        tableInfo={tableInfo}
-       loading={GetEstimatesQuery.isLoading} />
+       loading={GetEstimatesQuery.isFetching} />
     </div>
   );
 };

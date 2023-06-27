@@ -64,7 +64,7 @@ const Invoices = () => {
          data={data}
          setTableInfo={setTableInfo}
          tableInfo={tableInfo}
-         loading={GetInvoicesQuery.isLoading}/>
+         loading={GetInvoicesQuery.isFetching}/>
     </div>
   )
 }

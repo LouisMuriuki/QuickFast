@@ -31,6 +31,15 @@ const getClients = async (
   try {
     if (req.query.page) {
       doclength = await Client.countDocuments();
+      if (doclength === 0) {
+        return res.status(200).json({
+          success: true,
+          data: [],
+          status: 200,
+          total: doclength,
+          current: page,
+        });
+      }
       if (skip >= doclength) {
         return res.status(500).json({ success: false, data: "no such page" });
       }

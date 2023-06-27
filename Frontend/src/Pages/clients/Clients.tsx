@@ -96,7 +96,7 @@ const Clients = () => {
         data={data}
         setTableInfo={setTableInfo}
         tableInfo={tableInfo}
-        loading={GetClientsQuery.isLoading}
+        loading={GetClientsQuery.isFetching}
       />
     </div>
   );

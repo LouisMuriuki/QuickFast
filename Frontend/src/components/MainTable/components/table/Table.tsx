@@ -1,4 +1,4 @@
-import { useRef, useState ,useContext} from "react";
+import { useRef, useState, useContext } from "react";
 import { Input, Space, Button, Table } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
@@ -16,7 +16,19 @@ import type {
   TablePaginationConfig,
 } from "antd/es/table";
 import ExtrasContext from "../../../../Context/ExtrasContext";
+import {
+  Description,
+  FormInfo,
+  FromData,
+  ToData,
+} from "../../../../Context/InvoiceFormContext";
 
+interface invoiceprops {
+  fromdata: FromData;
+  description: Description;
+  todata: ToData;
+  forminfo: FormInfo;
+}
 interface DataType {
   _id?: string;
   name?: string;
@@ -25,10 +37,13 @@ interface DataType {
   total_billed?: number;
   email?: string;
   address?: string;
-  in_city?: Date;
-  in_zipcode?: number;
-  in_paid?: string;
+  city?: Date;
+  zipcode?: number;
+  paid?: string;
   country?: string;
+  invoice?: [invoiceprops];
+  estimate?: [invoiceprops];
+  createdAt: Date;
 }
 type DataIndex = keyof DataType;
 
@@ -48,18 +63,16 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-
 const DataTable = (props: TableListProps) => {
-  const {setClientData,setClientmodalIsOpen}=useContext(ExtrasContext)
+  const { setClientData, setClientmodalIsOpen } = useContext(ExtrasContext);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
 
-  const showClient=(data:any)=>{
-    setClientData(data)
-    setClientmodalIsOpen(true)
-   
-  }
+  const showClient = (data: any) => {
+    setClientData(data);
+    setClientmodalIsOpen(true);
+  };
 
   const handleSearch = (
     selectedKeys: string[],
@@ -170,44 +183,108 @@ const DataTable = (props: TableListProps) => {
 
   const invoicescolumns: ColumnType<DataType>[] = [
     {
-      title: "Invoice",
-      dataIndex: "in_invoice_number",
-      ...getColumnSearchProps("name"),
+      title: "Invoice Number",
+      dataIndex: "number",
+      render: (_, record) => {
+        const invoices = record.invoice;
+        const invoicenumber = invoices?.map((invoice, i) => {
+          return <span key={i}>{invoice.forminfo.number}</span>;
+        });
+        return <div>{invoicenumber}</div>;
+      },
+      // ...getColumnSearchProps("number"),
     },
     {
       title: "Client",
-      dataIndex: "in_client_name",
-      render: (in_personell_full_name) => `${in_personell_full_name} `,
+      dataIndex: "name",
+      render: (_, record) => {
+        const invoices = record.invoice;
+        const invoicedate = invoices?.map((invoice, i) => {
+          return <span key={i}>{invoice.todata.name}</span>;
+        });
+        return <div>{invoicedate}</div>;
+      },
     },
     {
       title: "Date",
+      render: (_, record) => {
+        const invoices = record.invoice;
+        const invoicedate = invoices?.map((invoice, i) => {
+          return <span key={i}>{invoice.forminfo.date}</span>;
+        });
+        return <div>{invoicedate}</div>;
+      },
       sorter: true,
-      dataIndex: "in_invoice_date",
+      dataIndex: "date",
     },
     {
-      title: "Balance Due",
-      dataIndex: "in_balance_due",
+      title: "Total",
+      dataIndex: "total",
+      render: (_, record) => {
+        const invoices = record.invoice;
+        const invoicetotal = invoices?.map((invoice, i) => {
+          return (
+            <div key={i}>
+              <span>{invoice.forminfo.currency}</span>
+              <span>{invoice.forminfo.total}</span>
+            </div>
+          );
+        });
+        return <div>{invoicetotal}</div>;
+      },
     },
   ];
   const estimatescolumns: ColumnType<DataType>[] = [
     {
-      title: "Estimates",
-      dataIndex: "in_invoice_number",
-      ...getColumnSearchProps("name"),
+      title: "Estimate Number",
+      dataIndex: "number",
+      render: (_, record) => {
+        const estimates = record.estimate;
+        const estimatenumber = estimates?.map((estimate, i) => {
+          return <span key={i}>{estimate.forminfo.number}</span>;
+        });
+        return <div>{estimatenumber}</div>;
+      },
+      // ...getColumnSearchProps("number"),
     },
     {
       title: "Client",
-      dataIndex: "in_client_name",
-      render: (in_personell_full_name) => `${in_personell_full_name} `,
+      dataIndex: "name",
+      render: (_, record) => {
+        const estimates = record.estimate;
+        const estimatedate = estimates?.map((estimate, i) => {
+          return <span key={i}>{estimate.todata.name}</span>;
+        });
+        return <div>{estimatedate}</div>;
+      },
     },
     {
       title: "Date",
+      render: (_, record) => {
+        const estimates = record.estimate;
+        const estimatedate = estimates?.map((estimate, i) => {
+          return <span key={i}>{estimate.forminfo.date}</span>;
+        });
+        return <div>{estimatedate}</div>;
+      },
       sorter: true,
-      dataIndex: "in_invoice_date",
+      dataIndex: "date",
     },
     {
       title: "Total",
-      dataIndex: "in_total",
+      dataIndex: "total",
+      render: (_, record) => {
+        const estimates = record.estimate;
+        const estimatetotal = estimates?.map((estimate, i) => {
+          return (
+            <div key={i}>
+              <span>{estimate.forminfo.currency}</span>
+              <span>{estimate.forminfo.total}</span>
+            </div>
+          );
+        });
+        return <div>{estimatetotal}</div>;
+      },
     },
   ];
   const clientsscolumns: ColumnType<DataType>[] = [
@@ -235,7 +312,9 @@ const DataTable = (props: TableListProps) => {
       render: (_, record) => (
         <Space size="middle" style={{ backgroundColor: "white" }}>
           <Button
-            onClick={() =>{showClient(record)}}
+            onClick={() => {
+              showClient(record);
+            }}
             type="primary"
             className="border-blue-500 bg-blue-500 text-white "
           >
@@ -309,16 +388,16 @@ const DataTable = (props: TableListProps) => {
   // }
   // console.log(props);
 
-  console.log(location.pathname)
+  console.log(location.pathname);
 
   if (location.pathname === "/clients") {
     MainColumn = clientsscolumns;
-  }else if(location.pathname==="/invoices"){
-    MainColumn=invoicescolumns
-  }else if(location.pathname==="/estimates"){
-    MainColumn=estimatescolumns
-  }else{
-    MainColumn=reportsscolumns
+  } else if (location.pathname === "/invoices") {
+    MainColumn = invoicescolumns;
+  } else if (location.pathname === "/estimates") {
+    MainColumn = estimatescolumns;
+  } else {
+    MainColumn = reportsscolumns;
   }
 
   return (
