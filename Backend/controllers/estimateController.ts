@@ -21,14 +21,29 @@ const getEstimate = async (req: { params: { id: any } }, res: any) => {
 };
 
 const getEstimates = async (
-  req: { query: { page: number; limit: number; id: string } },
+  req: { query: { page: number; limit: number; id: string; status: string } },
   res: any
 ) => {
   const ownerId = req.query.id;
+  const statusquery = req.query.status;
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const skip = (page - 1) * limit;
   let doclength;
+  let status;
+  if (statusquery && statusquery !== "All Estimates") {
+    switch (statusquery) {
+      case "Open":
+        status = "Open";
+        break;
+      case "Closed":
+        status = "Closed";
+        break;
+      default:
+        status = "";
+        break;
+    }
+  }
   try {
     if (req.query.page) {
       doclength = await Estimate.countDocuments();
@@ -45,9 +60,10 @@ const getEstimates = async (
         return res.status(500).json({ success: true, data: "no such page" });
       }
     }
-    const AllEstimates = await Estimate.find({ ownerId })
-      .skip(skip)
-      .limit(limit);
+    const AllEstimates =
+      statusquery === "All Estimates"
+        ? await Estimate.find({ ownerId }).skip(skip).limit(limit)
+        : await Estimate.find({ ownerId, status }).skip(skip).limit(limit);
     return res.status(200).json({
       success: true,
       data: AllEstimates,

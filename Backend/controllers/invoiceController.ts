@@ -22,13 +22,26 @@ const getInvoice = async (req: { params: { id: any } }, res: any) => {
 };
 
 const getInvoices = async (
-  req: { query: { page: number; limit: number,id:string } },
+  req: { query: { page: number; limit: number; id: string; status: string } },
   res: any
 ) => {
-  const ownerId=req.query.id
+  const ownerId = req.query.id;
+  const statusquery = req.query.status;
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const skip = (page - 1) * limit;
+  console.log(statusquery);
+  let status = "";
+  if (statusquery && statusquery !== "All Invoices") {
+    switch (statusquery) {
+      case "Pending":
+        status = "Pending";
+        break;
+      case "Completed":
+        status = "Completed";
+        break;
+    }
+  }
   let doclength;
   try {
     if (req.query.page) {
@@ -46,16 +59,17 @@ const getInvoices = async (
         res.status(500).json({ success: true, data: "no such page" });
       }
     }
-    const AllInvoices = await Invoice.find({ownerId}).skip(skip).limit(limit);
-    res
-      .status(200)
-      .json({
-        success: true,
-        data: AllInvoices,
-        status: 200,
-        total: doclength,
-        current: page,
-      });
+    const AllInvoices =
+      statusquery === "All Invoices"
+        ? await Invoice.find({ ownerId }).skip(skip).limit(limit)
+        : await Invoice.find({ ownerId, status }).skip(skip).limit(limit);
+    res.status(200).json({
+      success: true,
+      data: AllInvoices,
+      status: 200,
+      total: doclength,
+      current: page,
+    });
   } catch (error) {
     res.status(500).json({ success: false, data: error });
   }

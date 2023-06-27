@@ -130,7 +130,7 @@ export const InvoiceFormContext = createContext<FormContextType>({
 
 const FormContextProvider = ({ children }: any) => {
   const [segmentedoptions, setSegmentedOptions] = useState(["Edit", "Preview"]);
-  const [selectedoptions, setSelectedOptions] = useState("Edit");
+  const [selectedoptions, setSelectedOptions] = useState("");
   const [generateinvoicetype, setgenerateInvoiceType] = useState("Email");
   const [fromdata, setFromdata] = useState(initialFromData);
   const [todata, setTodata] = useState(initialToData);

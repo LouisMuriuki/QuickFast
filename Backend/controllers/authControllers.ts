@@ -48,13 +48,18 @@ const loginUser = async (
 ) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    res.status(500).json({ success: false, data: "somefileds are missing" });
+    return res
+      .status(500)
+      .json({ success: false, data: "somefileds are missing" });
   }
 
   try {
     const loggedInUser = await User.findOne({ email });
-    !loggedInUser &&
-      res.status(400).json({ success: true, data: "User does not exist" });
+    if (!loggedInUser) {
+      return res
+        .status(400)
+        .json({ success: true, data: "User does not exist" });
+    }
 
     const decryptPassword = CryptoJS.AES.decrypt(
       loggedInUser.password,
@@ -89,7 +94,7 @@ const loginUser = async (
       userid: loggedInUser._id,
       refreshToken: refreshToken,
     });
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: loggedInUser,
       accessToken,
