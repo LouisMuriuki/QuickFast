@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 
-interface FromData {
+export interface FromData {
   [key: string]: string;
   name: string;
   email: string;
@@ -11,7 +11,7 @@ interface FromData {
   website: string;
   country: string;
 }
-interface ToData {
+export interface ToData {
   [key: string]: string;
   name: string;
   email: string;
@@ -22,7 +22,7 @@ interface ToData {
   website: string;
   country: string;
 }
-interface FormInfo {
+export interface FormInfo {
   title: string;
   logo: string;
   number: string;
@@ -39,7 +39,7 @@ interface FormInfo {
   currency: string;
   locale: string;
 }
-interface Description {
+export interface Description {
   description: string;
   rate: number;
   qty: number;

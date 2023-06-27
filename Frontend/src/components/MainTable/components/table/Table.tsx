@@ -189,7 +189,7 @@ const DataTable = (props: TableListProps) => {
       dataIndex: "in_balance_due",
     },
   ];
-  const estimatscolumns: ColumnType<DataType>[] = [
+  const estimatescolumns: ColumnType<DataType>[] = [
     {
       title: "Estimates",
       dataIndex: "in_invoice_number",
@@ -313,6 +313,12 @@ const DataTable = (props: TableListProps) => {
 
   if (location.pathname === "/clients") {
     MainColumn = clientsscolumns;
+  }else if(location.pathname==="/invoices"){
+    MainColumn=invoicescolumns
+  }else if(location.pathname==="/estimates"){
+    MainColumn=estimatescolumns
+  }else{
+    MainColumn=reportsscolumns
   }
 
   return (

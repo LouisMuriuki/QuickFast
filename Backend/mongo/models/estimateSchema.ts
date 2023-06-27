@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 import { ClientSchema } from "./ClientSchema.ts";
 
 const estimateSchema = new mongoose.Schema({
-  ownerId: { type: String, required: true, unique: true },
+  ownerId: { type: String, required: true,},
   status:{type:String,default:"Open"},
   estimate: [
     {
       fromdata: {
-        name: { type: String, required: true, unique: true },
-        email: { type: String, required: true, unique: true },
-        phone: { type: String, required: true, unique: true },
+        name: { type: String, required: true, },
+        email: { type: String, required: true, },
+        phone: { type: String, required: true, },
         address: { type: String },
         city: { type: String },
         zipcode: { type: String },
@@ -17,7 +17,7 @@ const estimateSchema = new mongoose.Schema({
         country: { type: String },
       },
       todata: { type: ClientSchema },
-      Forminfo: {
+      forminfo: {
         title: { type: String },
         logo: { type: String },
         number: { type: String },
@@ -34,7 +34,7 @@ const estimateSchema = new mongoose.Schema({
         currency: { type: String },
         locale: { type: String },
       },
-      Description: {
+      description:[ {
         description: { type: String },
         rate: { type: Number },
         qty: { type: Number },
@@ -42,7 +42,7 @@ const estimateSchema = new mongoose.Schema({
         tax: { type: Boolean },
         taxrate: { type: Number },
         additional: { type: String },
-      },
+      }],
     },
 
   ],

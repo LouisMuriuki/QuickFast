@@ -4,7 +4,7 @@ import Invoice from "../mongo/models/invoiceSchema.ts";
 const addInvoice = async (req: { body: any }, res: any) => {
   try {
     const newInvoice = await Invoice.create(req.body);
-    res.status(200).json({ success: true, data: newInvoice,status:200 });
+    res.status(200).json({ success: true, data: newInvoice, status: 200 });
   } catch (error) {
     res.status(500).json({ success: false, data: error });
   }
@@ -15,28 +15,38 @@ const getInvoice = async (req: { params: { id: any } }, res: any) => {
 
   try {
     const currentInvoice = await Invoice.findById({ id });
-    res.status(200).json({ success: true, data: currentInvoice,status:200 });
+    res.status(200).json({ success: true, data: currentInvoice, status: 200 });
   } catch (error) {
     res.status(500).json({ success: false, data: error });
   }
 };
 
 const getInvoices = async (
-  req: { query: { page: number; limit: number } },
+  req: { query: { page: number; limit: number,id:string } },
   res: any
 ) => {
+  const ownerId=req.query.id
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const skip = (page - 1) * limit;
+  let doclength;
   try {
     if (req.query.page) {
-      const doclength = await Invoice.countDocuments();
+      doclength = await Invoice.countDocuments();
       if (skip >= doclength) {
         res.status(500).json({ success: true, data: "no such page" });
       }
     }
-    const AllInvoices = await Invoice.find({}).skip(skip).limit(limit);
-    res.status(200).json({ success: true, data: AllInvoices,status:200 });
+    const AllInvoices = await Invoice.find({ownerId}).skip(skip).limit(limit);
+    res
+      .status(200)
+      .json({
+        success: true,
+        data: AllInvoices,
+        status: 200,
+        total: doclength,
+        current: page,
+      });
   } catch (error) {
     res.status(500).json({ success: false, data: error });
   }
@@ -46,7 +56,7 @@ const deleteInvoice = async (req: { params: { id: any } }, res: any) => {
   const { id } = req.params;
   try {
     const currentInvoice = await Invoice.findByIdAndDelete({ id });
-    res.status(200).json({ success: true, data: currentInvoice,status:200 });
+    res.status(200).json({ success: true, data: currentInvoice, status: 200 });
   } catch (error) {
     res.status(500).json({ success: false, data: error });
   }
@@ -123,7 +133,7 @@ const updateInvoice = async (
       upsert: true, //important
       runValidators: true,
     });
-    res.status(200).json({ success: true, data: currentInvoice ,status:200});
+    res.status(200).json({ success: true, data: currentInvoice, status: 200 });
   } catch (error) {
     res.status(500).json({ success: false, data: error });
   }

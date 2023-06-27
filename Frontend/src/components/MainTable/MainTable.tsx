@@ -3,8 +3,16 @@ import { useState, useContext } from "react";
 import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
 import DataTable from "./components/table/Table";
 import { useLocation, useNavigate } from "react-router";
+interface TableListProps {
+  data?: any;
+  tableInfo?: any;
+  setTableInfo?: any;
+  loading?: boolean;
+  name?: string;
+  headervalue?: string | number;
+}
 
-const MainTable = () => {
+const MainTable = ({ data, setTableInfo, tableInfo, loading }:TableListProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   let text = "";
@@ -17,7 +25,7 @@ const MainTable = () => {
     useContext(InvoiceFormContext);
 
   const navigateTo = (text: string) => {
-    console.log("clicked")
+    console.log("clicked");
     text === "Add Invoice"
       ? navigate("new", { state: { name: "invoice" } })
       : navigate("new", { state: { name: "estimates" } });
@@ -38,14 +46,20 @@ const MainTable = () => {
         <Button
           size="large"
           type="primary"
-          onClick={() => {navigateTo(text);
+          onClick={() => {
+            navigateTo(text);
           }}
           className="border-blue-500 bg-blue-500 text-white "
         >
           {text}
         </Button>
       </div>
-      <DataTable />
+      <DataTable
+        data={data}
+        setTableInfo={setTableInfo}
+        tableInfo={tableInfo}
+        loading={loading}
+      />
     </div>
   );
 };

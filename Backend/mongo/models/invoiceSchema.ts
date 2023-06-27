@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 import { ClientSchema } from "./ClientSchema.ts";
 
 const invoiceSchema = new mongoose.Schema({
-  ownerId: { type: String, required: true, unique: true },
+  ownerId: { type: String, required: true, },
   status:{type:String,default:"Pending"},
   invoice: [
     {
       fromdata: {
-        name: { type: String, required: true, unique: true },
-        email: { type: String, required: true, unique: true },
-        phone: { type: String, required: true, unique: true },
+        name: { type: String, required: true },
+        email: { type: String, required: true },
+        phone: { type: String, required: true },
         address: { type: String },
         city: { type: String },
         zipcode: { type: String },
@@ -34,7 +34,7 @@ const invoiceSchema = new mongoose.Schema({
         currency: { type: String },
         locale: { type: String },
       },
-      description: {
+      description: [{
         description: { type: String },
         rate: { type: Number },
         qty: { type: Number },
@@ -42,7 +42,7 @@ const invoiceSchema = new mongoose.Schema({
         tax: { type: Boolean },
         taxrate: { type: Number },
         additional: { type: String },
-      },
+      }],
     },
   ],
 }, { timestamps: true });

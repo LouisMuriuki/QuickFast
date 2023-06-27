@@ -46,7 +46,7 @@ const Clients = () => {
 
   const GetClients = async ({ page, limit }: PageProps) => {
     const res = await axiosprivate.get(
-      `client/getclients?page=${page}&limit=${limit}`,
+      `client/getclients?id=${auth.userId}&page=${page}&limit=${limit}`,
       { headers: { Authorization: "Bearer " + auth.accessToken } }
     );
     console.log(res)

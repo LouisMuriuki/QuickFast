@@ -12,9 +12,10 @@ interface stateprops {
 
 interface dataProps {
   ownerId: string;
-  invoice: any;
+  invoice?: any;
+  estimate?: any;
 }
-const Download = ({ state }: stateprops) => { 
+const Download = ({ state }: stateprops) => {
   const { auth } = useAuth();
   const [data, setData] = useState<dataProps>({
     ownerId: auth?.accessToken,
@@ -22,15 +23,34 @@ const Download = ({ state }: stateprops) => {
   });
   const { forminfo, todata, fromdata, description } =
     useContext(InvoiceFormContext);
- 
-  console.log(auth)
+
+  console.log(auth);
 
   const axiosprivate = useAxiosPrivate();
   useEffect(() => {
-    setData({
-      ownerId: auth?.userId,
-      invoice: [{ fromdata, ...todata,ownerId:auth?.userId, forminfo, description }],
-    });
+    state === "invoice"
+      ? setData({
+          ownerId: auth?.userId,
+          invoice: [
+            {
+              fromdata,
+              todata: { ...todata, ownerId: auth?.userId },
+              forminfo,
+              description,
+            },
+          ],
+        })
+      : setData({
+          ownerId: auth?.userId,
+          estimate: [
+            {
+              fromdata,
+              todata: { ...todata, ownerId: auth?.userId },
+              forminfo,
+              description,
+            },
+          ],
+        });
   }, [state, fromdata, todata, forminfo, description, auth]);
 
   const uploadInvoice = async () => {

@@ -4,7 +4,7 @@ import { verifyTokenandAuthorization } from "../middleware/Verify.ts"
 const router=express.Router()
 
 router.get("/getinvoice",verifyTokenandAuthorization ,getInvoice)
-router.get("/getinvoices",verifyTokenandAuthorization,getInvoices)
+router.get("/getinvoices",getInvoices)
 router.post("/createinvoice",addInvoice)
 router.put("/updateinvoice",verifyTokenandAuthorization,updateInvoice)
 router.delete("/deleteinvoices",verifyTokenandAuthorization,deleteInvoice)
