@@ -1,13 +1,16 @@
 import jwt from "jsonwebtoken";
 import RefreshToken from "../mongo/models/refreshTokenSchema.ts";
+import * as dotenv from "dotenv"
+dotenv.config()
+
+
 const generateRefreshToken = async (req: any, res: any) => {
-  console.log(req);
-  const { refreshToken } = req.params;
+  const { refreshToken } = req.query;
   if (!refreshToken) {
     return res.status(400).json({ error: "Refresh token not provided" });
   }
 
-  const storedToken = await RefreshToken.findOne(refreshToken);
+  const storedToken = await RefreshToken.findOne({refreshToken});
 
   const accessToken = jwt.sign(
     {

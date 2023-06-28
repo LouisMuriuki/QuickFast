@@ -9,6 +9,7 @@ import type {
   SorterResult,
   FilterConfirmProps,
 } from "antd/es/table/interface";
+import { MenuInfo } from "rc-menu/lib/interface";
 import { InputRef, Dropdown } from "antd";
 import type {
   ColumnsType,
@@ -22,7 +23,7 @@ import {
   FromData,
   ToData,
 } from "../../../../Context/InvoiceFormContext";
-
+import type { MenuProps } from "antd";
 interface invoiceprops {
   fromdata: FromData;
   description: Description;
@@ -63,6 +64,25 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
+const InvoiceMenuItems = [
+  {
+    key: "1",
+    label: "Mark as Paid",
+  },
+  {
+    key: "1",
+    label: "Email",
+  },
+  {
+    key: "1",
+    label: "Print",
+  },
+  {
+    key: "1",
+    label: "Delete",
+  },
+];
+
 const DataTable = (props: TableListProps) => {
   const { setClientData, setClientmodalIsOpen } = useContext(ExtrasContext);
   const [searchText, setSearchText] = useState("");
@@ -87,6 +107,14 @@ const DataTable = (props: TableListProps) => {
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
     setSearchText("");
+  };
+
+  const onMenuClick = (itemId: number | undefined): MenuProps["onClick"] => {
+    return (menuInfo: MenuInfo) => {
+      const { key } = menuInfo;
+
+      console.log(`Clicked on menu item with key ${key} and ID ${itemId}`);
+    };
   };
   const getColumnSearchProps = (
     dataIndex: DataIndex
@@ -233,6 +261,25 @@ const DataTable = (props: TableListProps) => {
         return <div>{invoicetotal}</div>;
       },
     },
+    {
+      title: "Actions",
+      key: "action",
+      render: (_, record) => {
+        return (
+          <Space size="middle" style={{ backgroundColor: "white" }}>
+            {/* @ts-ignore  */}
+            <Dropdown.Button
+              menu={{
+                items: InvoiceMenuItems,
+                onClick: onMenuClick(record._id && record?._id),
+              }}
+            >
+              Actions
+            </Dropdown.Button>
+          </Space>
+        );
+      },
+    },
   ];
   const estimatescolumns: ColumnType<DataType>[] = [
     {
@@ -284,6 +331,25 @@ const DataTable = (props: TableListProps) => {
           );
         });
         return <div>{estimatetotal}</div>;
+      },
+    },
+    {
+      title: "Actions",
+      key: "action",
+      render: (_, record) => {
+        return (
+          <Space size="middle" style={{ backgroundColor: "white" }}>
+            {/* @ts-ignore  */}
+            <Dropdown.Button
+              menu={{
+                items: InvoiceMenuItems,
+                onClick: onMenuClick(record._id && record?._id),
+              }}
+            >
+              Actions
+            </Dropdown.Button>
+          </Space>
+        );
       },
     },
   ];

@@ -74,7 +74,6 @@ const loginUser = async (
     const accessToken = jwt.sign(
       {
         id: loggedInUser._id,
-        email: loggedInUser.email,
       },
       process.env.ACCESS_TOKEN_SECRET_KEY,
       { expiresIn: "3d" }
@@ -83,7 +82,6 @@ const loginUser = async (
     const refreshToken = jwt.sign(
       {
         id: loggedInUser._id,
-        email: loggedInUser.email,
       },
       process.env.REFRESH_TOKEN_SECRET_KEY,
       {

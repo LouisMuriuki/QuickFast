@@ -5,18 +5,20 @@ function UseRefreshToken() {
   const { auth, setAuth } = useAuth();
   const refresh = async () => {
     try {
-      const refreshToken = localStorage.getItem("mkrshTn");
+      const refreshToken = localStorage.getItem("Invoice_RefreshToken");
       const response = await axiosInstance.post(
-        `refreshToken/${refreshToken}`,
+        `/token/refreshToken?refreshToken=${refreshToken}`,
         {
           headers: { Authorization: "Bearer " + auth?.accessToken },
         }
       );
+      console.log(response.data);
       if (response.data.status === 200) {
-        setAuth(prev=>({
+        setAuth((prev) => ({
           ...prev,
           accessToken: response?.data?.accessToken,
           refreshToken: response?.data?.refreshToken,
+          userId: response.data.userId,
         }));
       }
       return response?.data;

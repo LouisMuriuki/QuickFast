@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import * as dotenv from "dotenv";
+dotenv.config();
 interface AuthenticatedRequest extends Request {
   user?: any;
 }
 const VerifyToken = (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
+  req: any,
+  res: any,
+  next:any
 ) => {
   const token = req.headers.authorization;
   console.log(token)
@@ -16,8 +18,9 @@ const VerifyToken = (
       .json({ message: "Access denied. No token provided." });
   }
   try {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY, (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY, (err: any, user: any) => {
       if (err) {
+        console.log("Verification error:", err);
         return res.status(403).json({message:"Token is not valid"});
       }
       console.log(user);

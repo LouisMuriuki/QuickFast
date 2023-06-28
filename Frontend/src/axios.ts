@@ -15,6 +15,7 @@ const axiosInstance = axios.create({
   timeoutErrorMessage: "Connection timeout!, Check internet connection",
   headers: {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": true,
   },
 });
 

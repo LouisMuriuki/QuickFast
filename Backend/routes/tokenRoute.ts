@@ -3,4 +3,6 @@ import { generateRefreshToken } from "../controllers/tokenController.ts"
 const router=express.Router()
 
 
-router.post("/refreshToken",generateRefreshToken)
+router.post("/refreshToken/",generateRefreshToken)
+
+export default router
