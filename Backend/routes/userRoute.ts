@@ -1,12 +1,12 @@
 import express from "express"
 import { deleteUser, getUser,getUsers, updateUser } from "../controllers/userController.ts"
-import { verifyTokenandAuthorization } from "../middleware/Verify.ts"
+import { VerifyToken, verifyTokenandAuthorization } from "../middleware/Verify.ts"
 
 const router=express.Router()
 
-router.get("/getuser",verifyTokenandAuthorization,getUser)
-router.get("/getusers",verifyTokenandAuthorization,getUsers)
-router.delete("/deleteuser",verifyTokenandAuthorization,deleteUser)
-router.put("/updateuser",verifyTokenandAuthorization,updateUser)
+router.get("/getuser",VerifyToken,getUser)
+router.get("/getusers",VerifyToken,getUsers)
+router.delete("/deleteuser",VerifyToken,deleteUser)
+router.put("/updateuser",VerifyToken,updateUser)
 
 export default router

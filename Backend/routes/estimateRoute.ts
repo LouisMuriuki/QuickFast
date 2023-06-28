@@ -1,12 +1,21 @@
-import express from "express"
-import { addEstimate, deleteEstimate, getEstimate, getEstimates, updateEstimate } from "../controllers/estimateController.ts"
-import { verifyTokenandAuthorization } from "../middleware/Verify.ts"
-const router=express.Router()
+import express from "express";
+import {
+  addEstimate,
+  deleteEstimate,
+  getEstimate,
+  getEstimates,
+  updateEstimate,
+} from "../controllers/estimateController.ts";
+import {
+  VerifyToken,
+  verifyTokenandAuthorization,
+} from "../middleware/Verify.ts";
+const router = express.Router();
 
-router.get("/getestimate",verifyTokenandAuthorization, getEstimate)
-router.get("/getestimates",getEstimates)
-router.post("/createestimate",addEstimate)
-router.put("/updateestimate",verifyTokenandAuthorization,updateEstimate)
-router.delete("/deleteestimates",verifyTokenandAuthorization,deleteEstimate)
+router.get("/getestimate", VerifyToken, getEstimate);
+router.get("/getestimates", VerifyToken, getEstimates);
+router.post("/createestimate", addEstimate);
+router.put("/updateestimate", VerifyToken, updateEstimate);
+router.delete("/deleteestimates", VerifyToken, deleteEstimate);
 
-export default router
+export default router;

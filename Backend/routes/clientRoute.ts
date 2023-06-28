@@ -4,9 +4,9 @@ import { VerifyToken, verifyTokenandAuthorization } from "../middleware/Verify.t
 const router=express.Router()
 
 router.post("/addclient",VerifyToken,addClient)
-router.get("/getclient",verifyTokenandAuthorization,getClient)
-router.get("/getclients", getClients)
-router.put("/updateclient",verifyTokenandAuthorization,updateClient)
-router.delete("/getclient",verifyTokenandAuthorization,deleteClient)
+router.get("/getclient",VerifyToken,getClient)
+router.get("/getclients",VerifyToken, getClients)
+router.put("/updateclient",VerifyToken,updateClient)
+router.delete("/getclient",VerifyToken,deleteClient)
 
 export default router

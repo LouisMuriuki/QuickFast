@@ -1,12 +1,12 @@
 import express from "express"
 import { addInvoice, deleteInvoice, getInvoice, getInvoices, updateInvoice } from "../controllers/invoiceController.ts"
-import { verifyTokenandAuthorization } from "../middleware/Verify.ts"
+import { VerifyToken, verifyTokenandAuthorization } from "../middleware/Verify.ts"
 const router=express.Router()
 
-router.get("/getinvoice",verifyTokenandAuthorization ,getInvoice)
-router.get("/getinvoices",getInvoices)
-router.post("/createinvoice",addInvoice)
-router.put("/updateinvoice",verifyTokenandAuthorization,updateInvoice)
-router.delete("/deleteinvoices",verifyTokenandAuthorization,deleteInvoice)
+router.get("/getinvoice",VerifyToken ,getInvoice)
+router.get("/getinvoices",VerifyToken, getInvoices)
+router.post("/createinvoice",VerifyToken,addInvoice)
+router.put("/updateinvoice",VerifyToken,updateInvoice)
+router.delete("/deleteinvoices",VerifyToken,deleteInvoice)
 
 export default router

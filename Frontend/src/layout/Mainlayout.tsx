@@ -1,11 +1,15 @@
 import { Breadcrumb, Layout, theme, ConfigProvider, FloatButton } from "antd";
-import type { ThemeConfig,  } from "antd";
-import {Link, Outlet } from "react-router-dom";
+import type { ThemeConfig } from "antd";
+import { Link, Outlet } from "react-router-dom";
 import AppNav from "../components/Navbar/AppNav";
 import { CommentOutlined } from "@ant-design/icons";
 import Login from "../components/login/Login";
 import Register from "../components/register/Register";
 import AddClient from "../Pages/clients/components/AddClient";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuth from "../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const { Header, Content, Footer } = Layout;
 
@@ -20,20 +24,34 @@ const config: ThemeConfig = {
 };
 
 const MainLayout = () => {
+  const axiosprivate = useAxiosPrivate();
+  const { auth, setAuth } = useAuth();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  // const App: React.FC = () => {
-  //   const [current, setCurrent] = useState('mail');
+  const getUser = async () => {
+    const response = await axiosprivate.get(
+      `/users/getuser?id=${auth?.userId}`,
+      {
+        headers: { Authorization: "Bearer " + auth?.accessToken },
+      }
+    );
+    console.log(response);
+    return response.data;
+  };
 
-  //   const onClick: MenuProps['onClick'] = (e) => {
-  //     console.log('click ', e);
-  //     setCurrent(e.key);
-  //   };
+  const getUserQuery = useQuery({
+    queryKey: ["user"],
+    queryFn: () => getUser(),
+  });
 
-  //   return <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />;
-  // };
+  useEffect(() => {
+    setAuth((prev) => ({
+      ...prev,
+      username: getUserQuery.data?.data?.username,
+    }));
+  }, [getUserQuery.data]);
 
   return (
     <ConfigProvider theme={config}>
@@ -49,9 +67,9 @@ const MainLayout = () => {
           <div className="w-[90%]" style={{ background: colorBgContainer }}>
             <Outlet />
           </div>
-          <Login/>
-          <Register/>
-          <AddClient/>
+          <Login />
+          <Register />
+          <AddClient />
           <FloatButton icon={<CommentOutlined />} />
         </Content>
         <Footer style={{ textAlign: "center" }}>

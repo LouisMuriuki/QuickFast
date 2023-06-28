@@ -1,7 +1,8 @@
 import User from "../mongo/models/UserSchema.ts";
 
-const getUser = async (req: { params: { id: any } }, res: any) => {
-  const { id } = req.params;
+const getUser = async (req: { query: { id: any } }, res: any) => {
+  const { id } = req.query;
+  console.log(id)
   try {
     const currentUser = await User.findById(id);
     res.status(200).json({ success: true, data: currentUser, status: 200 });

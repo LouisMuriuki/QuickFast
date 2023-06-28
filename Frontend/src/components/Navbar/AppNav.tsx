@@ -4,11 +4,21 @@ import { Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
 
 const AppNav = () => {
-  const { setLoginOpen, setRegisterOpen, auth } = useContext(AuthContext);
+  const { setLoginOpen, setRegisterOpen, auth, setAuth } =
+    useContext(AuthContext);
 
   const accessTokenString = localStorage.getItem("Invoice_AccessToken");
 
-  const OpenModal = () => {};
+  const logout = () => {
+    setAuth({
+      accessToken: "",
+      refreshToken: "",
+      userId: "",
+      username: "",
+    });
+    localStorage.removeItem("Invoice_AccessToken"),
+    localStorage.removeItem("Invoice_RefreshToken")
+  };
   return (
     <div className="flex">
       <nav>
@@ -68,8 +78,7 @@ const AppNav = () => {
                   </Link>
                   {auth.accessToken ? (
                     <Button
-                      
-                      onClick={() => setLoginOpen(true)}
+                      onClick={() => logout()}
                       className="flex items-center justify-center text border-red-500 bg-red-500 hover:bg-red-500 text-white 0 hover:text-white px-3 py-2 rounded-md transition duration-200"
                     >
                       LogOut
@@ -92,7 +101,7 @@ const AppNav = () => {
                       Sign up
                     </Button>
                   )}
-                  {
+                  {auth.userId &&
                     <Button
                       type="primary"
                       className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200"
