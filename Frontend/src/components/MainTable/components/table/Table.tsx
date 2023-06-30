@@ -84,7 +84,7 @@ const InvoiceMenuItems = [
 ];
 
 const DataTable = (props: TableListProps) => {
-  const { setClientData, setClientmodalIsOpen } = useContext(ExtrasContext);
+  const { setClientData, setClientmodalIsOpen,setClientDataMode } = useContext(ExtrasContext);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
@@ -92,6 +92,7 @@ const DataTable = (props: TableListProps) => {
   const showClient = (data: any) => {
     setClientData(data);
     setClientmodalIsOpen(true);
+    setClientDataMode("Update")
   };
 
   const handleSearch = (

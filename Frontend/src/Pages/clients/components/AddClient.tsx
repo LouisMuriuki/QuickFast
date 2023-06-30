@@ -8,7 +8,7 @@ import { axiosPrivate } from "../../../axios";
 import { useMutation } from "@tanstack/react-query";
 import AuthContext from "../../../Context/AuthContext";
 const AddClient = () => {
-  const { clientdata, clientmodalisopen, setClientmodalIsOpen } =
+  const { clientdata, clientmodalisopen, clientdatamode,setClientmodalIsOpen } =
     useContext(ExtrasContext);
   const { auth } = useContext(AuthContext);
   const [messageApi, contextHolder] = message.useMessage();
@@ -58,15 +58,22 @@ console.log(auth.accessToken)
         setIsOpen={setClientmodalIsOpen}
         title={"Add Client"}
       >
-        <FormComponent tolabels={tolabels} origin="Add Client" />
-        <Button
+        <FormComponent tolabels={tolabels} origin="Add Client" data={clientdata}/>
+        {clientdatamode==="Add"?<Button
           onClick={handleSubmit}
           type="primary"
           loading={addClientMutation.isLoading}
           className="flex flex-row-reverse border-blue-500 bg-blue-500 text-white"
         >
           Add
-        </Button>
+        </Button>:<Button
+          // onClick={}
+          type="primary"
+          // loading={}
+          className="flex flex-row-reverse border-blue-500 bg-blue-500 text-white"
+        >
+          Update
+        </Button>}
       </MainModal>
     </div>
   );

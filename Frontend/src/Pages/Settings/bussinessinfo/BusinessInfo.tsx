@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext,useEffect } from "react";
 import FormComponent from "../../../components/Reusables/FormComponent";
 import { fromlabels } from "../../../constants/Constants";
-import { Upload, message } from "antd";
+import { Upload, message, Form } from "antd";
 import axios from "axios";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload";
@@ -18,12 +18,12 @@ const beforeUpload = (file: RcFile) => {
   }
   return isJpgOrPng && isLt2M;
 };
-const BusinessInfo = () => {
+const BusinessInfo = (data: any) => {
   const { bizinfo, setBizInfo } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
   const upload_preset = import.meta.env.VITE_UPLOAD_PRESET;
   const cloudinary_name = import.meta.env.VITE_CLOUDINARY_NAME;
-
+  console.log(data);
   const handleChange = async (options: any) => {
     const { onSuccess, onError, file } = options;
     if (!file) {
@@ -61,6 +61,15 @@ const BusinessInfo = () => {
       <div style={{ marginTop: 8 }}>Add Logo</div>
     </div>
   );
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (data && data.data) {
+      form.setFieldsValue({
+        avatar: data.data.logo,
+      });
+    }
+  }, [data, form]);
 
   return (
     <div className="w-full flex flex-col">
@@ -71,25 +80,38 @@ const BusinessInfo = () => {
         <div className="flex items-center">
           <p>Logo:</p>
         </div>
-        <div className="">
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className=""
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            customRequest={handleChange}
-            beforeUpload={beforeUpload}
-          >
-            {bizinfo.logo ? (
-              <img src={bizinfo.logo} alt="avatar" style={{ width: "100%" }} />
-            ) : (
-              uploadButton
-            )}
-          </Upload>
-        </div>
+        <Form
+          name="logo"
+          form={form}
+        >
+          <div className="">
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className=""
+              showUploadList={false}
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              customRequest={handleChange}
+              beforeUpload={beforeUpload}
+            >
+              {bizinfo.logo ? (
+                <img
+                  src={bizinfo.logo}
+                  alt="avatar"
+                  style={{ width: "100%" }}
+                />
+              ) : (
+                uploadButton
+              )}
+            </Upload>
+          </div>
+        </Form>
       </div>
-      <FormComponent fromlabels={fromlabels} origin="settings" />
+      <FormComponent
+        fromlabels={fromlabels}
+        origin="settings"
+        data={data?.data && data?.data}
+      />
     </div>
   );
 };

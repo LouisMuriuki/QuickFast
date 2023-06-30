@@ -15,7 +15,7 @@ const settingsSchema = new mongoose.Schema(
         website: { type: String },
         country: { type: String },
       },
-      customize: {
+      customizeinfo: {
         invoicetitle: { type: String },
         estimatetitle: { type: String },
         currency: { type: String },

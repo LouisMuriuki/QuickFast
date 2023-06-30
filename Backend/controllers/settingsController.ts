@@ -7,9 +7,9 @@ const getDefaultInvoiceSettings = async(req: { query: { id: any } }, res: any) =
     return res.status(500).json({ success: false, data: "Invalid request" });
   }
   try {
-    const existingsettings = await Settings.findOne({ id });
+    const existingsettings = await Settings.findOne({ ownerId:id });
     if (!existingsettings) {
-      return res.status(200).json({ success: true, data: "Not found" });
+      return res.status(200).json({ success: true, data: [],status:200 });
     }
     return res
       .status(200)
@@ -18,12 +18,13 @@ const getDefaultInvoiceSettings = async(req: { query: { id: any } }, res: any) =
     return res.status(500).json({ success: false, data: error });
   }
 };
-const setDefaultSettings = async(req: { query: any }, res: any) => {
-    const { id } = req.query;
+const setDefaultSettings = async(req: { body: any;  }, res: any) => {
+  console.log(req.body)
+    const id  = req.body.ownerId;
     if (!id) {
       return res.status(500).json({ success: false, data: "Invalid request" });
     }
-    const body = req.query;
+    const body = req.body;
   if (!body) {
     return res.status(500).json({ success: false, data: "Invalid request" });
   }

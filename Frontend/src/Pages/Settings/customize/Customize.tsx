@@ -1,7 +1,6 @@
-import React from "react";
 import { Form, Input, Select, Space } from "antd";
 import clm from "country-locale-map";
-import { useContext } from "react";
+import { useContext,useEffect } from "react";
 import TextArea from "antd/es/input/TextArea";
 import { SettingsContext } from "../../../Context/SettingsContext";
 import {
@@ -10,7 +9,8 @@ import {
 } from "../../../constants/Constants";
 const { Option } = Select;
 const countries = clm.getAllCountries();
-const Customize = () => {
+const Customize = (data:any) => {
+  console.log(data)
   const { customizeinfo, setCustomizeInfo } = useContext(SettingsContext);
   const locale = clm.getLocaleByName("Kenya");
   console.log(locale);
@@ -22,15 +22,30 @@ const Customize = () => {
   const FromChange = (name: any, value: any) => {
     setCustomizeInfo((prev) => ({ ...prev, [name]: value }));
   };
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (data && data.data) {
+      form.setFieldsValue({
+        estimatetitle: data.data.estimatetitle,
+        invoicetitle: data.data.invoicetitle,
+      });
+    }
+  }, [data, form]);
+
   return (
     <div className="flex flex-col w-full">
         <h1 className="flex items-center justify-center mb-10">CUSTOMIZE</h1>
       <Form
+      form={form}
         name={"Customize"}
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
+        // initialValues={{
+        //   ["estimatetitle"]:data?.data&&data?.data["estimatetitle"],
+        //   ["invoicetitle"]:data?.data&&data?.data["invoicetitle"]
+        //  }}
         // onFinish={onFinish}
         // onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -49,7 +64,7 @@ const Customize = () => {
                   <Input
                     placeholder={labels.placeholder}
                     className="flex w-full"
-                    defaultValue={customizeinfo && customizeinfo?.labels?.name}
+                    defaultValue={data?.data && data?.data.labels?.name}
                     onChange={(e) => {
                       FromChange(labels.name, e.target.value);
                     }}
@@ -90,7 +105,7 @@ const Customize = () => {
             <TextArea
             className="col-span-8"
               showCount
-              value={customizeinfo[textarea.name]}
+              value={data?.data&&data?.data[textarea.name]}
               name={textarea.name}
               style={{ height: 150, resize: "none" }}
               onChange={(e) => {

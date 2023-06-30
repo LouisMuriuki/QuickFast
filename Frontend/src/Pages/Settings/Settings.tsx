@@ -5,6 +5,7 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { SettingsContext } from "../../Context/SettingsContext";
+import { Button } from "antd";
 
 const Settings = () => {
   const axiosprivate = useAxiosPrivate();
@@ -56,10 +57,12 @@ const Settings = () => {
     queryFn: () => getSettings(),
   });
 
-  // useEffect(() => {
-  //   setBizInfo(getSettingsQuery?.data?.data.settings.bizinfo);
-  //   setCustomizeInfo(getSettingsQuery?.data?.data.settings.customizeinfo);
-  // }, [getSettingsQuery?.data]);
+  useEffect(() => {
+    if (getSettingsQuery?.data?.data?.settings) {
+      setBizInfo(getSettingsQuery?.data?.data.settings.bizinfo);
+      setCustomizeInfo(getSettingsQuery?.data?.data.settings.customizeinfo);
+    }
+  }, [getSettingsQuery?.data]);
 
   const saveSettingsMutation = useMutation({
     mutationFn: saveSettings,
@@ -87,10 +90,20 @@ const Settings = () => {
   return (
     <div className="flex flex-col md:flex-col p-5">
       <div className="flex justify-center w-full md:w-1/2">
-        <BusinessInfo />
+        <BusinessInfo data={getSettingsQuery?.data?.data?.settings?.bizinfo}/>
       </div>
       <div className="flex justify-center w-full md:w-1/2">
-        <Customize />
+        <Customize data={getSettingsQuery?.data?.data?.settings?.customizeinfo} />
+      </div>
+      <div>
+        <Button
+          type="primary"
+          onClick={() => {
+            saveSettingsMutation.mutate();
+          }}
+        >
+          Save
+        </Button>
       </div>
     </div>
   );

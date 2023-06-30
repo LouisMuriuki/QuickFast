@@ -10,7 +10,7 @@ const InvoiceGen = () => {
   const { state } = useLocation();
   console.log(state);
   const { name } = state;
-  const { selectedoptions, setFormInfo } = useContext(InvoiceFormContext);
+  const { selectedoptions, setFormInfo,setSelectedOptions,setSegmentedOptions } = useContext(InvoiceFormContext);
 
   useEffect(() => {
     if (name === "estimates") {
@@ -19,6 +19,11 @@ const InvoiceGen = () => {
       setFormInfo((prev) => ({ ...prev, title: "Invoice" }));
     }
   }, [name]);
+
+  useEffect(()=>{
+    setSegmentedOptions(["Edit", "Preview"])
+    setSelectedOptions("Edit");
+  },[])
 
   return (
     <div className=" max-w-full  flex container ">
