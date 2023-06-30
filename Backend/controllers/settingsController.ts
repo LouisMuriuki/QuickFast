@@ -71,6 +71,8 @@ const updateDefaultSettings = async (
   res: any
 ) => {
   const { id } = req.query;
+  console.log(req.body)
+  console.log(req.query)
   if (!id) {
     return res.status(500).json({ success: false, data: "Invalid request" });
   }

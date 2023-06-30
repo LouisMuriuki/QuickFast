@@ -1,17 +1,19 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import BusinessInfo from "./bussinessinfo/BusinessInfo";
 import Customize from "./customize/Customize";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { SettingsContext } from "../../Context/SettingsContext";
-import { Button } from "antd";
+import { Button, message } from "antd";
 
 const Settings = () => {
   const axiosprivate = useAxiosPrivate();
   const { bizinfo, customizeinfo, setBizInfo, setCustomizeInfo } =
     useContext(SettingsContext);
+    const [_id,setID]=useState("")
   const { auth } = useAuth();
+  const [messageApi, contextHolder] = message.useMessage();
   const saveSettings = async () => {
     const res = await axiosprivate.post(
       `settings/setdefaultsettings?id=${auth.userId}`,
@@ -29,7 +31,7 @@ const Settings = () => {
 
   const updateSettings = async () => {
     const res = await axiosprivate.patch(
-      `settings/updatedefaultsettings?id=${auth.userId}`,
+      `settings/updatedefaultsettings?id=${_id}`,
       JSON.stringify({
         ownerId: auth.userId,
         settings: { bizinfo, customizeinfo },
@@ -56,11 +58,13 @@ const Settings = () => {
     queryKey: ["settings"],
     queryFn: () => getSettings(),
   });
+  console.log(getSettingsQuery?.data)
 
   useEffect(() => {
     if (getSettingsQuery?.data?.data?.settings) {
       setBizInfo(getSettingsQuery?.data?.data.settings.bizinfo);
       setCustomizeInfo(getSettingsQuery?.data?.data.settings.customizeinfo);
+      setID(getSettingsQuery?.data?.data?._id)
     }
   }, [getSettingsQuery?.data]);
 
@@ -69,9 +73,17 @@ const Settings = () => {
     onSuccess(data) {
       console.log(data);
       if (data.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: "settings added successfully",
+        });
       }
     },
     onError(error: { message: string }) {
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
       console.log(error.message);
     },
   });
@@ -80,29 +92,44 @@ const Settings = () => {
     onSuccess(data) {
       console.log(data);
       if (data.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: "settings updated successfully",
+        });
       }
     },
     onError(error: { message: string }) {
-      console.log(error.message);
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
     },
   });
 
+  const handleClick = () => {
+    getSettingsQuery?.data?.data?.settings?.bizinfo
+      ? updateSettingsMutation.mutate()
+      : saveSettingsMutation.mutate();
+  };
+
   return (
     <div className="flex flex-col md:flex-col p-5">
+      {contextHolder}
       <div className="flex justify-center w-full md:w-1/2">
-        <BusinessInfo data={getSettingsQuery?.data?.data?.settings?.bizinfo}/>
+        <BusinessInfo data={getSettingsQuery?.data?.data?.settings?.bizinfo} />
       </div>
       <div className="flex justify-center w-full md:w-1/2">
-        <Customize data={getSettingsQuery?.data?.data?.settings?.customizeinfo} />
+        <Customize
+          data={getSettingsQuery?.data?.data?.settings?.customizeinfo}
+        />
       </div>
       <div>
         <Button
           type="primary"
-          onClick={() => {
-            saveSettingsMutation.mutate();
-          }}
+          className="border-blue-500 bg-blue-500 text-white"
+          onClick={handleClick}
         >
-          Save
+          {getSettingsQuery?.data?.data?.settings?.bizinfo ? "Update" : "Save"}
         </Button>
       </div>
     </div>

@@ -26,11 +26,10 @@ interface FormProps {
   data: any;
 }
 const FormComponent = ({ fromlabels, tolabels, origin, data }: FormProps) => {
-  const { fromdata, todata, setFromdata, setTodata } =
+  const {  todata, setFromdata, setTodata } =
     useContext(InvoiceFormContext);
-  console.log(data);
-  const { setBizInfo, bizinfo } = useContext(SettingsContext);
-  const { clientdata, setClientData, clientdatamode } =
+  const { setBizInfo, } = useContext(SettingsContext);
+  const { setClientData, clientdatamode } =
     useContext(ExtrasContext);
   const FromChange = (name: any, value: any) => {
     origin === "settings"
@@ -68,18 +67,6 @@ const FormComponent = ({ fromlabels, tolabels, origin, data }: FormProps) => {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
-        // initialValues={{
-        // ["name"]:bizinfo["name"],
-        // ["email"]:bizinfo["email"],
-        // ["phone"]:bizinfo["phone"],
-        // ["address"]:bizinfo["address"],
-        // ["city"]:bizinfo["city"],
-        // ["zipcode"]:bizinfo["zipcode"],
-        // ["website"]:bizinfo["website"],
-        // ["country"]:bizinfo["country"],
-        // }}
-        // onFinish={onFinish}
-        // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         {fromlabels &&

@@ -8,12 +8,17 @@ import { axiosPrivate } from "../../../axios";
 import { useMutation } from "@tanstack/react-query";
 import AuthContext from "../../../Context/AuthContext";
 const AddClient = () => {
-  const { clientdata, clientmodalisopen, clientdatamode,setClientmodalIsOpen } =
-    useContext(ExtrasContext);
+  const {
+    clientdata,
+    clientmodalisopen,
+    clientdatamode,
+    setClientmodalIsOpen,
+  } = useContext(ExtrasContext);
   const { auth } = useContext(AuthContext);
   const [messageApi, contextHolder] = message.useMessage();
 
   const addClient = async () => {
+    
     const res = await axiosPrivate.post(
       "/client/addclient",
       JSON.stringify({
@@ -21,12 +26,26 @@ const AddClient = () => {
         ownerId: auth.userId,
       }),
       {
-        headers:{Authorization:"Bearer "+auth.accessToken}
+        headers: { Authorization: "Bearer " + auth.accessToken },
       }
     );
     return res.data;
   };
-console.log(auth.accessToken)
+  const updateClient = async () => {
+    const {__v,_id,...newclient}=clientdata
+    const res = await axiosPrivate.patch(
+      `/client/updateclient/${_id}`,
+      JSON.stringify({
+         ...newclient,
+        ownerId: auth.userId,
+      }),
+      {
+        headers: { Authorization: "Bearer " + auth.accessToken },
+      }
+    );
+    return res.data;
+  };
+
   const addClientMutation = useMutation({
     mutationFn: addClient,
     onSuccess(data) {
@@ -45,9 +64,31 @@ console.log(auth.accessToken)
       });
     },
   });
+  const updateClientMutation = useMutation({
+    mutationFn: updateClient,
+    onSuccess(data) {
+      if (data.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: "Client updated successfully",
+        });
+        setClientmodalIsOpen(false);
+      }
+    },
+    onError(error: { message: string }) {
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
+    },
+  });
 
   const handleSubmit = () => {
-    addClientMutation.mutate();
+    {
+      clientdatamode === "Add"
+        ? addClientMutation.mutate()
+        : updateClientMutation.mutate();
+    }
   };
 
   return (
@@ -58,22 +99,19 @@ console.log(auth.accessToken)
         setIsOpen={setClientmodalIsOpen}
         title={"Add Client"}
       >
-        <FormComponent tolabels={tolabels} origin="Add Client" data={clientdata}/>
-        {clientdatamode==="Add"?<Button
+        <FormComponent
+          tolabels={tolabels}
+          origin="Add Client"
+          data={clientdata}
+        />
+        <Button
           onClick={handleSubmit}
           type="primary"
-          loading={addClientMutation.isLoading}
+          loading={addClientMutation.isLoading||updateClientMutation.isLoading}
           className="flex flex-row-reverse border-blue-500 bg-blue-500 text-white"
         >
-          Add
-        </Button>:<Button
-          // onClick={}
-          type="primary"
-          // loading={}
-          className="flex flex-row-reverse border-blue-500 bg-blue-500 text-white"
-        >
-          Update
-        </Button>}
+          {clientdatamode === "Add" ? "Add" : "Update"}
+        </Button>
       </MainModal>
     </div>
   );

@@ -6,7 +6,7 @@ const router=express.Router()
 router.post("/addclient",VerifyToken,addClient)
 router.get("/getclient",VerifyToken,getClient)
 router.get("/getclients",VerifyToken, getClients)
-router.put("/updateclient",VerifyToken,updateClient)
+router.patch("/updateclient/:id",VerifyToken,updateClient)
 router.delete("/getclient",VerifyToken,deleteClient)
 
 export default router

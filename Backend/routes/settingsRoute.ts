@@ -5,6 +5,6 @@ const router=express.Router()
 
 router.get("/getdefaultsettings",VerifyToken,getDefaultInvoiceSettings)
 router.post("/setdefaultsettings",VerifyToken,setDefaultSettings)
-router.put("/updatedefaultsettings",VerifyToken,updateDefaultSettings)
+router.patch("/updatedefaultsettings",VerifyToken,updateDefaultSettings)
 
 export default router
