@@ -1,6 +1,6 @@
 import { Breadcrumb, Layout, theme, ConfigProvider, FloatButton } from "antd";
 import type { ThemeConfig } from "antd";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import AppNav from "../components/Navbar/AppNav";
 import { CommentOutlined } from "@ant-design/icons";
 import Login from "../components/login/Login";
@@ -25,6 +25,7 @@ const config: ThemeConfig = {
 
 const MainLayout = () => {
   const axiosprivate = useAxiosPrivate();
+  const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
   const {
     token: { colorBgContainer },
@@ -52,6 +53,10 @@ const MainLayout = () => {
       username: getUserQuery.data?.data?.username,
     }));
   }, [getUserQuery.data]);
+
+  useEffect(() => {
+    navigate("invoices");
+  }, []);
 
   return (
     <ConfigProvider theme={config}>

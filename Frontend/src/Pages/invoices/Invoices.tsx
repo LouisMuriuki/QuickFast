@@ -25,7 +25,6 @@ const Invoices = () => {
   const {selectedoptions,setSelectedOptions,setSegmentedOptions}=useContext(InvoiceFormContext)
   const [data, setData] = useState([]);
   const [status, setStatus] = useState("All Invoices");
- console.log(status)
   const [tableInfo, setTableInfo] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -39,7 +38,6 @@ const Invoices = () => {
     const res=await axiosprivate.get(`/invoice/getinvoices?id=${auth.userId}&page=${page}&limit=${limit}&status=${status}`,{
       headers:{Authorization:"Bearer "+auth?.accessToken}
     })
-    console.log(res)
     setTableInfo({
       ...tableInfo,
       pagination: {
@@ -59,8 +57,6 @@ const Invoices = () => {
         status:status
       }),
   });
-
-  console.log(GetInvoicesQuery?.data?.data);
 
   useEffect(()=>{
     setData(GetInvoicesQuery?.data?.data)

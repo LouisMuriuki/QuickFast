@@ -1,5 +1,5 @@
 import { useRef, useState, useContext } from "react";
-import { Input, Space, Button, Table } from "antd";
+import { Input, Space, Button, Table, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { DownloadOutlined } from "@ant-design/icons";
@@ -24,6 +24,9 @@ import {
   ToData,
 } from "../../../../Context/InvoiceFormContext";
 import type { MenuProps } from "antd";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+import useAuth from "../../../../hooks/useAuth";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 interface invoiceprops {
   fromdata: FromData;
   description: Description;
@@ -70,30 +73,91 @@ const InvoiceMenuItems = [
     label: "Mark as Paid",
   },
   {
-    key: "1",
+    key: "2",
     label: "Email",
   },
   {
-    key: "1",
+    key: "3",
     label: "Print",
   },
   {
-    key: "1",
+    key: "4",
     label: "Delete",
   },
 ];
 
 const DataTable = (props: TableListProps) => {
+  const queryClient=useQueryClient()
+  const [messageApi, contextHolder] = message.useMessage();
   const { setClientData, setClientmodalIsOpen,setClientDataMode } = useContext(ExtrasContext);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
-
+  const axiosprivate=useAxiosPrivate()
+  const {auth}=useAuth()
   const showClient = (data: any) => {
     setClientData(data);
     setClientmodalIsOpen(true);
     setClientDataMode("Update")
   };
+
+  const deleteInvoices=async(id:string)=>{
+    const res=await axiosprivate.delete(`/invoice/deleteinvoices/${id}`,{
+      headers:{Authorization:"Bearer "+auth?.accessToken}
+    })
+    return res.data;
+  }
+
+  const deleteMutation=useMutation({
+    mutationFn:deleteInvoices,
+    onSuccess(data) {
+      if(data.status===200){
+        messageApi.open({
+          type: "success",
+          content: "Invoice deleted successfully",
+        });
+      }        
+    },
+    onError(error:{message:string}) {
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
+    },
+  })
+
+  const markInvoiceCompleted= async (record:any) => {
+     const newInvoice={...record,status:"Completed"}
+    const res = await axiosprivate.patch(
+      `/invoice/invoicemarkascompleted/${record?._id}`,
+      JSON.stringify({
+         ...newInvoice,
+        ownerId: auth.userId,
+      }),
+      {
+        headers: { Authorization: "Bearer " + auth.accessToken },
+      }
+    );
+    return res.data;
+  };
+
+  const markInvoiceCompletedMutation=useMutation({
+    mutationFn:markInvoiceCompleted,
+    onSuccess(data) {
+      if(data.status===200){
+        messageApi.open({
+          type: "success",
+          content: "Invoice marked as Completed",
+        });
+      }        
+    },
+    onError(error:{message:string}) {
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
+    },
+  })
 
   const handleSearch = (
     selectedKeys: string[],
@@ -110,11 +174,33 @@ const DataTable = (props: TableListProps) => {
     setSearchText("");
   };
 
-  const onMenuClick = (itemId: number | undefined): MenuProps["onClick"] => {
+  const onMenuClick = (record:any): MenuProps["onClick"] => {
     return (menuInfo: MenuInfo) => {
+      console.log(record)
       const { key } = menuInfo;
+      
 
-      console.log(`Clicked on menu item with key ${key} and ID ${itemId}`);
+      switch (key) {
+        case "1":
+          markInvoiceCompletedMutation.mutate(record)
+          break;
+        case "2":
+          
+          break;
+        case "3":
+          
+          break;
+        case "4":
+          deleteMutation.mutate(record?._id)
+          queryClient.invalidateQueries({ queryKey: ['invoices'] })
+
+          break;
+      
+        default:
+          break;
+      }
+
+      // console.log(`Clicked on menu item with key ${key} and ID ${itemId}`);
     };
   };
   const getColumnSearchProps = (
@@ -272,7 +358,7 @@ const DataTable = (props: TableListProps) => {
             <Dropdown.Button
               menu={{
                 items: InvoiceMenuItems,
-                onClick: onMenuClick(record._id && record?._id),
+                onClick: onMenuClick(record),
               }}
             >
               Actions
@@ -469,6 +555,7 @@ const DataTable = (props: TableListProps) => {
 
   return (
     <div>
+      {contextHolder}
       <Table
         className="w-full overflow-x-auto bg-white"
         columns={MainColumn}

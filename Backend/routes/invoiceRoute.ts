@@ -6,7 +6,7 @@ const router=express.Router()
 router.get("/getinvoice",VerifyToken ,getInvoice)
 router.get("/getinvoices",VerifyToken, getInvoices)
 router.post("/createinvoice",VerifyToken,addInvoice)
-router.put("/updateinvoice",VerifyToken,updateInvoice)
-router.delete("/deleteinvoices",VerifyToken,deleteInvoice)
+router.patch("/invoicemarkascompleted/:id",VerifyToken,updateInvoice)
+router.delete("/deleteinvoices/:id",VerifyToken,deleteInvoice)
 
 export default router

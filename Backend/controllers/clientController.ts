@@ -77,8 +77,6 @@ const updateClient = async (
 ) => {
   const { id } = req.params;
   try {
-    console.log(req.body)
-    console.log(req.params)
     const updatedClient = await Client.findByIdAndUpdate(id, req.body, {
       new: true,
       upsert: true, 

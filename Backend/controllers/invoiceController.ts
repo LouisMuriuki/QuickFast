@@ -77,7 +77,7 @@ const getInvoices = async (
 const deleteInvoice = async (req: { params: { id: any } }, res: any) => {
   const { id } = req.params;
   try {
-    const currentInvoice = await Invoice.findByIdAndDelete({ id });
+    const currentInvoice = await Invoice.findByIdAndDelete(id);
     res.status(200).json({ success: true, data: currentInvoice, status: 200 });
   } catch (error) {
     res.status(500).json({ success: false, data: error });
