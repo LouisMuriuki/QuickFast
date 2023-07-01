@@ -26,7 +26,12 @@ import {
 import type { MenuProps } from "antd";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import useAuth from "../../../../hooks/useAuth";
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useLocation } from "react-router";
 interface invoiceprops {
   fromdata: FromData;
   description: Description;
@@ -67,71 +72,103 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-const InvoiceMenuItems = [
-  {
-    key: "1",
-    label: "Mark as Paid",
-  },
-  {
-    key: "2",
-    label: "Email",
-  },
-  {
-    key: "3",
-    label: "Print",
-  },
-  {
-    key: "4",
-    label: "Delete",
-  },
-];
-
 const DataTable = (props: TableListProps) => {
-  const queryClient=useQueryClient()
+  const queryClient = useQueryClient();
   const [messageApi, contextHolder] = message.useMessage();
-  const { setClientData, setClientmodalIsOpen,setClientDataMode } = useContext(ExtrasContext);
+  const { setClientData, setClientmodalIsOpen, setClientDataMode } =
+    useContext(ExtrasContext);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
-  const axiosprivate=useAxiosPrivate()
-  const {auth}=useAuth()
+  const axiosprivate = useAxiosPrivate();
+  const { auth } = useAuth();
   const showClient = (data: any) => {
     setClientData(data);
     setClientmodalIsOpen(true);
-    setClientDataMode("Update")
+    setClientDataMode("Update");
   };
+  const location = useLocation();
+  console.log(location.pathname);
 
-  const deleteInvoices=async(id:string)=>{
-    const res=await axiosprivate.delete(`/invoice/deleteinvoices/${id}`,{
-      headers:{Authorization:"Bearer "+auth?.accessToken}
-    })
+  const MenuItems = [
+    {
+      key: "1",
+      label: `${
+        location.pathname === "/invoices"
+          ? "Mark as completed"
+          : "Mark as closed"
+      }`,
+    },
+    {
+      key: "2",
+      label: "Email",
+    },
+    {
+      key: "3",
+      label: "Print",
+    },
+    {
+      key: "4",
+      label: "Delete",
+    },
+  ];
+
+  const deleteInvoices = async (id: string) => {
+    const res = await axiosprivate.delete(`/invoice/deleteinvoices/${id}`, {
+      headers: { Authorization: "Bearer " + auth?.accessToken },
+    });
     return res.data;
-  }
-
-  const deleteMutation=useMutation({
-    mutationFn:deleteInvoices,
+  };
+  const deleteInvoiceMutation = useMutation({
+    mutationFn: deleteInvoices,
     onSuccess(data) {
-      if(data.status===200){
+      if (data.status === 200) {
         messageApi.open({
           type: "success",
           content: "Invoice deleted successfully",
         });
-      }        
+        queryClient.invalidateQueries({ queryKey: ["invoices"] });
+      }
     },
-    onError(error:{message:string}) {
+    onError(error: { message: string }) {
       messageApi.open({
         type: "error",
         content: error.message,
       });
     },
-  })
+  });
+  const deleteEstimates = async (id: string) => {
+    const res = await axiosprivate.delete(`/estimate/deleteestimates/${id}`, {
+      headers: { Authorization: "Bearer " + auth?.accessToken },
+    });
+    return res.data;
+  };
 
-  const markInvoiceCompleted= async (record:any) => {
-     const newInvoice={...record,status:"Completed"}
+  const deleteEstimateMutation = useMutation({
+    mutationFn: deleteEstimates,
+    onSuccess(data) {
+      if (data.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: "Estimate deleted successfully",
+        });
+        queryClient.invalidateQueries({ queryKey: ["estimates"] });
+      }
+    },
+    onError(error: { message: string }) {
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
+    },
+  });
+
+  const markInvoiceCompleted = async (record: any) => {
+    const newInvoice = { ...record, status: "Completed" };
     const res = await axiosprivate.patch(
       `/invoice/invoicemarkascompleted/${record?._id}`,
       JSON.stringify({
-         ...newInvoice,
+        ...newInvoice,
         ownerId: auth.userId,
       }),
       {
@@ -141,23 +178,57 @@ const DataTable = (props: TableListProps) => {
     return res.data;
   };
 
-  const markInvoiceCompletedMutation=useMutation({
-    mutationFn:markInvoiceCompleted,
+  const markInvoiceCompletedMutation = useMutation({
+    mutationFn: markInvoiceCompleted,
     onSuccess(data) {
-      if(data.status===200){
+      if (data.status === 200) {
         messageApi.open({
           type: "success",
           content: "Invoice marked as Completed",
         });
-      }        
+        queryClient.invalidateQueries({ queryKey: ["invoices"] });
+      }
     },
-    onError(error:{message:string}) {
+    onError(error: { message: string }) {
       messageApi.open({
         type: "error",
         content: error.message,
       });
     },
-  })
+  });
+  const markestimatesClosed = async (record: any) => {
+    const newEstimate = { ...record, status: "Closed" };
+    const res = await axiosprivate.patch(
+      `/estimate/estimatemarkasclosed/${record?._id}`,
+      JSON.stringify({
+        ...newEstimate,
+        ownerId: auth.userId,
+      }),
+      {
+        headers: { Authorization: "Bearer " + auth?.accessToken },
+      }
+    );
+    return res.data;
+  };
+
+  const markEstimateClosedMutation = useMutation({
+    mutationFn: markestimatesClosed,
+    onSuccess(data) {
+      if (data.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: "Estimate marked as Closed",
+        });
+        queryClient.invalidateQueries({ queryKey: ["estimates"] });
+      }
+    },
+    onError(error: { message: string }) {
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
+    },
+  });
 
   const handleSearch = (
     selectedKeys: string[],
@@ -174,28 +245,26 @@ const DataTable = (props: TableListProps) => {
     setSearchText("");
   };
 
-  const onMenuClick = (record:any): MenuProps["onClick"] => {
+  const onMenuClick = (record: any): MenuProps["onClick"] => {
     return (menuInfo: MenuInfo) => {
-      console.log(record)
+      console.log(record);
       const { key } = menuInfo;
-      
-
       switch (key) {
         case "1":
-          markInvoiceCompletedMutation.mutate(record)
+          location.pathname === "/invoices"
+            ? markInvoiceCompletedMutation.mutate(record)
+            : markEstimateClosedMutation.mutate(record);
           break;
         case "2":
-          
           break;
         case "3":
-          
           break;
         case "4":
-          deleteMutation.mutate(record?._id)
-          queryClient.invalidateQueries({ queryKey: ['invoices'] })
-
+          location.pathname === "/invoices"
+            ? deleteInvoiceMutation.mutate(record?._id)
+            : deleteEstimateMutation.mutate(record?._id);
           break;
-      
+
         default:
           break;
       }
@@ -357,7 +426,7 @@ const DataTable = (props: TableListProps) => {
             {/* @ts-ignore  */}
             <Dropdown.Button
               menu={{
-                items: InvoiceMenuItems,
+                items: MenuItems,
                 onClick: onMenuClick(record),
               }}
             >
@@ -429,8 +498,8 @@ const DataTable = (props: TableListProps) => {
             {/* @ts-ignore  */}
             <Dropdown.Button
               menu={{
-                items: InvoiceMenuItems,
-                onClick: onMenuClick(record._id && record?._id),
+                items: MenuItems,
+                onClick: onMenuClick(record),
               }}
             >
               Actions

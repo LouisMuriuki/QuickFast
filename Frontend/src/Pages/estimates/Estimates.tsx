@@ -70,7 +70,7 @@ const Estimates = () => {
   }, [GetEstimatesQuery.data]);
 
   useEffect(()=>{
-    setSegmentedOptions(["All Estimates","Open","Close"])
+    setSegmentedOptions(["All Estimates","Open","Closed"])
     setSelectedOptions("All Estimates");
   },[])
   return (
