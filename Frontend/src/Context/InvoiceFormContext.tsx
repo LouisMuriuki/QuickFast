@@ -48,7 +48,7 @@ export interface Description {
   taxrate: number;
   additional: string;
 }
-const initialdescription: Description = {
+ export const initialdescription: Description = {
   description: "",
   rate: undefined as unknown as number,
   qty: 1,
@@ -57,7 +57,7 @@ const initialdescription: Description = {
   taxrate: 0,
   additional: "",
 };
-const initialFormInfo: FormInfo = {
+export const initialFormInfo: FormInfo = {
   title: "Invoice",
   logo: "",
   number: "",
@@ -74,7 +74,7 @@ const initialFormInfo: FormInfo = {
   currency: "KES",
   locale: "ebu_KE",
 };
-const initialFromData: FromData = {
+export const initialFromData: FromData = {
   name: "",
   email: "",
   phone: "",
@@ -84,7 +84,7 @@ const initialFromData: FromData = {
   website: "",
   country: "",
 };
-const initialToData: ToData = {
+export const initialToData: ToData = {
   name: "",
   email: "",
   phone: "",

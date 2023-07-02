@@ -2,8 +2,6 @@ import { useRef, useState, useContext } from "react";
 import { Input, Space, Button, Table, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { DownloadOutlined } from "@ant-design/icons";
-
 import type {
   FilterValue,
   SorterResult,
@@ -12,7 +10,6 @@ import type {
 import { MenuInfo } from "rc-menu/lib/interface";
 import { InputRef, Dropdown } from "antd";
 import type {
-  ColumnsType,
   ColumnType,
   TablePaginationConfig,
 } from "antd/es/table";
@@ -27,11 +24,10 @@ import type { MenuProps } from "antd";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import useAuth from "../../../../hooks/useAuth";
 import {
-  QueryClient,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate, } from "react-router";
 interface invoiceprops {
   fromdata: FromData;
   description: Description;
@@ -88,7 +84,7 @@ const DataTable = (props: TableListProps) => {
     setClientDataMode("Update");
   };
   const location = useLocation();
-  console.log(location.pathname);
+  const navigate = useNavigate();
 
   const MenuItems = [
     {
@@ -105,7 +101,7 @@ const DataTable = (props: TableListProps) => {
     },
     {
       key: "3",
-      label: "Print",
+      label: "View",
     },
     {
       key: "4",
@@ -258,6 +254,14 @@ const DataTable = (props: TableListProps) => {
         case "2":
           break;
         case "3":
+          location.pathname === "/invoices"
+            ? navigate("/invoices/new", {
+                state: { data: record, name: "invoices" },
+              })
+            : navigate("/estimates/new", {
+                state: { data: record, name: "estimates" },
+              });
+
           break;
         case "4":
           location.pathname === "/invoices"

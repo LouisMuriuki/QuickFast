@@ -26,10 +26,10 @@ interface FormProps {
   data: any;
 }
 const FormComponent = ({ fromlabels, tolabels, origin, data }: FormProps) => {
-  const {  todata, setFromdata, setTodata } =
+  const {  todata, fromdata,setFromdata, setTodata } =
     useContext(InvoiceFormContext);
   const { setBizInfo, } = useContext(SettingsContext);
-  const { setClientData, clientdatamode } =
+  const { setClientData } =
     useContext(ExtrasContext);
   const FromChange = (name: any, value: any) => {
     origin === "settings"
@@ -83,7 +83,7 @@ const FormComponent = ({ fromlabels, tolabels, origin, data }: FormProps) => {
                   <Input
                     placeholder={labels.placeholder}
                     className="flex w-full"
-
+                    defaultValue={fromdata && fromdata[labels?.name]}
                     onChange={(e) => {
                       FromChange(labels.name, e.target.value);
                     }}

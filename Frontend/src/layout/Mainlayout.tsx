@@ -69,7 +69,7 @@ const MainLayout = () => {
             <Breadcrumb.Item>Home</Breadcrumb.Item>
             <Link to="/new">New</Link>
           </Breadcrumb>
-          <div className="w-[90%]" style={{ background: colorBgContainer }}>
+          <div className="w-[90%] h-screen" style={{ background: colorBgContainer }}>
             <Outlet />
           </div>
           <Login />
