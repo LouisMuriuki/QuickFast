@@ -68,7 +68,6 @@ const Invoices = () => {
   },[])
   return (
     <div>
-        <Link to="new">new Invoice</Link>
         <MainTable
          data={data}
          setTableInfo={setTableInfo}

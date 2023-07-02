@@ -10,6 +10,7 @@ const Notes = () => {
     console.log("Change:", e.target.value);
     setFormInfo((prev) => ({ ...prev, notes: e.target.value }));
   };
+  console.log(forminfo.notes)
   return (
     <div className="flex flex-col">
       <h2 className="text-lg font-semibold text-gray-700 pb-3">Notes</h2>

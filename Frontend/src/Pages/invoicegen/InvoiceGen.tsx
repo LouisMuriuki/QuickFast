@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import InvoiceTop from "./InvoiceTop";
 import InvoiceEdit from "./InvoiceEdit/InvoiceEdit";
 import {
@@ -11,11 +11,11 @@ import {
 import InvoicePreview from "./InvoicePreview/InvoicePreview";
 import SideBar from "../../components/Sidebar/SideBar";
 import { useLocation } from "react-router";
+import { SettingsContext } from "../../Context/SettingsContext";
 
 const InvoiceGen = () => {
   const { state } = useLocation();
   const { name, data } = state;
-  console.log(data)
   const {
     selectedoptions,
     setFormInfo,
@@ -25,6 +25,30 @@ const InvoiceGen = () => {
     setFromdata,
     setTodata,
   } = useContext(InvoiceFormContext);
+  const { bizinfo, customizeinfo } = useContext(SettingsContext);
+  const { logo, ...restofobject } = bizinfo;
+  const [partofforminfo, setPartOfFormInfo] = useState({});
+
+  useEffect(() => {
+    if (name === "estimates") {
+      setPartOfFormInfo({
+        title: customizeinfo?.estimatetitle,
+        logo: logo,
+        currency: customizeinfo?.currency,
+        notes: customizeinfo?.estimatenotes,
+      });
+    } else {
+      setPartOfFormInfo({
+        title: customizeinfo?.invoicetitle,
+        logo: logo,
+        currency: customizeinfo?.currency,
+        notes: customizeinfo?.invoicenotes,
+      });
+    }
+  }, []);
+
+  const result = { ...partofforminfo, ...initialFormInfo };
+
   useEffect(() => {
     if (!data) {
       if (name === "estimates") {
@@ -36,7 +60,7 @@ const InvoiceGen = () => {
   }, [name]);
 
   useEffect(() => {
-    if (data&&data) {
+    if (data && data) {
       if (name === "invoices") {
         setFormInfo(data?.invoice[0]?.forminfo);
         setDescription(data?.invoice[0]?.description);
@@ -50,9 +74,9 @@ const InvoiceGen = () => {
       }
     }
     return () => {
-      setFormInfo(initialFormInfo);
+      setFormInfo(result);
       setDescription([initialdescription]);
-      setFromdata(initialFromData);
+      setFromdata(restofobject);
       setTodata(initialToData);
     };
   }, [data]);
@@ -65,6 +89,9 @@ const InvoiceGen = () => {
       setSegmentedOptions(["Preview"]);
       setSelectedOptions("Preview");
     }
+    return () => {
+      setSelectedOptions("Edit");
+    };
   }, [data]);
 
   return (

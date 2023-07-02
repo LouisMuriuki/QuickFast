@@ -1,6 +1,6 @@
 import { Breadcrumb, Layout, theme, ConfigProvider, FloatButton } from "antd";
 import type { ThemeConfig } from "antd";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import {  Outlet, useLocation, useNavigate } from "react-router-dom";
 import AppNav from "../components/Navbar/AppNav";
 import { CommentOutlined } from "@ant-design/icons";
 import Login from "../components/login/Login";
@@ -9,7 +9,8 @@ import AddClient from "../Pages/clients/components/AddClient";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect,useContext } from "react";
+import { SettingsContext } from "../Context/SettingsContext";
 
 const { Header, Content, Footer } = Layout;
 
@@ -26,10 +27,13 @@ const config: ThemeConfig = {
 const MainLayout = () => {
   const axiosprivate = useAxiosPrivate();
   const navigate = useNavigate();
+  const location = useLocation();
   const { auth, setAuth } = useAuth();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const {  setBizInfo, setCustomizeInfo,set_ID } =useContext(SettingsContext);
 
   const getUser = async () => {
     const response = await axiosprivate.get(
@@ -54,9 +58,39 @@ const MainLayout = () => {
     }));
   }, [getUserQuery.data]);
 
+  const getSettings = async () => {
+    const res = await axiosprivate.get(
+      `settings/getdefaultsettings?id=${auth.userId}`,
+      {
+        headers: { Authorization: "bearer " + auth.accessToken },
+      }
+    );
+    console.log(res);
+    return res.data;
+  };
+
+  const getSettingsQuery = useQuery({
+    queryKey: ["settings"],
+    queryFn: () => getSettings(),
+  });
+  console.log(getSettingsQuery?.data)
+
   useEffect(() => {
-    navigate("invoices");
-  }, []);
+    if (getSettingsQuery?.data?.data?.settings) {
+      setBizInfo(getSettingsQuery?.data?.data?.settings?.bizinfo);
+      setCustomizeInfo(getSettingsQuery?.data?.data?.settings?.customizeinfo);
+      set_ID(getSettingsQuery?.data?.data?._id)
+    }
+  }, [getSettingsQuery?.data]);
+
+
+
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("invoices");
+    }
+  }, [location]);
 
   return (
     <ConfigProvider theme={config}>
@@ -65,11 +99,15 @@ const MainLayout = () => {
           <AppNav />
         </Header>
         <Content className="overflow-hidden" style={{ padding: "0 50px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Link to="/new">New</Link>
-          </Breadcrumb>
-          <div className="w-[90%] h-screen" style={{ background: colorBgContainer }}>
+          <Breadcrumb
+            style={{ margin: "16px 0" }}
+            items={[{ title: location.pathname }]}
+          />
+
+          <div
+            className="w-[90%] h-screen overflow-y-auto"
+            style={{ background: colorBgContainer }}
+          >
             <Outlet />
           </div>
           <Login />

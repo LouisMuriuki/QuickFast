@@ -42,6 +42,8 @@ const initialCustomizeInfo: Customizeinfo = {
 };
 
 interface SettingsContextType {
+  _id:string,
+  set_ID:React.Dispatch<React.SetStateAction<string>>
   bizinfo: BizInfo;
   setBizInfo: React.Dispatch<React.SetStateAction<BizInfo>>;
   customizeinfo: Customizeinfo;
@@ -49,6 +51,8 @@ interface SettingsContextType {
 }
 
 export const SettingsContext = createContext<SettingsContextType>({
+  _id:"",
+  set_ID:()=>{},
   bizinfo: initialBizInfo,
   setBizInfo: () => {},
   customizeinfo: initialCustomizeInfo,
@@ -57,11 +61,12 @@ export const SettingsContext = createContext<SettingsContextType>({
 const SettingsContextProvider = ({ children }: any) => {
   const [bizinfo, setBizInfo] = useState(initialBizInfo);
   const [customizeinfo, setCustomizeInfo] = useState(initialCustomizeInfo);
+  const [_id,set_ID]=useState("")
   console.log(bizinfo)
   console.log(customizeinfo)
   return (
     <SettingsContext.Provider
-      value={{ bizinfo, setBizInfo, customizeinfo, setCustomizeInfo }}
+      value={{ bizinfo,_id,set_ID, setBizInfo, customizeinfo, setCustomizeInfo }}
     >
       {children}
     </SettingsContext.Provider>

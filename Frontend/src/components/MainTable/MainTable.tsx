@@ -9,14 +9,20 @@ interface TableListProps {
   tableInfo?: any;
   setTableInfo?: any;
   loading?: boolean;
-  onStatusChange?:any
+  onStatusChange?: any;
   name?: string;
   headervalue?: string | number;
 }
 
-const MainTable = ({ data, setTableInfo, tableInfo, loading , onStatusChange}:TableListProps) => {
+const MainTable = ({
+  data,
+  setTableInfo,
+  tableInfo,
+  loading,
+  onStatusChange,
+}: TableListProps) => {
   const location = useLocation();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   let text = "";
   if (location.pathname === "/invoices") {
@@ -34,16 +40,16 @@ const MainTable = ({ data, setTableInfo, tableInfo, loading , onStatusChange}:Ta
       : navigate("new", { state: { name: "estimates" } });
   };
 
-  const Refetch=()=>{
+  const Refetch = () => {
     if (location.pathname === "/invoices") {
-      queryClient.invalidateQueries({ queryKey: ['invoices'] })
+      queryClient.invalidateQueries({ queryKey: ["invoices"] });
     } else if (location.pathname === "/estimates") {
-      queryClient.invalidateQueries({ queryKey: ['estimates'] })
+      queryClient.invalidateQueries({ queryKey: ["estimates"] });
     }
-  }
+  };
   return (
     <div className="flex flex-col max-w-7xl">
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between px-2 py-4">
         <Segmented
           size={"large"}
           options={segmentedoptions}
@@ -52,8 +58,8 @@ const MainTable = ({ data, setTableInfo, tableInfo, loading , onStatusChange}:Ta
           className="bg-blue-400 text-white"
           onChange={(e) => {
             setSelectedOptions(e.toString());
-            onStatusChange(e.toString())
-            Refetch()
+            onStatusChange(e.toString());
+            Refetch();
           }}
         />
         <Button
@@ -67,12 +73,14 @@ const MainTable = ({ data, setTableInfo, tableInfo, loading , onStatusChange}:Ta
           {text}
         </Button>
       </div>
-      <DataTable
-        data={data}
-        setTableInfo={setTableInfo}
-        tableInfo={tableInfo}
-        loading={loading}
-      />
+      <div className="px-2">
+        <DataTable
+          data={data}
+          setTableInfo={setTableInfo}
+          tableInfo={tableInfo}
+          loading={loading}
+        />
+      </div>
     </div>
   );
 };

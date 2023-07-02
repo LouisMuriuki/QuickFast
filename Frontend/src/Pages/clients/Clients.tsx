@@ -79,7 +79,7 @@ const Clients = () => {
 
   return (
     <div className="flex flex-col max-w-7xl">
-      <div className="flex items-center justify-between w-full m-10">
+      <div className="flex items-center justify-between px-2 py-4">
         <h2 className="text-2xl font-bold">Clients</h2>
         <Button
           size="large"
@@ -92,12 +92,15 @@ const Clients = () => {
           Add Client
         </Button>
       </div>
-      <DataTable
+      <div className="px-2">
+        <DataTable
         data={data}
         setTableInfo={setTableInfo}
         tableInfo={tableInfo}
         loading={GetClientsQuery.isFetching}
       />
+      </div>
+      
     </div>
   );
 };

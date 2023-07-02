@@ -1,17 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext} from "react";
 import BusinessInfo from "./bussinessinfo/BusinessInfo";
 import Customize from "./customize/Customize";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { SettingsContext } from "../../Context/SettingsContext";
 import { Button, message } from "antd";
 
 const Settings = () => {
   const axiosprivate = useAxiosPrivate();
-  const { bizinfo, customizeinfo, setBizInfo, setCustomizeInfo } =
+  const { bizinfo, customizeinfo,_id} =
     useContext(SettingsContext);
-    const [_id,setID]=useState("")
+    
   const { auth } = useAuth();
   const [messageApi, contextHolder] = message.useMessage();
   const saveSettings = async () => {
@@ -43,30 +43,7 @@ const Settings = () => {
     console.log(res);
     return res.data;
   };
-  const getSettings = async () => {
-    const res = await axiosprivate.get(
-      `settings/getdefaultsettings?id=${auth.userId}`,
-      {
-        headers: { Authorization: "bearer " + auth.accessToken },
-      }
-    );
-    console.log(res);
-    return res.data;
-  };
-
-  const getSettingsQuery = useQuery({
-    queryKey: ["settings"],
-    queryFn: () => getSettings(),
-  });
-  console.log(getSettingsQuery?.data)
-
-  useEffect(() => {
-    if (getSettingsQuery?.data?.data?.settings) {
-      setBizInfo(getSettingsQuery?.data?.data.settings.bizinfo);
-      setCustomizeInfo(getSettingsQuery?.data?.data.settings.customizeinfo);
-      setID(getSettingsQuery?.data?.data?._id)
-    }
-  }, [getSettingsQuery?.data]);
+  
 
   const saveSettingsMutation = useMutation({
     mutationFn: saveSettings,
@@ -107,7 +84,7 @@ const Settings = () => {
   });
 
   const handleClick = () => {
-    getSettingsQuery?.data?.data?.settings?.bizinfo
+    bizinfo.name&&bizinfo.phone
       ? updateSettingsMutation.mutate()
       : saveSettingsMutation.mutate();
   };
@@ -116,11 +93,11 @@ const Settings = () => {
     <div className="flex flex-col md:flex-col p-5">
       {contextHolder}
       <div className="flex justify-center w-full md:w-1/2">
-        <BusinessInfo data={getSettingsQuery?.data?.data?.settings?.bizinfo} />
+        <BusinessInfo data={bizinfo} />
       </div>
       <div className="flex justify-center w-full md:w-1/2">
         <Customize
-          data={getSettingsQuery?.data?.data?.settings?.customizeinfo}
+          data={customizeinfo}
         />
       </div>
       <div>
@@ -129,7 +106,7 @@ const Settings = () => {
           className="border-blue-500 bg-blue-500 text-white"
           onClick={handleClick}
         >
-          {getSettingsQuery?.data?.data?.settings?.bizinfo ? "Update" : "Save"}
+          {bizinfo ? "Update" : "Save"}
         </Button>
       </div>
     </div>
