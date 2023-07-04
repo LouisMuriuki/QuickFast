@@ -85,6 +85,9 @@ const InvoiceGen = () => {
     if (!data) {
       setSegmentedOptions(["Edit", "Preview"]);
       setSelectedOptions("Edit");
+    } else if (data && name === "estimates") {
+      setSegmentedOptions(["Edit", "Preview"]);
+      setSelectedOptions("Preview");
     } else {
       setSegmentedOptions(["Preview"]);
       setSelectedOptions("Preview");
@@ -94,13 +97,19 @@ const InvoiceGen = () => {
     };
   }, [data]);
 
+  console.log(data)
+
   return (
     <div className=" max-w-full  flex container ">
       <div className="flex flex-col md:flex-row w-full">
         <div className=" flex flex-col w-full md:w-3/4">
           <InvoiceTop />
           {selectedoptions === "Edit" ? (
-            <InvoiceEdit data={data?.invoice[0]} />
+            <InvoiceEdit
+              data={
+                name === "estimates" ? data?.estimate[0] : data?.invoice[0]
+              }
+            />
           ) : (
             <InvoicePreview />
           )}

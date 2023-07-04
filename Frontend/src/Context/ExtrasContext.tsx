@@ -10,7 +10,7 @@ interface ClientData {
   website: string;
   country: string;
 }
-const initialClientData: ClientData = {
+export const initialClientData: ClientData = {
   name: "",
   email: "",
   phone: "",

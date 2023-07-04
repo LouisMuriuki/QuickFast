@@ -1,6 +1,6 @@
 import { Button, TablePaginationConfig } from "antd";
 import { useContext, useEffect, useState } from "react";
-import ExtrasContext from "../../Context/ExtrasContext";
+import ExtrasContext, { initialClientData } from "../../Context/ExtrasContext";
 import { FilterValue } from "antd/es/table/interface";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import AuthContext from "../../Context/AuthContext";
@@ -34,7 +34,7 @@ interface ClientProps {
 
 const Clients = () => {
   const axiosprivate = useAxiosPrivate();
-  const { setClientmodalIsOpen } = useContext(ExtrasContext);
+  const { setClientmodalIsOpen,setClientDataMode,setClientData, } = useContext(ExtrasContext);
   const { auth } = useContext(AuthContext);
   const [data, setData] = useState<ClientProps[]>([]);
   const [tableInfo, setTableInfo] = useState<TableParams>({
@@ -86,6 +86,8 @@ const Clients = () => {
           type="primary"
           onClick={() => {
             setClientmodalIsOpen(true);
+            setClientDataMode("Add")
+            setClientData(initialClientData)
           }}
           className="border-blue-500 bg-blue-500 text-white "
         >

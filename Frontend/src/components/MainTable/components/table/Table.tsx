@@ -79,6 +79,7 @@ const DataTable = (props: TableListProps) => {
   const axiosprivate = useAxiosPrivate();
   const { auth } = useAuth();
   const showClient = (data: any) => {
+    console.log(data)
     setClientData(data);
     setClientmodalIsOpen(true);
     setClientDataMode("Update");
@@ -398,7 +399,7 @@ const DataTable = (props: TableListProps) => {
       render: (_, record) => {
         const invoices = record.invoice;
         const invoicedate = invoices?.map((invoice, i) => {
-          return <span key={i}>{invoice.forminfo.date}</span>;
+          return <span key={i}>{new Date(invoice.forminfo.date).toLocaleDateString()}</span>;
         });
         return <div>{invoicedate}</div>;
       },
@@ -470,7 +471,7 @@ const DataTable = (props: TableListProps) => {
       render: (_, record) => {
         const estimates = record.estimate;
         const estimatedate = estimates?.map((estimate, i) => {
-          return <span key={i}>{estimate.forminfo.date}</span>;
+          return <span key={i}>{new Date(estimate.forminfo.date).toLocaleDateString()}</span>;
         });
         return <div>{estimatedate}</div>;
       },

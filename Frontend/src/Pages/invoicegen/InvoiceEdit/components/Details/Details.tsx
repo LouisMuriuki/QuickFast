@@ -38,7 +38,7 @@ const InvoiceDetails = () => {
             name="details"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
-            style={{ maxWidth: width-50 }}
+            style={{ maxWidth: width - 50 }}
             initialValues={{ remember: true }}
             // onFinish={onFinish}
             // onFinishFailed={onFinishFailed}
@@ -66,7 +66,12 @@ const InvoiceDetails = () => {
               name={"date"}
               rules={[{ required: true, message: "Date is required" }]}
             >
-              <DatePicker className="w-full" value={dayjs(formattedDate, 'YYYY-MM-DD')} onChange={onChange} />
+              <DatePicker
+                className="w-full"
+                value={forminfo.date ? dayjs(forminfo.date, "YYYY-MM-DD") : dayjs(formattedDate, "YYYY-MM-DD")}
+                defaultValue={forminfo.date ? dayjs(forminfo.date, "YYYY-MM-DD") : undefined}
+                onChange={onChange}
+              />
             </Form.Item>
             <Form.Item
               label={"Terms"}

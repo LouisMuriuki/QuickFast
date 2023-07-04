@@ -10,15 +10,15 @@ export const fromlabels = [
   {
     name: "email",
     label: "Email",
-    required: true,
+    required: false,
     message: "Please input your Email",
-    visible: true,
+    visible: false,
     placeholder: "example@example.com",
   },
   {
     name: "phone",
     label: "Phone",
-    required: false,
+    required: true,
     message: "Please input your Phone",
     visible: true,
     placeholder: "(123) 456-7890",
@@ -76,7 +76,7 @@ export const tolabels = [
   {
     name: "email",
     label: "Email",
-    required: true,
+    required: false,
     message: "Please input your Email",
     visible: true,
     placeholder: "example@example.com",
@@ -84,7 +84,7 @@ export const tolabels = [
   {
     name: "phone",
     label: "Phone",
-    required: false,
+    required: true,
     message: "Please input your Phone",
     visible: true,
     placeholder: "(123) 456-7890",

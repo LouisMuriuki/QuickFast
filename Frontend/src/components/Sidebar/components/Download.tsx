@@ -1,4 +1,4 @@
-import { Divider, Button } from "antd";
+import { Divider, Button, message } from "antd";
 import easyinvoice from "easyinvoice";
 import { useState, useContext, useEffect } from "react";
 import { InvoiceFormContext } from "../../../Context/InvoiceFormContext";
@@ -16,6 +16,7 @@ interface dataProps {
   estimate?: any;
 }
 const Download = ({ state }: stateprops) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const { auth } = useAuth();
   const [data, setData] = useState<dataProps>({
     ownerId: auth?.accessToken,
@@ -54,27 +55,54 @@ const Download = ({ state }: stateprops) => {
   }, [state, fromdata, todata, forminfo, description, auth]);
 
   const uploadInvoice = async () => {
-    const res = await axiosprivate.post(
-      "/invoice/createinvoice",
-      JSON.stringify(data),
-      {
-        headers: { Authorization: "Bearer " + auth.accessToken },
-      }
-    );
-    console.log(res);
-    return res.data;
+    if (
+      fromdata.name === "" ||
+      todata.name === "" ||
+      fromdata.phone === "" ||
+      todata.phone === ""
+    ) {
+      console.log("im ruuning");
+      messageApi.open({
+        type: "error",
+        content: "Invoice is incomplete",
+      });
+      return;
+    } else {
+      const res = await axiosprivate.post(
+        "/invoice/createinvoice",
+        JSON.stringify(data),
+        {
+          headers: { Authorization: "Bearer " + auth.accessToken },
+        }
+      );
+      console.log(res);
+      return res.data;
+    }
   };
 
   const uploadEstimates = async () => {
-    const res = await axiosprivate.post(
-      "/estimate/createestimate",
-      JSON.stringify(data),
-      {
-        headers: { Authorization: "Bearer " + auth.accessToken },
-      }
-    );
-    console.log(res);
-    return res.data;
+    if (
+      fromdata.name === "" ||
+      todata.name === "" ||
+      fromdata.phone === "" ||
+      todata.phone === ""
+    ) {
+      messageApi.open({
+        type: "error",
+        content: "Estimate is incomplete",
+      });
+      return;
+    } else {
+      const res = await axiosprivate.post(
+        "/estimate/createestimate",
+        JSON.stringify(data),
+        {
+          headers: { Authorization: "Bearer " + auth.accessToken },
+        }
+      );
+      console.log(res);
+      return res.data;
+    }
   };
 
   const uploadMutation = useMutation({
@@ -89,8 +117,28 @@ const Download = ({ state }: stateprops) => {
     },
   });
 
-  const handleSubmit = () => {
-    uploadMutation.mutate();
+  const invoiceHandler = () => {
+    if (
+      fromdata.name === "" ||
+      todata.name === "" ||
+      fromdata.phone === "" ||
+      todata.phone === "" ||
+      forminfo.date === "" ||
+      forminfo.number === "" ||
+      description[0].description === "" ||
+      !(typeof description[0].qty === "number") ||
+      !(typeof description[0].amount === "number")
+    ) {
+      console.log(forminfo)
+      messageApi.open({
+        type: "error",
+        content: "Please ensure the fields are filled correctly",
+      });
+      return;
+    } else {
+      uploadMutation.mutate();
+      Download();
+    }
   };
 
   let number = [0];
@@ -217,16 +265,16 @@ const Download = ({ state }: stateprops) => {
 
   return (
     <div className="flex flex-col">
+      {contextHolder}
       <p className="flex font-semibold">DOWNLOAD PDF</p>
       <Divider className="border border-black mt-1" />
       <p>Download PDF document</p>
       <div className="flex items-center justify-center pt-4 w-full ">
         <Button
           type="primary"
-          loading={loading}
+          loading={loading || uploadMutation.isLoading}
           onClick={() => {
-            handleSubmit();
-            Download();
+            invoiceHandler();
           }}
           className="flex items-center w-full justify-center bg-blue-500 text-white"
         >

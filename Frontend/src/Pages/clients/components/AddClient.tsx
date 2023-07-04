@@ -18,7 +18,6 @@ const AddClient = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const addClient = async () => {
-    
     const res = await axiosPrivate.post(
       "/client/addclient",
       JSON.stringify({
@@ -32,11 +31,11 @@ const AddClient = () => {
     return res.data;
   };
   const updateClient = async () => {
-    const {__v,_id,...newclient}=clientdata
+    const { __v, _id, ...newclient } = clientdata;
     const res = await axiosPrivate.patch(
       `/client/updateclient/${_id}`,
       JSON.stringify({
-         ...newclient,
+        ...newclient,
         ownerId: auth.userId,
       }),
       {
@@ -84,10 +83,18 @@ const AddClient = () => {
   });
 
   const handleSubmit = () => {
-    {
-      clientdatamode === "Add"
-        ? addClientMutation.mutate()
-        : updateClientMutation.mutate();
+    if (clientdata.name === "" || clientdata.phone === "") {
+      messageApi.open({
+        type: "error",
+        content: "please fill in all the required details",
+      });
+      return;
+    } else {
+      {
+        clientdatamode === "Add"
+          ? addClientMutation.mutate()
+          : updateClientMutation.mutate();
+      }
     }
   };
 
@@ -107,7 +114,9 @@ const AddClient = () => {
         <Button
           onClick={handleSubmit}
           type="primary"
-          loading={addClientMutation.isLoading||updateClientMutation.isLoading}
+          loading={
+            addClientMutation.isLoading || updateClientMutation.isLoading
+          }
           className="flex flex-row-reverse border-blue-500 bg-blue-500 text-white"
         >
           {clientdatamode === "Add" ? "Add" : "Update"}
