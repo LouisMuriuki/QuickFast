@@ -103,19 +103,20 @@ const InvoiceGen = () => {
     <div className=" max-w-full  flex container ">
       <div className="flex flex-col md:flex-row w-full">
         <div className=" flex flex-col w-full md:w-3/4">
-          <InvoiceTop />
+          <InvoiceTop  />
           {selectedoptions === "Edit" ? (
             <InvoiceEdit
               data={
                 name === "estimates" ? data?.estimate[0] : data?.invoice[0]
               }
+              
             />
           ) : (
             <InvoicePreview />
           )}
         </div>
         <div className="flex flex-col w-full md:w-1/4">
-          <SideBar state={name} />
+          <SideBar state={name} id={data?data._id:""} />
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ const router=express.Router()
 router.get("/getinvoice",VerifyToken ,getInvoice)
 router.get("/getinvoices",VerifyToken, getInvoices)
 router.post("/createinvoice",VerifyToken,addInvoice)
+router.patch("/updateinvoice/:id",VerifyToken,updateInvoice)
 router.patch("/invoicemarkascompleted/:id",VerifyToken,updateInvoice)
 router.delete("/deleteinvoices/:id",VerifyToken,deleteInvoice)
 

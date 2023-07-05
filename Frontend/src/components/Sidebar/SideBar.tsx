@@ -7,13 +7,14 @@ import Download from "./components/Download";
 // import Discount from "./components/Discount";
 interface props{
 state:string
+id?:string| number
 }
-const SideBar = ({state}:props) => {
+const SideBar = ({state,id}:props) => {
   const { generateinvoicetype } = useContext(InvoiceFormContext);
   return (
     <div className="flex flex-col py-16 px-4">
       <div className="mb-10">
-        {generateinvoicetype === "Email" ? <ViewOptions /> : <Download state={state }/>}
+        {generateinvoicetype === "Email" ? <ViewOptions /> : <Download state={state } id={id}/>}
       </div>
       {/* <div className="mb-10">
         <Tax />

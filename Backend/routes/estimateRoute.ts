@@ -15,6 +15,7 @@ const router = express.Router();
 router.get("/getestimate", VerifyToken, getEstimate);
 router.get("/getestimates", VerifyToken, getEstimates);
 router.post("/createestimate", addEstimate);
+router.patch("/updateestimate/:id", VerifyToken, updateEstimate);
 router.patch("/estimatemarkasclosed/:id", VerifyToken, updateEstimate);
 router.delete("/deleteestimates/:id", VerifyToken, deleteEstimate);
 

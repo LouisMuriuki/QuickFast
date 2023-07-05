@@ -415,7 +415,7 @@ const DataTable = (props: TableListProps) => {
           return (
             <div key={i}>
               <span>{invoice.forminfo.currency}</span>
-              <span>{invoice.forminfo.total}</span>
+              <span>{invoice.forminfo.total?.toLocaleString()}</span>
             </div>
           );
         });
@@ -487,7 +487,7 @@ const DataTable = (props: TableListProps) => {
           return (
             <div key={i}>
               <span>{estimate.forminfo.currency}</span>
-              <span>{estimate.forminfo.total}</span>
+              <span>{estimate.forminfo.total.toLocaleString()}</span>
             </div>
           );
         });

@@ -8,6 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
 interface stateprops {
   state: string;
+  id?: string | number;
 }
 
 interface dataProps {
@@ -15,7 +16,7 @@ interface dataProps {
   invoice?: any;
   estimate?: any;
 }
-const Download = ({ state }: stateprops) => {
+const Download = ({ state, id }: stateprops) => {
   const [messageApi, contextHolder] = message.useMessage();
   const { auth } = useAuth();
   const [data, setData] = useState<dataProps>({
@@ -55,61 +56,83 @@ const Download = ({ state }: stateprops) => {
   }, [state, fromdata, todata, forminfo, description, auth]);
 
   const uploadInvoice = async () => {
-    if (
-      fromdata.name === "" ||
-      todata.name === "" ||
-      fromdata.phone === "" ||
-      todata.phone === ""
-    ) {
-      console.log("im ruuning");
-      messageApi.open({
-        type: "error",
-        content: "Invoice is incomplete",
-      });
-      return;
-    } else {
-      const res = await axiosprivate.post(
-        "/invoice/createinvoice",
-        JSON.stringify(data),
-        {
-          headers: { Authorization: "Bearer " + auth.accessToken },
-        }
-      );
-      console.log(res);
-      return res.data;
-    }
+    const res = await axiosprivate.post(
+      "/invoice/createinvoice",
+      JSON.stringify(data),
+      {
+        headers: { Authorization: "Bearer " + auth.accessToken },
+      }
+    );
+    console.log(res);
+    return res.data;
   };
 
   const uploadEstimates = async () => {
-    if (
-      fromdata.name === "" ||
-      todata.name === "" ||
-      fromdata.phone === "" ||
-      todata.phone === ""
-    ) {
-      messageApi.open({
-        type: "error",
-        content: "Estimate is incomplete",
-      });
-      return;
-    } else {
-      const res = await axiosprivate.post(
-        "/estimate/createestimate",
-        JSON.stringify(data),
-        {
-          headers: { Authorization: "Bearer " + auth.accessToken },
-        }
-      );
-      console.log(res);
-      return res.data;
-    }
+    const res = await axiosprivate.post(
+      "/estimate/createestimate",
+      JSON.stringify(data),
+      {
+        headers: { Authorization: "Bearer " + auth.accessToken },
+      }
+    );
+    console.log(res);
+    return res.data;
+  };
+  const updateInvoice = async () => {
+    const res = await axiosprivate.patch(
+      `/invoice/updateinvoice/${id}`,
+      JSON.stringify(data),
+      {
+        headers: { Authorization: "Bearer " + auth.accessToken },
+      }
+    );
+    console.log(res);
+    return res.data;
+  };
+
+  const updateEstimates = async () => {
+    const res = await axiosprivate.patch(
+      `/estimate/updateestimate/${id}`,
+      JSON.stringify(data),
+      {
+        headers: { Authorization: "Bearer " + auth.accessToken },
+      }
+    );
+    console.log(res);
+    return res.data;
   };
 
   const uploadMutation = useMutation({
-    mutationFn: state === "invoice" ? uploadInvoice : uploadEstimates,
+    mutationFn:
+      state === "invoice"
+        ? id
+          ? updateInvoice
+          : uploadInvoice
+        : id
+        ? updateEstimates
+        : uploadEstimates,
     onSuccess(data) {
       console.log(data);
       if (data.status === 200) {
+        state === "invoice"
+          ? id
+            ? messageApi.open({
+                type: "success",
+                content: "Invoice updated successfully",
+              })
+            : messageApi.open({
+                type: "success",
+                content: "Invoice created successfully",
+              })
+          : id
+          ? messageApi.open({
+              type: "success",
+              content: "Estimate updated successfully",
+            })
+          : messageApi.open({
+              type: "success",
+              content: "Estimate created successfully",
+            });
       }
     },
     onError(error: { message: string }) {
@@ -118,18 +141,22 @@ const Download = ({ state }: stateprops) => {
   });
 
   const invoiceHandler = () => {
+    const phoneNumberRegex = /^(?:\+254|0)(?:1|7)\d{8}$/;
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (
       fromdata.name === "" ||
       todata.name === "" ||
-      fromdata.phone === "" ||
-      todata.phone === "" ||
+      (fromdata.email.length > 0 && !emailRegex.test(fromdata.email)) ||
+      (todata.email.length > 0 && !emailRegex.test(todata.email)) ||
+      !phoneNumberRegex.test(todata.phone) ||
+      !phoneNumberRegex.test(fromdata.phone) ||
       forminfo.date === "" ||
       forminfo.number === "" ||
       description[0].description === "" ||
       !(typeof description[0].qty === "number") ||
       !(typeof description[0].amount === "number")
     ) {
-      console.log(forminfo)
+      console.log(forminfo);
       messageApi.open({
         type: "error",
         content: "Please ensure the fields are filled correctly",

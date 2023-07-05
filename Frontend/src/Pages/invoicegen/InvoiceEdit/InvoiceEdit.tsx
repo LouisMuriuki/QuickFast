@@ -7,6 +7,7 @@ import {Divider} from "antd"
 import Description from "./components/Description/Description";
 interface dataProps{
   data?:any
+  
 }
 
 const InvoiceEdit = ({data}:dataProps) => {
