@@ -61,12 +61,12 @@ interface TableListProps {
   headervalue?: string | number;
 }
 
-interface TableParams {
-  pagination?: TablePaginationConfig;
-  sortField?: string;
-  sortOrder?: string;
-  filters?: Record<string, FilterValue>;
-}
+// interface TableParams {
+//   pagination?: TablePaginationConfig;
+//   sortField?: string;
+//   sortOrder?: string;
+//   filters?: Record<string, FilterValue>;
+// }
 
 const DataTable = (props: TableListProps) => {
   const queryClient = useQueryClient();

@@ -1,12 +1,16 @@
 import { UpdateQuery } from "mongoose";
 import Invoice from "../mongo/models/invoiceSchema.ts";
 
-const addInvoice = async (req: { body: any }, res: any) => {
+const addInvoice = async (req: { body: any }, res: any, next: any) => {
+  const client = req.body.invoice[0].todata;
   try {
+    req.body = client;
+    next();
     const newInvoice = await Invoice.create(req.body);
-    res.status(200).json({ success: true, data: newInvoice, status: 200 });
+    return res.status(200).json({ success: true, data: newInvoice, status: 200 });
+   
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, data: error });
   }
 };
 

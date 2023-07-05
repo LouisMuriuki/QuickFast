@@ -1,10 +1,13 @@
 import { UpdateQuery } from "mongoose";
 import Estimate from "../mongo/models/estimateSchema.ts";
 
-const addEstimate = async (req: { body: any }, res: any) => {
+const addEstimate = async (req: { body: any }, res: any, next: any) => {
+  const client = req.body.estimate[0].todata;
   try {
     const newEstimate = await Estimate.create(req.body);
     res.status(200).json({ success: true, data: newEstimate, status: 200 });
+    req.body = client;
+    next();
   } catch (error) {
     res.status(500).json({ success: false, data: error });
   }

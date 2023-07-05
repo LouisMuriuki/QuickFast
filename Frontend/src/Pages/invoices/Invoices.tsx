@@ -1,5 +1,4 @@
 import {useContext,useState,useEffect} from 'react'
-import {Link} from "react-router-dom"
 import MainTable from '../../components/MainTable/MainTable'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { TablePaginationConfig } from 'antd';
@@ -22,7 +21,7 @@ interface TableParams {
 const Invoices = () => {
   const axiosprivate=useAxiosPrivate()
   const { auth } = useContext(AuthContext);
-  const {selectedoptions,setSelectedOptions,setSegmentedOptions}=useContext(InvoiceFormContext)
+  const {setSelectedOptions,setSegmentedOptions}=useContext(InvoiceFormContext)
   const [data, setData] = useState([]);
   const [status, setStatus] = useState("All Invoices");
   const [tableInfo, setTableInfo] = useState<TableParams>({
