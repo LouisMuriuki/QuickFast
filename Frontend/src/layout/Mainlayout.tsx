@@ -1,6 +1,6 @@
 import { Breadcrumb, Layout, theme, ConfigProvider, FloatButton } from "antd";
 import type { ThemeConfig } from "antd";
-import {  Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AppNav from "../components/Navbar/AppNav";
 import { CommentOutlined } from "@ant-design/icons";
 import Login from "../components/login/Login";
@@ -9,7 +9,7 @@ import AddClient from "../Pages/clients/components/AddClient";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect,useContext } from "react";
+import { useEffect, useContext } from "react";
 import { SettingsContext } from "../Context/SettingsContext";
 
 const { Header, Content, Footer } = Layout;
@@ -33,7 +33,7 @@ const MainLayout = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const {  setBizInfo, setCustomizeInfo,set_ID } =useContext(SettingsContext);
+  const { setBizInfo, setCustomizeInfo, set_ID } = useContext(SettingsContext);
 
   const getUser = async () => {
     const response = await axiosprivate.get(
@@ -73,18 +73,15 @@ const MainLayout = () => {
     queryKey: ["settings"],
     queryFn: () => getSettings(),
   });
-  console.log(getSettingsQuery?.data)
+  console.log(getSettingsQuery?.data);
 
   useEffect(() => {
     if (getSettingsQuery?.data?.data?.settings) {
       setBizInfo(getSettingsQuery?.data?.data?.settings?.bizinfo);
       setCustomizeInfo(getSettingsQuery?.data?.data?.settings?.customizeinfo);
-      set_ID(getSettingsQuery?.data?.data?._id)
+      set_ID(getSettingsQuery?.data?.data?._id);
     }
   }, [getSettingsQuery?.data]);
-
-
-
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -94,18 +91,17 @@ const MainLayout = () => {
 
   return (
     <ConfigProvider theme={config}>
-      <Layout className="layout">
-        <Header style={{ display: "flex" }}>
+      <Layout className="layout min-w-full">
+        <Header className="p-0 m-0" style={{ display: "flex" }}>
           <AppNav />
         </Header>
-        <Content className="overflow-hidden" style={{ padding: "0 50px" }}>
+        <Content className="overflow-hidden px-[5px] md:px-[50px]">
           <Breadcrumb
-            style={{ margin: "16px 0" }}
+            className="mt-[16px]"
             items={[{ title: location.pathname }]}
           />
-
           <div
-            className="w-[90%] h-screen overflow-y-auto"
+            className="w-full md:w-[90%] h-screen overflow-y-auto"
             style={{ background: colorBgContainer }}
           >
             <Outlet />

@@ -76,7 +76,7 @@ const BusinessInfo = (data: any) => {
       <h1 className="flex items-center justify-center mb-6">
         BUSINESS DETAILS
       </h1>
-      <div className="flex justify-around ml-14 p-2">
+      <div className="flex justify-around md:ml-14 p-2">
         <div className="flex items-center">
           <p>Logo:</p>
         </div>
