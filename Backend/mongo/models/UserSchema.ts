@@ -19,6 +19,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    packageId:{
+      type:String,
+    },
+    location:{
+      type:String,
+    },
+
   },
   { timestamps: true }
 );
