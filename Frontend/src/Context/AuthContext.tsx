@@ -4,12 +4,16 @@ interface authProps {
   refreshToken: string;
   userId: string;
   username:string
+  email:string,
+  package:string
 }
-const initialauth: authProps = {
+export const initialauth: authProps = {
   accessToken: "",
   refreshToken: "",
   userId: "",
-  username:""
+  username:"",
+  email:"",
+  package:""
 };
 interface contextProps {
   accountlocked: boolean;
@@ -35,12 +39,7 @@ export const AuthContextprovider = ({ children }: any) => {
   const [accountlocked, setAccountLocked] = useState(false);
   const [loginopen, setLoginOpen] = useState(false);
   const [registeropen, setRegisterOpen] = useState(false);
-  const [auth, setAuth] = useState({
-    accessToken: "",
-    refreshToken: "",
-    userId: "",
-    username:""
-  });
+  const [auth, setAuth] = useState(initialauth);
   return (
     <AuthContext.Provider
       value={{

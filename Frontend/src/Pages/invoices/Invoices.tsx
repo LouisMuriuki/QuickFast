@@ -62,8 +62,8 @@ const Invoices = () => {
   },[GetInvoicesQuery.data])
 
   useEffect(()=>{
-    setSegmentedOptions(["All Invoices","Pending","Completed"])
-    setSelectedOptions("All Invoices");
+    setSegmentedOptions(["All","Pending","Completed"])
+    setSelectedOptions("All");
   },[])
   return (
     <div>

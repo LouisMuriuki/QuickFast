@@ -11,6 +11,7 @@ import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useContext } from "react";
 import { SettingsContext } from "../Context/SettingsContext";
+import ProfilePopup from "../components/popup/ProfilePopup";
 
 const { Header, Content, Footer } = Layout;
 
@@ -50,11 +51,13 @@ const MainLayout = () => {
     queryKey: ["user"],
     queryFn: () => getUser(),
   });
+  console.log(getUserQuery.data)
 
   useEffect(() => {
     setAuth((prev) => ({
       ...prev,
       username: getUserQuery.data?.data?.username,
+      email: getUserQuery.data?.data?.email,
     }));
   }, [getUserQuery.data]);
 
@@ -110,6 +113,7 @@ const MainLayout = () => {
           <Register />
           <AddClient />
           <FloatButton icon={<CommentOutlined />} />
+          {auth.accessToken && (<ProfilePopup/>)}
         </Content>
         <Footer style={{ textAlign: "center" }}>
           Easy Quick Invoice ©2023

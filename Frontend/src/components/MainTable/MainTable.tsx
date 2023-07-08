@@ -1,9 +1,10 @@
 import { Segmented, Button } from "antd";
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
 import DataTable from "./components/table/Table";
 import { useLocation, useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import useWindowDimensions from "../../hooks/useWindoDimensions";
 interface TableListProps {
   data?: any;
   tableInfo?: any;
@@ -47,11 +48,14 @@ const MainTable = ({
       queryClient.invalidateQueries({ queryKey: ["estimates"] });
     }
   };
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { width} = useWindowDimensions();
   return (
-    <div className="flex flex-col max-w-7xl">
+    <div ref={containerRef} className="flex flex-col max-w-7xl">
       <div className="flex items-center justify-between px-2 py-4">
         <Segmented
-          size={"large"}
+          size={width < 768 ? "middle" : "large"}
           options={segmentedoptions}
           value={selectedoptions}
           defaultValue={selectedoptions}
@@ -63,7 +67,7 @@ const MainTable = ({
           }}
         />
         <Button
-          size="large"
+          size={width < 768 ? "middle" :"large"}
           type="primary"
           onClick={() => {
             navigateTo(text);

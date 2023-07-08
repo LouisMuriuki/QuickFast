@@ -27,6 +27,8 @@ interface ExtrasContextProps {
   setClientmodalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   clientdata: ClientData;
   setClientData: React.Dispatch<React.SetStateAction<ClientData>>;
+  profilemodalisopen: boolean;
+  setProfileModalisOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ExtrasContext = createContext<ExtrasContextProps>({
@@ -34,11 +36,14 @@ const ExtrasContext = createContext<ExtrasContextProps>({
   setClientDataMode: () => {},
   clientmodalisopen: false,
   setClientmodalIsOpen: () => {},
+  profilemodalisopen: false,
+  setProfileModalisOpen: () => {},
   clientdata: initialClientData,
   setClientData: () => {},
 });
 export const ExtrasContextProvider = ({ children }: any) => {
   const [clientmodalisopen, setClientmodalIsOpen] = useState(false);
+  const [profilemodalisopen, setProfileModalisOpen] = useState(false);
   const [clientdata, setClientData] = useState(initialClientData);
   const [clientdatamode, setClientDataMode] = useState("");
   return (
@@ -50,6 +55,8 @@ export const ExtrasContextProvider = ({ children }: any) => {
         setClientmodalIsOpen,
         clientdata,
         setClientData,
+        profilemodalisopen,
+        setProfileModalisOpen,
       }}
     >
       {children}
