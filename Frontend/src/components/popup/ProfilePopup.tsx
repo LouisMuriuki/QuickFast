@@ -75,7 +75,7 @@ const ProfilePopup = () => {
               {auth.email}
             </p>
             <p className="flex flex-wrap p-0 my-1 text-sm md:text-base">
-              {auth.email}
+             {` ${auth.package} Tier`}
             </p>
           </div>
           <div className="my-2 flex flex-col">

@@ -5,7 +5,13 @@ interface authProps {
   userId: string;
   username:string
   email:string,
-  package:string
+  package:string,
+  totalbilled:string
+  isadmin:boolean,
+  maxinvoices:number,
+  packageprice:number,
+  overflow:number,
+
 }
 export const initialauth: authProps = {
   accessToken: "",
@@ -13,7 +19,12 @@ export const initialauth: authProps = {
   userId: "",
   username:"",
   email:"",
-  package:""
+  package:"",
+  totalbilled:"",
+  isadmin:false,
+  maxinvoices:0,
+  packageprice:0,
+  overflow:0,
 };
 interface contextProps {
   accountlocked: boolean;

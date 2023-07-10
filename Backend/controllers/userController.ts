@@ -1,11 +1,18 @@
+import Package from "../mongo/models/PackageSchema.ts";
 import User from "../mongo/models/UserSchema.ts";
 
 const getUser = async (req: { query: { id: any } }, res: any) => {
   const { id } = req.query;
-  console.log(id)
+  console.log(id);
   try {
     const currentUser = await User.findById(id);
-    res.status(200).json({ success: true, data: currentUser, status: 200 });
+    let packageType;
+    if (currentUser.packageId) {
+      packageType = await Package.findById(currentUser.packageId);
+      console.log(packageType)
+    }
+    const data = {packageType,currentUser };
+    res.status(200).json({ success: true, data: data, status: 200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
@@ -31,16 +38,15 @@ const getUsers = async (req: any, res: any) => {
         console.log("no such page");
       }
     }
-    const currentUsers = User.find({}).skip(skip).limit(limit);
-    res
-      .status(200)
-      .json({
-        success: true,
-        data: currentUsers,
-        status: 200,
-        total: doclength,
-        current: page,
-      });
+    const currentUsers = await User.find({}).skip(skip).limit(limit);
+
+    res.status(200).json({
+      success: true,
+      data: currentUsers,
+      status: 200,
+      total: doclength,
+      current: page,
+    });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }

@@ -8,6 +8,7 @@ interface RegisterProps {
   username: string;
   email: string;
   password: string;
+  packageId:string
 }
 
 export const userLogin = async ({ email, password }: LoginProps) => {
@@ -26,6 +27,7 @@ export const userRegister = async ({
   username,
   email,
   password,
+  packageId,
 }: RegisterProps) => {
   const res = await axiosInstance.post(
     "/auth/register",
@@ -33,6 +35,7 @@ export const userRegister = async ({
       username,
       email,
       password,
+      packageId
     })
   );
   console.log(res);

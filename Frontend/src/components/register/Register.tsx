@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, SetStateAction } from "react";
 import MainModal from "../Reusables/MainModal";
 import { Form, Input, message, Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
@@ -7,28 +7,30 @@ import { userRegister } from "../../api/authCalls";
 import axiosInstance from "../../axios";
 
 const Register = () => {
-  const { setRegisterOpen, setLoginOpen, registeropen, } =
+  const { setRegisterOpen, setLoginOpen, registeropen } =
     useContext(AuthContext);
   const [messageApi, contextHolder] = message.useMessage();
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [starterpackageID,setStarterPackageID]=useState('')
-  const getPackages=async()=>{
-    const res=await axiosInstance.get(`/packages/getpackages`)
+  const [starterpackageID, setStarterPackageID] = useState("");
+  const getPackages = async () => {
+    const res = await axiosInstance.get(`/packages/getpackages`);
     return res.data;
-  }
+  };
   const GetPackageQuery = useQuery({
     queryKey: ["packages"],
-    queryFn: () =>
-    getPackages(),
+    queryFn: () => getPackages(),
   });
 
-  useEffect(()=>{
-    console.log(GetPackageQuery?.data?.data)
-    setStarterPackageID(GetPackageQuery?.data?.data)
-  },[GetPackageQuery.data])
+  useEffect(() => {
+    GetPackageQuery?.data?.data.map((pack: { packageName: string; _id: SetStateAction<string>; }) => {
+      if (pack.packageName === "Free") {
+        setStarterPackageID(pack._id);
+      }
+    });
+  }, [GetPackageQuery.data]);
 
   const RegisterMutation = useMutation({
     mutationFn: userRegister,
@@ -67,8 +69,8 @@ const Register = () => {
       username: values.username,
       email: values.email,
       password: values.password,
+      packageId: starterpackageID
     });
-    console.log(values);
   };
 
   const Login = () => {

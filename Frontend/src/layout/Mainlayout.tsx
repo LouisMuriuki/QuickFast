@@ -51,13 +51,25 @@ const MainLayout = () => {
     queryKey: ["user"],
     queryFn: () => getUser(),
   });
-  console.log(getUserQuery.data)
+  console.log(getUserQuery.data);
+
+  useEffect(() => {
+    if (auth.accessToken && !auth.username) {
+      getUserQuery.refetch();
+    }
+  }, [auth.accessToken, auth.username]);
 
   useEffect(() => {
     setAuth((prev) => ({
       ...prev,
-      username: getUserQuery.data?.data?.username,
-      email: getUserQuery.data?.data?.email,
+      username: getUserQuery.data?.data?.currentUser.username,
+      email: getUserQuery.data?.data?.currentUser.email,
+      isadmin: getUserQuery.data?.data?.currentUser.isAdmin,
+      totalbilled: getUserQuery.data?.data?.currentUser.totalbilled,
+      package: getUserQuery.data?.data?.packageType.packageName,
+      price: getUserQuery.data?.data?.packageType.price,
+      maxinvoices: getUserQuery.data?.data?.packageType.maxInvoices,
+      overflow: getUserQuery.data?.data?.packageType.overflow,
     }));
   }, [getUserQuery.data]);
 
@@ -113,7 +125,7 @@ const MainLayout = () => {
           <Register />
           <AddClient />
           <FloatButton icon={<CommentOutlined />} />
-          {auth.accessToken && (<ProfilePopup/>)}
+          {auth.accessToken && <ProfilePopup />}
         </Content>
         <Footer style={{ textAlign: "center" }}>
           Easy Quick Invoice ©2023

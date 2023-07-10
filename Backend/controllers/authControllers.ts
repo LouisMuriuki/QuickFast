@@ -6,11 +6,18 @@ import RefreshToken from "../mongo/models/refreshTokenSchema.ts";
 dotenv.config();
 
 const registerUser = async (
-  req: { body: { username: string; email: string; password: string } },
+  req: {
+    body: {
+      username: string;
+      email: string;
+      password: string;
+      packageId: string;
+    };
+  },
   res: any
 ) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
+  const { username, email, password, packageId } = req.body;
+  if (!username || !email || !password || !packageId) {
     return res
       .status(500)
       .json({ sucess: false, data: "some fields are missing" });
@@ -31,6 +38,7 @@ const registerUser = async (
         password,
         process.env.PASSWORD_SECRET_KEY
       ).toString(),
+      packageId,
     });
 
     return res.status(200).json({ success: true, data: newUser, status: 200 });

@@ -12,24 +12,26 @@ import Settings from "./Pages/Settings/Settings";
 import Reports from "./Pages/reports/Reports";
 import InvoiceGen from "./Pages/invoicegen/InvoiceGen";
 import Persistlogin from "./utils/PersistLogin";
+import NotFound from "./Pages/NotFound/NotFound";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Persistlogin />}>
-    {/*        <Route element={<RequireAuth />}> */}
-    <Route path="/" element={<MainLayout />}>
-      <Route path="invoices">
-        <Route index element={<Invoices />} />
-        <Route path="new" element={<InvoiceGen />} />
+      {/*        <Route element={<RequireAuth />}> */}
+      <Route path="/" element={<MainLayout />}>
+        <Route path="invoices">
+          <Route index element={<Invoices />} />
+          <Route path="new" element={<InvoiceGen />} />
+        </Route>
+        <Route path="estimates">
+          <Route index element={<Estimates />} />
+          <Route path="new" element={<InvoiceGen />} />
+        </Route>
+        <Route path="clients" element={<Clients />} />
+        <Route path="reports" element={<Reports />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
-      <Route path="estimates">
-        <Route index element={<Estimates />} />
-        <Route path="new" element={<InvoiceGen />} />
-      </Route>
-      <Route path="clients" element={<Clients />} />
-      <Route path="reports" element={<Reports />} />
-      <Route path="settings" element={<Settings />} />
-    </Route>
     </Route>
   )
 );
