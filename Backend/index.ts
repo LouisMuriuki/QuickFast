@@ -9,6 +9,7 @@ import invoiceRoute from "./routes/invoiceRoute.ts"
 import tokenRoute from "./routes/tokenRoute.ts"
 import settingsRoute from "./routes/settingsRoute.ts"
 import estimateRoute from "./routes/estimateRoute.ts"
+import packageRoute from "./routes/packageRoute.ts"
 dotenv.config()
 const app = express();
 
@@ -23,7 +24,8 @@ app.use("/fastinvoice/api/v1/estimate",estimateRoute);
 app.use("/fastinvoice/api/v1/invoice",invoiceRoute);
 app.use("/fastinvoice/api/v1/token",tokenRoute);
 app.use("/fastinvoice/api/v1/settings",settingsRoute);
-
+app.use("/fastinvoice/api/v1/packages",packageRoute);
+ 
 const StartServer = () => {
   try {
     Connect(process.env.MONGO_URL);
@@ -36,3 +38,6 @@ const StartServer = () => {
 };
 
 StartServer()
+
+
+

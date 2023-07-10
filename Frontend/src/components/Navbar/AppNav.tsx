@@ -104,16 +104,18 @@ const AppNav = () => {
                   >
                     {auth.username}
                   </Link>
-                  <Avatar
-                    size={40}
-                    className="cursor-pointer flex self-center"
-                    onClick={() => {
-                      setProfileModalisOpen(true);
-                    }}
-                    src={
-                      "https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg"
-                    }
-                  />
+                  {auth.accessToken && (
+                    <Avatar
+                      size={40}
+                      className="cursor-pointer flex self-center"
+                      onClick={() => {
+                        setProfileModalisOpen(true);
+                      }}
+                      src={
+                        "https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg"
+                      }
+                    />
+                  )}
                   {auth.accessToken ? (
                     <Button
                       type="primary"

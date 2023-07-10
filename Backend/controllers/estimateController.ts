@@ -1,15 +1,22 @@
 import { UpdateQuery } from "mongoose";
 import Estimate from "../mongo/models/estimateSchema.ts";
+import Client from "../mongo/models/ClientSchema.ts";
 
 const addEstimate = async (req: { body: any }, res: any, next: any) => {
   const client = req.body.estimate[0].todata;
   try {
+    const email = client.email;
+    const phone = client.phone;
+    const currentClient = await Client.findOne({ phone, email });
+    if (!currentClient) {
+      await Client.create(client);
+    }
     const newEstimate = await Estimate.create(req.body);
-    res.status(200).json({ success: true, data: newEstimate, status: 200 });
-    req.body = client;
-    next();
+    return res
+      .status(200)
+      .json({ success: true, data: newEstimate, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, data: error });
   }
 };
 

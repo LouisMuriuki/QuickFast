@@ -1,51 +1,72 @@
 import Package from "../mongo/models/PackageSchema.ts";
 
-const createPackage = async (req: any, res: any) => {
+const savePackages = async (req: any, res: any) => {
   try {
-    let packages: [
+    const packages= [
       {
-        packageName: "Free";
-        features: [];
-        price: 0;
-        maxinvoices: 10;
+        packageName: "Free",
+        features: [""],
+        price: 0,
+        maxinvoices: 10,
       },
       {
-        packageName: "Basic";
-        features: [];
-        price: 1;
-        maxinvoices: 5;
+        packageName: "Basic",
+        features: [""],
+        price: 1,
+        maxinvoices: 5,
       },
       {
-        packageName: "Premium";
-        features: [];
-        price: 1.5;
-        maxinvoices: 10;
+        packageName: "Premium",
+        features: [""],
+        price: 1.5,
+        maxinvoices: 10,
       },
       {
-        packageName: "Executive";
-        features: [];
-        price: 2;
-        maxinvoices: 100;
+        packageName: "Executive",
+        features: [""],
+        price: 2,
+        maxinvoices: 100,
       }
     ];
-    for (const item of packages) {
-      const existingpackage = await Package.findOne({
-        item,
-      });
-      if (!existingpackage) {
-        const createdPackage = Package.create({
+    let newpackage
+    if (packages && packages.length) {
+      for (const item of packages) {
+        const existingpackage = await Package.findOne({
           packageName: item.packageName,
-          features: item.features,
-          price: item.price,
-          maxInvoices: item.maxinvoices,
         });
-        res.status(200).json({
-          status: 200,
-          message: "Packages created successfully",
-        });
+        if (!existingpackage) {
+          newpackage=await Package.create({
+            packageName: item.packageName,
+            features: item.features,
+            price: item.price,
+            maxInvoices: item.maxinvoices,
+          });
+          console.log("Packages created successfully");
+        }
       }
     }
+    res
+      .status(200)
+      .json({ status: 200, data: newpackage, sucess: true });
   } catch (error) {
-    res.json({ message: error.message, status: error.code });
+    console.log(error.message, "here");
+    res
+      .status(500)
+      .json({ status: 500, message: error.message, sucess: false });
   }
 };
+
+const getPackages = async (req: any, res: any) => {
+  try {
+    const existingPackages = await Package.find({});
+    res
+      .status(200)
+      .json({ status: 200, data: existingPackages, success: true });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ status: 500, message: error.message, success: false });
+  }
+};
+
+export { getPackages, savePackages };

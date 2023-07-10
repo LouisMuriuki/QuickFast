@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 
 const PackageSchema = new mongoose.Schema(
   {
-    packageName: { type: String, default: "Free" },
-    features: [],
+    packageName: { type: String },
+    features:  [{ type: String }],
     price: { type: Number },
     maxInvoices: { type: Number },
+    overflow:{ type: Number,default:0 }
   },
   { timestamps: true }
 );

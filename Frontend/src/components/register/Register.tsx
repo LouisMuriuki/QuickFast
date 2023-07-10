@@ -1,18 +1,34 @@
-import  { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import MainModal from "../Reusables/MainModal";
 import { Form, Input, message, Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { userRegister } from "../../api/authCalls";
+import axiosInstance from "../../axios";
 
 const Register = () => {
-  const { setRegisterOpen, setLoginOpen, registeropen, setAuth } =
+  const { setRegisterOpen, setLoginOpen, registeropen, } =
     useContext(AuthContext);
   const [messageApi, contextHolder] = message.useMessage();
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [starterpackageID,setStarterPackageID]=useState('')
+  const getPackages=async()=>{
+    const res=await axiosInstance.get(`/packages/getpackages`)
+    return res.data;
+  }
+  const GetPackageQuery = useQuery({
+    queryKey: ["packages"],
+    queryFn: () =>
+    getPackages(),
+  });
+
+  useEffect(()=>{
+    console.log(GetPackageQuery?.data?.data)
+    setStarterPackageID(GetPackageQuery?.data?.data)
+  },[GetPackageQuery.data])
 
   const RegisterMutation = useMutation({
     mutationFn: userRegister,
@@ -77,7 +93,7 @@ const Register = () => {
             name="username"
             rules={[
               { required: true, message: "Please enter your username" },
-              ({ getFieldValue }) => ({
+              () => ({
                 validator(_, value) {
                   if (value.trim().length < 2) {
                     return Promise.reject(

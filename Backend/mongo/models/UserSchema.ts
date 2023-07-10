@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema(
     location:{
       type:String,
     },
+    totalbilled:{type:Number,default:0}
 
   },
   { timestamps: true }
