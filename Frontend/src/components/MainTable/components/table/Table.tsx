@@ -9,10 +9,7 @@ import type {
 } from "antd/es/table/interface";
 import { MenuInfo } from "rc-menu/lib/interface";
 import { InputRef, Dropdown } from "antd";
-import type {
-  ColumnType,
-  TablePaginationConfig,
-} from "antd/es/table";
+import type { ColumnType, TablePaginationConfig } from "antd/es/table";
 import ExtrasContext from "../../../../Context/ExtrasContext";
 import {
   Description,
@@ -23,11 +20,8 @@ import {
 import type { MenuProps } from "antd";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import useAuth from "../../../../hooks/useAuth";
-import {
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { useLocation, useNavigate, } from "react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocation, useNavigate } from "react-router";
 interface invoiceprops {
   fromdata: FromData;
   description: Description;
@@ -79,7 +73,7 @@ const DataTable = (props: TableListProps) => {
   const axiosprivate = useAxiosPrivate();
   const { auth } = useAuth();
   const showClient = (data: any) => {
-    console.log(data)
+    console.log(data);
     setClientData(data);
     setClientmodalIsOpen(true);
     setClientDataMode("Update");
@@ -103,6 +97,24 @@ const DataTable = (props: TableListProps) => {
     {
       key: "3",
       label: "View",
+    },
+    {
+      key: "4",
+      label: "Delete",
+    },
+  ];
+  const ClientMenuItems = [
+    {
+      key: "1",
+      label: "Load into invoice",
+    },
+    {
+      key: "2",
+      label: "Load into estimate",
+    },
+    {
+      key: "3",
+      label: "Details",
     },
     {
       key: "4",
@@ -193,6 +205,7 @@ const DataTable = (props: TableListProps) => {
       });
     },
   });
+
   const markestimatesClosed = async (record: any) => {
     const newEstimate = { ...record, status: "Closed" };
     const res = await axiosprivate.patch(
@@ -241,7 +254,7 @@ const DataTable = (props: TableListProps) => {
     clearFilters();
     setSearchText("");
   };
-
+//name is the type of doc to be created while root is the origin of the data
   const onMenuClick = (record: any): MenuProps["onClick"] => {
     return (menuInfo: MenuInfo) => {
       console.log(record);
@@ -257,14 +270,45 @@ const DataTable = (props: TableListProps) => {
         case "3":
           location.pathname === "/invoices"
             ? navigate("/invoices/new", {
-                state: { data: record, name: "invoices" },
+                state: { data: record, name: "invoices", root: "invoice" },
               })
             : navigate("/estimates/new", {
-                state: { data: record, name: "estimates" },
+                state: { data: record, name: "estimates", root: "estimate" },
               });
-
           break;
         case "4":
+          location.pathname === "/invoices"
+            ? deleteInvoiceMutation.mutate(record?._id)
+            : deleteEstimateMutation.mutate(record?._id);
+          break;
+
+        default:
+          break;
+      }
+
+      // console.log(`Clicked on menu item with key ${key} and ID ${itemId}`);
+    };
+  };
+  //name is the type of doc to be created while root is the origin of the data
+  const onClientMenuClick = (record: any): MenuProps["onClick"] => {
+    return (menuInfo: MenuInfo) => {
+      console.log(record);
+      const { key } = menuInfo;
+      switch (key) {
+        case "1":
+          navigate("/invoices/new", {
+            state: { data: record, name: "invoices", root: "client" },
+          });
+          break;
+        case "2":
+          navigate("/estimates/new", {
+            state: { data: record, name: "estimates", root: "client" },
+          });
+          break;
+        case "3":
+          showClient(record);
+          break;
+        case "3":
           location.pathname === "/invoices"
             ? deleteInvoiceMutation.mutate(record?._id)
             : deleteEstimateMutation.mutate(record?._id);
@@ -399,7 +443,11 @@ const DataTable = (props: TableListProps) => {
       render: (_, record) => {
         const invoices = record.invoice;
         const invoicedate = invoices?.map((invoice, i) => {
-          return <span key={i}>{new Date(invoice.forminfo.date).toLocaleDateString()}</span>;
+          return (
+            <span key={i}>
+              {new Date(invoice.forminfo.date).toLocaleDateString()}
+            </span>
+          );
         });
         return <div>{invoicedate}</div>;
       },
@@ -471,7 +519,11 @@ const DataTable = (props: TableListProps) => {
       render: (_, record) => {
         const estimates = record.estimate;
         const estimatedate = estimates?.map((estimate, i) => {
-          return <span key={i}>{new Date(estimate.forminfo.date).toLocaleDateString()}</span>;
+          return (
+            <span key={i}>
+              {new Date(estimate.forminfo.date).toLocaleDateString()}
+            </span>
+          );
         });
         return <div>{estimatedate}</div>;
       },
@@ -536,21 +588,21 @@ const DataTable = (props: TableListProps) => {
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
-        <Space size="middle" style={{ backgroundColor: "white" }}>
-          <Button
-            onClick={() => {
-              showClient(record);
-            }}
-            type="primary"
-            className="border-blue-500 bg-blue-500 text-white "
-          >
-            Details
-          </Button>
-
-          {/* <DeleteOutlined style={{ fontSize: "22px",color: 'red' }} onClick={() => setAsyncConfirmOpen(true)} /> */}
-        </Space>
-      ),
+      render: (_, record) => {
+        return (
+          <Space size="middle" style={{ backgroundColor: "white" }}>
+            {/* @ts-ignore  */}
+            <Dropdown.Button
+              menu={{
+                items: ClientMenuItems,
+                onClick: onClientMenuClick(record),
+              }}
+            >
+              Actions
+            </Dropdown.Button>
+          </Space>
+        );
+      },
     },
   ];
   const reportsscolumns: ColumnType<DataType>[] = [

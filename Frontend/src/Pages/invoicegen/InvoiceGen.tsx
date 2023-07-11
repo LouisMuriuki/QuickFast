@@ -14,7 +14,8 @@ import { SettingsContext } from "../../Context/SettingsContext";
 
 const InvoiceGen = () => {
   const { state } = useLocation();
-  const { name, data } = state;
+  const { name, data, root } = state;
+  console.log(data);
   const {
     selectedoptions,
     setFormInfo,
@@ -44,7 +45,7 @@ const InvoiceGen = () => {
         notes: customizeinfo?.invoicenotes,
       });
     }
-  }, []);
+  }, [logo, customizeinfo, name]);
 
   const result = { ...partofforminfo, ...initialFormInfo };
 
@@ -56,27 +57,39 @@ const InvoiceGen = () => {
         setFormInfo((prev) => ({ ...prev, title: "Invoice" }));
       }
     }
-  }, [name]);
+  }, [name, data]);
 
   useEffect(() => {
-    if (data && data) {
-      if (name === "invoices") {
-        setFormInfo(data?.invoice[0]?.forminfo);
-        setDescription(data?.invoice[0]?.description);
-        setFromdata(data?.invoice[0]?.fromdata);
-        setTodata(data?.invoice[0]?.todata);
+    if (data) {
+      if (root === "client") {
+        setTodata(data);
+        setFormInfo((prev) => ({
+          ...prev,
+          title: name === "estimates" ? "Estimate" : "Invoice",
+        }));
+      } else if (name === "invoices") {
+        const invoiceData = data?.invoice[0];
+        setFormInfo(invoiceData?.forminfo);
+        setDescription(invoiceData?.description);
+        setFromdata(invoiceData?.fromdata);
+        setTodata(invoiceData?.todata);
       } else {
-        setFormInfo(data?.estimate[0]?.forminfo);
-        setDescription(data?.estimate[0]?.description);
-        setFromdata(data?.estimate[0]?.fromdata);
-        setTodata(data?.estimate[0]?.todata);
+        const estimateData = data?.estimate[0];
+        setFormInfo(estimateData?.forminfo);
+        setDescription(estimateData?.description);
+        setFromdata(estimateData?.fromdata);
+        setTodata(estimateData?.todata);
       }
     }
+
     return () => {
-      setFormInfo(result);
-      setDescription([initialdescription]);
-      setFromdata(restofobject);
-      setTodata(initialToData);
+      if (root === "client") {
+      } else {
+        setFormInfo(result);
+        setDescription([initialdescription]);
+        setFromdata(restofobject);
+        setTodata(initialToData);
+      }
     };
   }, [data]);
 
@@ -84,7 +97,10 @@ const InvoiceGen = () => {
     if (!data) {
       setSegmentedOptions(["Edit", "Preview"]);
       setSelectedOptions("Edit");
-    } else if (data && name === "estimates") {
+    } else if (data && root === "client") {
+      setSegmentedOptions(["Edit", "Preview"]);
+      setSelectedOptions("Edit");
+    } else if (data && name === "estimates" && root === "estimate") {
       setSegmentedOptions(["Edit", "Preview"]);
       setSelectedOptions("Preview");
     } else {
@@ -96,26 +112,30 @@ const InvoiceGen = () => {
     };
   }, [data]);
 
-  console.log(data)
+  console.log(data);
 
   return (
     <div className=" max-w-full  flex container ">
       <div className="flex flex-col md:flex-row w-full">
         <div className=" flex flex-col w-full md:w-3/4">
-          <InvoiceTop  />
+          <InvoiceTop />
           {selectedoptions === "Edit" ? (
             <InvoiceEdit
               data={
-                name === "estimates" ? data?.estimate[0] : data?.invoice[0]
+                //if root equals to client then set data else set data as estimate or invoice
+                root === "client"
+                  ? data
+                  : name === "estimates"
+                  ? data?.estimate[0]
+                  : data?.invoice[0]
               }
-              
             />
           ) : (
             <InvoicePreview />
           )}
         </div>
         <div className="flex flex-col w-full md:w-1/4">
-          <SideBar state={name} id={data?data._id:""} />
+          <SideBar state={name} id={data ? data._id : ""} />
         </div>
       </div>
     </div>

@@ -1,5 +1,3 @@
-import React from "react";
-
 const Subscription = () => {
   return (
     <div className="flex flex-col ">
