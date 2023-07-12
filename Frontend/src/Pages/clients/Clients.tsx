@@ -1,4 +1,4 @@
-import { Button, TablePaginationConfig } from "antd";
+import { Button, TablePaginationConfig} from "antd";
 import { useContext, useEffect, useState } from "react";
 import ExtrasContext, { initialClientData } from "../../Context/ExtrasContext";
 import { FilterValue } from "antd/es/table/interface";
@@ -34,7 +34,8 @@ interface ClientProps {
 
 const Clients = () => {
   const axiosprivate = useAxiosPrivate();
-  const { setClientmodalIsOpen,setClientDataMode,setClientData, } = useContext(ExtrasContext);
+  const { setClientmodalIsOpen, setClientDataMode, setClientData } =
+    useContext(ExtrasContext);
   const { auth } = useContext(AuthContext);
   const [data, setData] = useState<ClientProps[]>([]);
   const [tableInfo, setTableInfo] = useState<TableParams>({
@@ -49,7 +50,7 @@ const Clients = () => {
       `client/getclients?id=${auth.userId}&page=${page}&limit=${limit}`,
       { headers: { Authorization: "Bearer " + auth.accessToken } }
     );
-    console.log(res)
+    console.log(res);
     setTableInfo({
       ...tableInfo,
       pagination: {
@@ -73,9 +74,15 @@ const Clients = () => {
 
   console.log(GetClientsQuery?.data?.data);
 
-  useEffect(()=>{
-    setData(GetClientsQuery?.data?.data)
-  },[GetClientsQuery.data])
+  useEffect(() => {
+    setData(GetClientsQuery?.data?.data);
+  }, [GetClientsQuery.data]);
+
+  const addClient = () => {
+    setClientmodalIsOpen(true);
+    setClientDataMode("Add");
+    setClientData(initialClientData);
+  };
 
   return (
     <div className="flex flex-col max-w-7xl">
@@ -84,11 +91,7 @@ const Clients = () => {
         <Button
           size="large"
           type="primary"
-          onClick={() => {
-            setClientmodalIsOpen(true);
-            setClientDataMode("Add")
-            setClientData(initialClientData)
-          }}
+          onClick={addClient}
           className="border-blue-500 bg-blue-500 text-white "
         >
           Add Client
@@ -96,13 +99,12 @@ const Clients = () => {
       </div>
       <div className="px-2">
         <DataTable
-        data={data}
-        setTableInfo={setTableInfo}
-        tableInfo={tableInfo}
-        loading={GetClientsQuery.isFetching}
-      />
+          data={data}
+          setTableInfo={setTableInfo}
+          tableInfo={tableInfo}
+          loading={GetClientsQuery.isFetching}
+        />
       </div>
-      
     </div>
   );
 };

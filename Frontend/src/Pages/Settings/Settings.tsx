@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import BusinessInfo from "./bussinessinfo/BusinessInfo";
 import Customize from "./customize/Customize";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -9,9 +9,8 @@ import { Button, message } from "antd";
 
 const Settings = () => {
   const axiosprivate = useAxiosPrivate();
-  const { bizinfo, customizeinfo,_id} =
-    useContext(SettingsContext);
-    
+  const { bizinfo, customizeinfo, _id } = useContext(SettingsContext);
+  const refreshToken = localStorage.getItem("Invoice_RefreshToken");
   const { auth } = useAuth();
   const [messageApi, contextHolder] = message.useMessage();
   const saveSettings = async () => {
@@ -43,7 +42,6 @@ const Settings = () => {
     console.log(res);
     return res.data;
   };
-  
 
   const saveSettingsMutation = useMutation({
     mutationFn: saveSettings,
@@ -84,9 +82,22 @@ const Settings = () => {
   });
 
   const handleClick = () => {
-    bizinfo.name&&bizinfo.phone
-      ? updateSettingsMutation.mutate()
-      : saveSettingsMutation.mutate();
+    if (auth.userId) {
+      bizinfo.name && bizinfo.phone
+        ? updateSettingsMutation.mutate()
+        : saveSettingsMutation.mutate();
+    } else if (!refreshToken) {
+      messageApi.open({
+        type: "error",
+        content:
+          "Seems we dont recognise you, please signup to use fast-invoice",
+      });
+    } else {
+      messageApi.open({
+        type: "error",
+        content: "Please login to finish up your invoice",
+      });
+    }
   };
 
   return (
@@ -96,9 +107,7 @@ const Settings = () => {
         <BusinessInfo data={bizinfo} />
       </div>
       <div className="flex justify-center w-full md:w-1/2">
-        <Customize
-          data={customizeinfo}
-        />
+        <Customize data={customizeinfo} />
       </div>
       <div>
         <Button
@@ -106,7 +115,7 @@ const Settings = () => {
           className="border-blue-500 bg-blue-500 text-white"
           onClick={handleClick}
         >
-          {bizinfo ? "Update" : "Save"}
+          {bizinfo.name && bizinfo.phone ? "Update" : "Save"}
         </Button>
       </div>
     </div>

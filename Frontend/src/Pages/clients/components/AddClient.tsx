@@ -8,6 +8,7 @@ import { axiosPrivate } from "../../../axios";
 import { useMutation } from "@tanstack/react-query";
 import AuthContext from "../../../Context/AuthContext";
 const AddClient = () => {
+  const refreshToken = localStorage.getItem("Invoice_RefreshToken");
   const {
     clientdata,
     clientmodalisopen,
@@ -83,18 +84,31 @@ const AddClient = () => {
   });
 
   const handleSubmit = () => {
-    if (clientdata.name === "" || clientdata.phone === "") {
+    if (auth.userId) {
+      if (clientdata.name === "" || clientdata.phone === "") {
+        messageApi.open({
+          type: "error",
+          content: "please fill in all the required details",
+        });
+        return;
+      } else {
+        {
+          clientdatamode === "Add"
+            ? addClientMutation.mutate()
+            : updateClientMutation.mutate();
+        }
+      }
+    } else if (!refreshToken) {
       messageApi.open({
         type: "error",
-        content: "please fill in all the required details",
+        content:
+          "Seems we dont recognise you, please signup to use fast-invoice",
       });
-      return;
     } else {
-      {
-        clientdatamode === "Add"
-          ? addClientMutation.mutate()
-          : updateClientMutation.mutate();
-      }
+      messageApi.open({
+        type: "error",
+        content: "Please login to finish up your invoice",
+      });
     }
   };
 

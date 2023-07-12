@@ -7,6 +7,6 @@ router.post("/addclient",VerifyToken,addClient)
 router.get("/getclient",VerifyToken,getClient)
 router.get("/getclients",VerifyToken, getClients)
 router.patch("/updateclient/:id",VerifyToken,updateClient)
-router.delete("/getclient",VerifyToken,deleteClient)
+router.delete("/deleteclient/:id",VerifyToken,deleteClient)
 
 export default router

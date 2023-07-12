@@ -141,30 +141,45 @@ const Download = ({ state, id }: stateprops) => {
   });
 
   const invoiceHandler = () => {
-    const phoneNumberRegex = /^(?:\+254|0)(?:1|7)\d{8}$/;
-    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (
-      fromdata.name === "" ||
-      todata.name === "" ||
-      (fromdata.email.length > 0 && !emailRegex.test(fromdata.email)) ||
-      (todata.email.length > 0 && !emailRegex.test(todata.email)) ||
-      !phoneNumberRegex.test(todata.phone) ||
-      !phoneNumberRegex.test(fromdata.phone) ||
-      forminfo.date === "" ||
-      forminfo.number === "" ||
-      description[0].description === "" ||
-      !(typeof description[0].qty === "number") ||
-      !(typeof description[0].amount === "number")
-    ) {
-      console.log(forminfo);
+    const refreshToken = localStorage.getItem("Invoice_RefreshToken");
+    if (auth.userId) {
+      const phoneNumberRegex = /^(?:\+254|0)(?:1|7)\d{8}$/;
+      const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (
+        fromdata.name === "" ||
+        todata.name === "" ||
+        (fromdata.email.length > 0 && !emailRegex.test(fromdata.email)) ||
+        (todata.email.length > 0 && !emailRegex.test(todata.email)) ||
+        !phoneNumberRegex.test(todata.phone) ||
+        !phoneNumberRegex.test(fromdata.phone) ||
+        forminfo.date === "" ||
+        forminfo.number === "" ||
+        description[0].description === "" ||
+        !(typeof description[0].qty === "number") ||
+        !(typeof description[0].amount === "number")
+      ) {
+        console.log(forminfo);
+        messageApi.open({
+          type: "error",
+          content: "Please ensure the fields are filled correctly",
+        });
+        return;
+      } else {
+        uploadMutation.mutate();
+        Download();
+      }
+    } else if (!refreshToken) {
       messageApi.open({
         type: "error",
-        content: "Please ensure the fields are filled correctly",
+        content:
+          "Seems we dont recognise you, please signup to use fast-invoice",
       });
-      return;
-    } else {
-      uploadMutation.mutate();
-      Download();
+    }else{
+      messageApi.open({
+        type: "error",
+        content:
+          "Please login to finish up your invoice",
+      });
     }
   };
 

@@ -13,6 +13,7 @@ import Reports from "./Pages/reports/Reports";
 import InvoiceGen from "./Pages/invoicegen/InvoiceGen";
 import Persistlogin from "./utils/PersistLogin";
 import NotFound from "./Pages/NotFound/NotFound";
+import Subscription from "./Pages/subscription/Subscription";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,6 +32,7 @@ const router = createBrowserRouter(
         <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="subscription" element={<Subscription />} />
       </Route>
     </Route>
   )

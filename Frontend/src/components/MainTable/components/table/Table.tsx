@@ -171,6 +171,31 @@ const DataTable = (props: TableListProps) => {
       });
     },
   });
+  const deleteClients = async (id: string) => {
+    const res = await axiosprivate.delete(`/client/deleteclient/${id}`, {
+      headers: { Authorization: "Bearer " + auth?.accessToken },
+    });
+    return res.data;
+  };
+
+  const deleteClientMutation = useMutation({
+    mutationFn: deleteClients,
+    onSuccess(data) {
+      if (data.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: "client deleted successfully",
+        });
+        queryClient.invalidateQueries({ queryKey: ["clients"] });
+      }
+    },
+    onError(error: { message: string }) {
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
+    },
+  });
 
   const markInvoiceCompleted = async (record: any) => {
     const newInvoice = { ...record, status: "Completed" };
@@ -254,7 +279,7 @@ const DataTable = (props: TableListProps) => {
     clearFilters();
     setSearchText("");
   };
-//name is the type of doc to be created while root is the origin of the data
+  //name is the type of doc to be created while root is the origin of the data
   const onMenuClick = (record: any): MenuProps["onClick"] => {
     return (menuInfo: MenuInfo) => {
       console.log(record);
@@ -308,12 +333,9 @@ const DataTable = (props: TableListProps) => {
         case "3":
           showClient(record);
           break;
-        case "3":
-          location.pathname === "/invoices"
-            ? deleteInvoiceMutation.mutate(record?._id)
-            : deleteEstimateMutation.mutate(record?._id);
+        case "4":
+          deleteClientMutation.mutate(record?._id);
           break;
-
         default:
           break;
       }

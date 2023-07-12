@@ -100,7 +100,7 @@ const deleteClient = async (req: { params: { id: any } }, res: any) => {
   try {
     const { id } = req.params;
     const deletedClient = await Client.findByIdAndDelete(id);
-    res.status(201).json({ success: true, status: 200 });
+    res.status(201).json({ success: true, data: deletedClient, status: 200 });
   } catch (error) {
     res.status(500).json({ success: true, data: error });
   }
