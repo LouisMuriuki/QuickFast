@@ -20,7 +20,7 @@ const registerUser = async (
   if (!username || !email || !password || !packageId) {
     return res
       .status(500)
-      .json({ sucess: false, data: "some fields are missing" });
+      .json({ sucess: false, error: "some fields are missing" });
   }
   try {
     const existinguser = await User.findOne({ email });
@@ -28,7 +28,7 @@ const registerUser = async (
     if (existinguser) {
       return res
         .status(409)
-        .json({ success: false, data: "User already exists" });
+        .json({ success: false, error: "User already exists" });
     }
 
     const newUser = await User.create({
@@ -58,7 +58,7 @@ const loginUser = async (
   if (!email || !password) {
     return res
       .status(500)
-      .json({ success: false, data: "somefileds are missing" });
+      .json({ success: false, error: "somefileds are missing" });
   }
 
   try {
@@ -108,7 +108,7 @@ const loginUser = async (
       status: 200,
     });
   } catch (error) {
-    return res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, error: error });
   }
 };
 

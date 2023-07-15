@@ -48,7 +48,7 @@ const getUsers = async (req: any, res: any) => {
       current: page,
     });
   } catch (error) {
-    res.status(500).json({ success: true, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -68,7 +68,7 @@ const updateUser = async (
     });
     res.status(200).json({ success: true, data: updatedUser, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -78,7 +78,7 @@ const deleteUser = async (req: { params: { id: any } }, res: any) => {
     const deletedUser = await User.findByIdAndDelete(id);
     res.status(201).json({ success: true, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: true, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 

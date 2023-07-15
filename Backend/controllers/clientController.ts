@@ -22,7 +22,7 @@ const addClient = async (req: { body: any }, res: any) => {
         .json({ success: true, data: newClient, status: 200 });
     }
   } catch (error) {
-    return res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -32,7 +32,7 @@ const getClient = async (req: { params: { id: any } }, res: any) => {
     const currentClient = await Client.findById(id);
     res.status(200).json({ success: true, data: currentClient, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 const getClients = async (
@@ -58,7 +58,7 @@ const getClients = async (
         });
       }
       if (skip >= doclength) {
-        return res.status(500).json({ success: false, data: "no such page" });
+        return res.status(500).json({ success: false, error: "no such page" });
       }
     }
     const currentClients = await Client.find({ ownerId })
@@ -72,7 +72,7 @@ const getClients = async (
       current: page,
     });
   } catch (error) {
-    return res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -92,7 +92,7 @@ const updateClient = async (
     });
     res.status(200).json({ success: true, data: updatedClient, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 

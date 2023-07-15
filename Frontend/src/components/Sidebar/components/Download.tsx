@@ -174,11 +174,10 @@ const Download = ({ state, id }: stateprops) => {
         content:
           "Seems we dont recognise you, please signup to use fast-invoice",
       });
-    }else{
+    } else {
       messageApi.open({
         type: "error",
-        content:
-          "Please login to finish up your invoice",
+        content: "Please login to finish up your invoice",
       });
     }
   };
@@ -191,10 +190,10 @@ const Download = ({ state, id }: stateprops) => {
       ? [0]
       : (forminfo?.terms?.match(/\d+/g) || []).map(Number);
   console.log(number);
-  const formattedDate = dayjs(forminfo?.date).format("dddd, MMMM DD, YYYY");
+  const formattedDate = dayjs(forminfo?.date).format("DD/M/YYYY");
   const formattedDueDate = dayjs(forminfo?.date)
     .add(+number[0], "day")
-    .format("dddd, MMMM DD, YYYY");
+    .format("DD/M/YYYY");
   const Download = () => {
     setLoading(true);
     var data = {
@@ -259,10 +258,15 @@ const Download = ({ state, id }: stateprops) => {
         Kindly pay your invoice ${
           forminfo.terms === "none" ? "today" : `within ${forminfo.terms}`
         }
-      </p style="text-align: center; font-weight: bold;> 
-      <p style="text-align: left; margin-bottom: 80px;">
+      </p> 
+      <p style="text-align: center;">
       Thank You!
       </p>
+      ${
+        forminfo.title === "Estimate"
+          ? `<p style="text-align: center; font-style: italic; margin-top: 80px;">**This is an estimate, once agreed upon please request for the invoice**</p>`
+          : ""
+      }
     `,
       // Settings to customize your invoice
       settings: {
@@ -279,7 +283,7 @@ const Download = ({ state, id }: stateprops) => {
       },
       // Translate your invoice to your preferred language
       translate: {
-        // "invoice": "FACTUUR",  // Default to 'INVOICE'
+        invoice: forminfo.title === "Estimate" ? "Estimate" : "Invoice", // Default to 'INVOICE'
         // "number": "Nummer", // Defaults to 'Number'
         // "date": "Datum", // Default to 'Date'
         // "due-date": "Verloopdatum", // Defaults to 'Due Date'

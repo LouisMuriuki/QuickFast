@@ -1,0 +1,16 @@
+/* Hide the scrollbar for WebKit-based browsers */
+/* Replace 'width' and 'height' values to fit your design */
+::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+  
+  /* Hide the scrollbar thumb for WebKit-based browsers */
+  ::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+  
+  /* Hide the scrollbar for Firefox */
+  /* Replace 'none' with 'auto' to show the default scrollbar */
+
+  

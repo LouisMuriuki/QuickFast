@@ -17,7 +17,7 @@ const addInvoice = async (req: { body: any }, res: any, next: any) => {
       .status(200)
       .json({ success: true, data: newInvoice, status: 200 });
   } catch (error) {
-    return res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -28,7 +28,7 @@ const getInvoice = async (req: { params: { id: any } }, res: any) => {
     const currentInvoice = await Invoice.findById({ id });
     res.status(200).json({ success: true, data: currentInvoice, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -70,7 +70,7 @@ const getInvoices = async (
       }
     }
     const AllInvoices =
-      statusquery === "All Invoices"
+      statusquery === "All"
         ? await Invoice.find({ ownerId }).skip(skip).limit(limit)
         : await Invoice.find({ ownerId, status }).skip(skip).limit(limit);
     res.status(200).json({
@@ -81,7 +81,7 @@ const getInvoices = async (
       current: page,
     });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -91,7 +91,7 @@ const deleteInvoice = async (req: { params: { id: any } }, res: any) => {
     const currentInvoice = await Invoice.findByIdAndDelete(id);
     res.status(200).json({ success: true, data: currentInvoice, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -168,7 +168,7 @@ const updateInvoice = async (
     });
     res.status(200).json({ success: true, data: currentInvoice, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 

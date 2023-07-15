@@ -52,7 +52,7 @@ const savePackages = async (req: any, res: any) => {
     console.log(error.message, "here");
     res
       .status(500)
-      .json({ status: 500, message: error.message, sucess: false });
+      .json({ status: 500, error: error.message, sucess: false });
   }
 };
 
@@ -65,7 +65,7 @@ const getPackages = async (req: any, res: any) => {
   } catch (error) {
     res
       .status(500)
-      .json({ status: 500, message: error.message, success: false });
+      .json({ status: 500, error: error.message, success: false });
   }
 };
 

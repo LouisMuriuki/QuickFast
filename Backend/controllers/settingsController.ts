@@ -4,7 +4,7 @@ import Settings from "../mongo/models/SettingsSchema.ts";
 const getDefaultInvoiceSettings = async(req: { query: { id: any } }, res: any) => {
   const { id } = req.query;
   if (!id) {
-    return res.status(500).json({ success: false, data: "Invalid request" });
+    return res.status(500).json({ success: false, error: "Invalid request" });
   }
   try {
     const existingsettings = await Settings.findOne({ ownerId:id });
@@ -15,18 +15,18 @@ const getDefaultInvoiceSettings = async(req: { query: { id: any } }, res: any) =
       .status(200)
       .json({ success: true, data: existingsettings, status: 200 });
   } catch (error) {
-    return res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, error: error });
   }
 };
 const setDefaultSettings = async(req: { body: any;  }, res: any) => {
   console.log(req.body)
     const id  = req.body.ownerId;
     if (!id) {
-      return res.status(500).json({ success: false, data: "Invalid request" });
+      return res.status(500).json({ success: false, error: "Invalid request" });
     }
     const body = req.body;
   if (!body) {
-    return res.status(500).json({ success: false, data: "Invalid request" });
+    return res.status(500).json({ success: false, error: "Invalid request" });
   }
   try {
     const newSettings = await Settings.create(body);
@@ -34,7 +34,7 @@ const setDefaultSettings = async(req: { body: any;  }, res: any) => {
       .status(200)
       .json({ success: true, data: newSettings, status: 200 });
   } catch (error) {
-    return res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, error: error });
   }
 };
 const updateDefaultSettings = async (
@@ -74,7 +74,7 @@ const updateDefaultSettings = async (
   console.log(req.body)
   console.log(req.query)
   if (!id) {
-    return res.status(500).json({ success: false, data: "Invalid request" });
+    return res.status(500).json({ success: false, error: "Invalid request" });
   }
   try {
     const updatedSettings = await Settings.findByIdAndUpdate(id, req.body, {
@@ -84,7 +84,7 @@ const updateDefaultSettings = async (
     });
     res.status(200).json({ success: true, data: updatedSettings, status: 200 });
   } catch (error) {
-    return res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, error: error });
   }
 };
 

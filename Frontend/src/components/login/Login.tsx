@@ -1,29 +1,33 @@
-import React, { useState, useContext } from "react";
+import  { useState, useContext } from "react";
 import MainModal from "../Reusables/MainModal";
-import { Form, Input, message,Button } from "antd";
+import { Form, Input, message, Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { userLogin } from "../../api/authCalls";
 
 const Login = () => {
-  const { setLoginOpen,setRegisterOpen, loginopen,setAuth } = useContext(AuthContext);
+  const { setLoginOpen, setRegisterOpen, loginopen, setAuth } =
+    useContext(AuthContext);
+    const query=useQueryClient()
   const [messageApi, contextHolder] = message.useMessage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-   const LoginMutation = useMutation({
+  const LoginMutation = useMutation({
     mutationFn: userLogin,
     onSuccess(data) {
       console.log(data);
       if (data.status === 200) {
-        setAuth({
-            accessToken:data.accessToken,
-            refreshToken:data.refreshToken,
-            userId:data.data._id,
-            username:data.data.username
-        })
-        localStorage.setItem("Invoice_AccessToken",data.accessToken)
-        localStorage.setItem("Invoice_RefreshToken",data.refreshToken)
-        setLoginOpen(false)
+        setAuth((prev) => ({
+          ...prev,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+          userId: data.data._id,
+          username: data.data.username,
+        }));
+        localStorage.setItem("Invoice_AccessToken", data.accessToken);
+        localStorage.setItem("Invoice_RefreshToken", data.refreshToken);
+        setLoginOpen(false);
+        query.invalidateQueries(["invoices","estimates"])
       } else {
         messageApi.open({
           type: "error",
@@ -32,10 +36,10 @@ const Login = () => {
       }
     },
     onError(error: { message: string }) {
-        messageApi.open({
-            type: "error",
-            content: error.message,
-          });
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
     },
   });
 
@@ -47,14 +51,14 @@ const Login = () => {
     console.log("Form submitted:", values);
   };
 
-  const SignUp=()=>{
-    setLoginOpen(false)
-    setRegisterOpen(true)
-  }
+  const SignUp = () => {
+    setLoginOpen(false);
+    setRegisterOpen(true);
+  };
   return (
     <div>
-        {contextHolder}
-      <MainModal isOpen={loginopen} setIsOpen={setLoginOpen} title="Login">
+      {contextHolder}
+      <MainModal isOpen={loginopen} setIsOpen={setLoginOpen} title="">
         <div className="flex-col justify-center  flex items-center">
           <h3 className="text-2xl font-bold mb-5">Login to your Account</h3>
           <p className="text-lg font-semibold flex self  mb-5">
@@ -66,7 +70,7 @@ const Login = () => {
             onFinish={handleSubmit}
             className="w-72"
             labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
+            wrapperCol={{ span: 30 }}
           >
             <Form.Item
               label="Email"

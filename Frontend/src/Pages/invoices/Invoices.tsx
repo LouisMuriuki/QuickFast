@@ -23,7 +23,7 @@ const Invoices = () => {
   const { auth } = useContext(AuthContext);
   const {setSelectedOptions,setSegmentedOptions}=useContext(InvoiceFormContext)
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState("All Invoices");
+  const [status, setStatus] = useState("All");
   const [tableInfo, setTableInfo] = useState<TableParams>({
     pagination: {
       current: 1,

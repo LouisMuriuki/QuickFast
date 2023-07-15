@@ -16,7 +16,7 @@ const addEstimate = async (req: { body: any }, res: any, next: any) => {
       .status(200)
       .json({ success: true, data: newEstimate, status: 200 });
   } catch (error) {
-    return res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -26,7 +26,7 @@ const getEstimate = async (req: { params: { id: any } }, res: any) => {
     const currentEstimate = await Estimate.findById({ id });
     res.status(200).json({ success: true, data: currentEstimate, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -71,7 +71,7 @@ const getEstimates = async (
       }
     }
     const AllEstimates =
-      statusquery === "All Estimates"
+      statusquery === "All"
         ? await Estimate.find({ ownerId }).skip(skip).limit(limit)
         : await Estimate.find({ ownerId, status }).skip(skip).limit(limit);
     return res.status(200).json({
@@ -82,7 +82,7 @@ const getEstimates = async (
       current: page,
     });
   } catch (error) {
-    return res.status(500).json({ success: false, data: error });
+    return res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -92,7 +92,7 @@ const deleteEstimate = async (req: { params: { id: any } }, res: any) => {
     const currentEstimate = await Estimate.findByIdAndDelete(id);
     res.status(200).json({ success: true, data: currentEstimate, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 
@@ -169,7 +169,7 @@ const updateEstimate = async (
     });
     res.status(200).json({ success: true, data: currentEstimate, status: 200 });
   } catch (error) {
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, error: error });
   }
 };
 
