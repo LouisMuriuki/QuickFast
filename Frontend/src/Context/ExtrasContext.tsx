@@ -20,6 +20,27 @@ export const initialClientData: ClientData = {
   website: "",
   country: "",
 };
+
+export interface emailerrors {
+  fromerror: boolean;
+  toerror: boolean;
+  emailerror: boolean;
+  ccerror: boolean;
+}
+export interface phoneerrors {
+  fromerror: boolean;
+  toerror: boolean;
+}
+const initialPhoneErrors = {
+  fromerror: false,
+  toerror: false,
+};
+const initialEmailErrors = {
+  fromerror: false,
+  toerror: false,
+  emailerror: false,
+  ccerror: false,
+};
 interface ExtrasContextProps {
   clientdatamode: string;
   setClientDataMode: React.Dispatch<React.SetStateAction<string>>;
@@ -29,6 +50,10 @@ interface ExtrasContextProps {
   setClientData: React.Dispatch<React.SetStateAction<ClientData>>;
   profilemodalisopen: boolean;
   setProfileModalisOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  emailerrors: emailerrors;
+  setEmailErrors: React.Dispatch<React.SetStateAction<emailerrors>>;
+  phoneerrors: phoneerrors;
+  setPhoneErrors: React.Dispatch<React.SetStateAction<phoneerrors>>;
 }
 
 const ExtrasContext = createContext<ExtrasContextProps>({
@@ -40,12 +65,18 @@ const ExtrasContext = createContext<ExtrasContextProps>({
   setProfileModalisOpen: () => {},
   clientdata: initialClientData,
   setClientData: () => {},
+  emailerrors: initialEmailErrors,
+  setEmailErrors: () => {},
+  phoneerrors: initialPhoneErrors,
+  setPhoneErrors: () => {},
 });
 export const ExtrasContextProvider = ({ children }: any) => {
   const [clientmodalisopen, setClientmodalIsOpen] = useState(false);
   const [profilemodalisopen, setProfileModalisOpen] = useState(false);
   const [clientdata, setClientData] = useState(initialClientData);
   const [clientdatamode, setClientDataMode] = useState("");
+  const [emailerrors, setEmailErrors] = useState(initialEmailErrors);
+  const [phoneerrors, setPhoneErrors] = useState(initialPhoneErrors);
   return (
     <ExtrasContext.Provider
       value={{
@@ -57,6 +88,10 @@ export const ExtrasContextProvider = ({ children }: any) => {
         setClientData,
         profilemodalisopen,
         setProfileModalisOpen,
+        emailerrors,
+        setEmailErrors,
+        phoneerrors,
+        setPhoneErrors,
       }}
     >
       {children}

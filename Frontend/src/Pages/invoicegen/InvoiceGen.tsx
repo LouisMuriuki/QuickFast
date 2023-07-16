@@ -11,6 +11,7 @@ import InvoicePreview from "./InvoicePreview/InvoicePreview";
 import SideBar from "../../components/Sidebar/SideBar";
 import { useLocation } from "react-router";
 import { SettingsContext } from "../../Context/SettingsContext";
+import Email from "../../components/Email/Email";
 
 const InvoiceGen = () => {
   const { state } = useLocation();
@@ -116,26 +117,31 @@ const InvoiceGen = () => {
 
   return (
     <div className=" max-w-full  flex container ">
-      <div className="flex flex-col md:flex-row w-full">
-        <div className=" flex flex-col w-full md:w-3/4">
-          <InvoiceTop />
-          {selectedoptions === "Edit" ? (
-            <InvoiceEdit
-              data={
-                //if root equals to client then set data else set data as estimate or invoice
-                root === "client"
-                  ? data
-                  : name === "estimates"
-                  ? data?.estimate[0]
-                  : data?.invoice[0]
-              }
-            />
-          ) : (
-            <InvoicePreview />
-          )}
-        </div>
-        <div className="flex flex-col w-full md:w-1/4">
-          <SideBar state={name} id={data ? data._id : ""} />
+      <div className="flex flex-col w-full">
+        <Email />
+        <div className="flex flex-col md:flex-row w-full">
+          <div className="flex flex-col w-full md:w-3/4 md:m-5 m-2">
+            <InvoiceTop />
+            {selectedoptions === "Edit" ? (
+              <InvoiceEdit
+                data={
+                  //if root equals to client then set data else set data as estimate or invoice
+                  root === "client"
+                    ? data
+                    : name === "estimates"
+                    ? data?.estimate[0]
+                    : data?.invoice[0]
+                }
+              />
+            ) : (
+              <>
+                <InvoicePreview />
+              </>
+            )}
+          </div>
+          <div className="flex flex-col w-full md:w-1/4">
+            <SideBar state={name} id={data ? data._id : ""} />
+          </div>
         </div>
       </div>
     </div>

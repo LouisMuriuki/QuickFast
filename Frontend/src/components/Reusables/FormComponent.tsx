@@ -3,6 +3,7 @@ import { Form, Input } from "antd";
 import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
 import { SettingsContext } from "../../Context/SettingsContext";
 import ExtrasContext from "../../Context/ExtrasContext";
+import { handleEmailBlur, handlePhoneBlur } from "../../utils/validator";
 interface fromlabels {
   name: string;
   label: string;
@@ -26,11 +27,17 @@ interface FormProps {
   data: any;
 }
 const FormComponent = ({ fromlabels, tolabels, origin, data }: FormProps) => {
-  const {  todata, fromdata,setFromdata, setTodata } =
+  const { todata, fromdata, setFromdata, setTodata } =
     useContext(InvoiceFormContext);
-  const { setBizInfo, } = useContext(SettingsContext);
-  const { setClientData } =
-    useContext(ExtrasContext);
+
+  const { setBizInfo } = useContext(SettingsContext);
+  const {
+    setClientData,
+    emailerrors,
+    setEmailErrors,
+    phoneerrors,
+    setPhoneErrors,
+  } = useContext(ExtrasContext);
   const FromChange = (name: any, value: any) => {
     origin === "settings"
       ? setBizInfo((prev) => ({ ...prev, [name]: value }))
@@ -87,6 +94,32 @@ const FormComponent = ({ fromlabels, tolabels, origin, data }: FormProps) => {
                     onChange={(e) => {
                       FromChange(labels.name, e.target.value);
                     }}
+                    style={
+                      labels.name === "email"
+                        ? {
+                            borderColor: emailerrors.fromerror ? "red" : "",
+                          }
+                        : labels.name === "phone"
+                        ? {
+                            borderColor: phoneerrors.fromerror ? "red" : "",
+                          }
+                        : undefined
+                    }
+                    onBlur={(e) =>
+                      labels.name === "email"
+                        ? handleEmailBlur(
+                            e.target.value,
+                            "from",
+                            setEmailErrors
+                          )
+                        : labels.name === "phone"
+                        ? handlePhoneBlur(
+                            e.target.value,
+                            "from",
+                            setPhoneErrors
+                          )
+                        : null
+                    }
                   />
                 </Form.Item>
               </div>
@@ -106,10 +139,28 @@ const FormComponent = ({ fromlabels, tolabels, origin, data }: FormProps) => {
                   <Input
                     placeholder={labels.placeholder}
                     className="flex w-full"
+                    style={
+                      labels.name === "email"
+                        ? {
+                            borderColor: emailerrors.toerror ? "red" : "",
+                          }
+                        : labels.name === "phone"
+                        ? {
+                            borderColor: phoneerrors.toerror ? "red" : "",
+                          }
+                        : undefined
+                    }
                     defaultValue={todata && todata[labels?.name]}
                     onChange={(e) => {
                       ToChange(labels.name, e.target.value);
                     }}
+                    onBlur={(e) =>
+                      labels.name === "email"
+                        ? handleEmailBlur(e.target.value, "to", setEmailErrors)
+                        : labels.name === "phone"
+                        ? handlePhoneBlur(e.target.value, "to", setPhoneErrors)
+                        : null
+                    }
                   />
                 </Form.Item>
               </div>

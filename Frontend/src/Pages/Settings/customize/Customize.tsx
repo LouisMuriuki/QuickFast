@@ -11,7 +11,7 @@ const { Option } = Select;
 const countries = clm.getAllCountries();
 const Customize = (data:any) => {
   console.log(data)
-  const { customizeinfo, setCustomizeInfo } = useContext(SettingsContext);
+  const { setCustomizeInfo } = useContext(SettingsContext);
   const locale = clm.getLocaleByName("Kenya");
   console.log(locale);
   const handleChange = (value: string) => {

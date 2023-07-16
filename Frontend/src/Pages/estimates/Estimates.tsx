@@ -21,7 +21,7 @@ interface TableParams {
 const Estimates = () => {
   const axiosprivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
-  const {selectedoptions,setSelectedOptions,setSegmentedOptions}=useContext(InvoiceFormContext)
+  const {setSelectedOptions,setSegmentedOptions}=useContext(InvoiceFormContext)
   const [data, setData] = useState([]);
   const [status, setStatus] = useState("All");
   const [tableInfo, setTableInfo] = useState<TableParams>({
