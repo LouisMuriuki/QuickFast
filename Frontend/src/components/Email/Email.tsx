@@ -1,19 +1,42 @@
 import { useContext, useState } from "react";
-import { Input, Button } from "antd";
+import { Input, Button, message } from "antd";
 import { handleEmailBlur } from "../../utils/validator";
 import useAuth from "../../hooks/useAuth";
 import ExtrasContext from "../../Context/ExtrasContext";
-
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useMutation } from "@tanstack/react-query";
+interface attachment {
+  filename: string;
+  content: any;
+  encoding: any;
+}
+interface email {
+  ownerId: string;
+  from: string;
+  cc: string[];
+  to: string;
+  subject: string;
+  body: string;
+  attachment: attachment;
+}
 const Email = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const axiosprivate = useAxiosPrivate();
   const { emailerrors, setEmailErrors } = useContext(ExtrasContext);
   const { auth } = useAuth();
   const [ccEmails, setCCEmails] = useState<string[]>([""]); // Initialize with one empty CC field
   const [email, setEmail] = useState({
+    ownerId: auth.userId,
     from: auth.email,
     cc: ccEmails,
     to: "",
     subject: "",
     body: "",
+    attachment: {
+      filename: "",
+      content: "",
+      encoding: "",
+    },
   });
 
   const handleAddMoreCC = () => {
@@ -32,11 +55,43 @@ const Email = () => {
     setCCEmails(updatedCCEmails);
   };
 
+  const sendEmail = async (email: email) => {
+    const res = await axiosprivate.post(
+      `/emails/sendEmail/`,
+      JSON.stringify({
+        email,
+      }),
+      {
+        headers: { Authorization: "Bearer " + auth?.accessToken },
+      }
+    );
+    return res.data;
+  };
+  const sendEmailMutation = useMutation({
+    mutationFn: sendEmail,
+    onSuccess(data) {
+      if (data.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: "Invoice deleted successfully",
+        });
+      }
+    },
+    onError(error: { message: string }) {
+      messageApi.open({
+        type: "error",
+        content: error.message,
+      });
+    },
+  });
+
   const handleSend = () => {
     // Implement the send email logic here
+    sendEmailMutation.mutate(email);
   };
   return (
     <div className="w-2/3 mx-auto my-10 shadow-md p-5 md:p-10">
+      {contextHolder}
       <h1 className="text-2xl font-bold mb-4">Compose Email</h1>
       <div className="flex flex-col space-y-4">
         <Input.Group>
@@ -63,9 +118,9 @@ const Email = () => {
                 value={ccEmail}
                 onChange={(e) => handleCCEmailChange(index, e.target.value)}
                 style={{
-                    marginBottom: 8,
-                    borderColor: emailerrors.ccerror ? "red" : "",
-                  }}
+                  marginBottom: 8,
+                  borderColor: emailerrors.ccerror ? "red" : "",
+                }}
                 onBlur={(e) =>
                   handleEmailBlur(e.target.value, "cc", setEmailErrors)
                 }
