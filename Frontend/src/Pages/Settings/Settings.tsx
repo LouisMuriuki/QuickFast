@@ -77,6 +77,7 @@ const Settings = () => {
       messageApi.open({
         type: "error",
         content: error.message,
+        
       });
     },
   });
