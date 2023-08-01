@@ -63,6 +63,12 @@ const Estimates = () => {
       }),
   });
 
+     useEffect(() => {
+       if (auth.accessToken) {
+         GetEstimatesQuery.refetch();
+       }
+     }, [auth?.accessToken]);
+
   console.log(GetEstimatesQuery?.data?.data);
 
   useEffect(() => {

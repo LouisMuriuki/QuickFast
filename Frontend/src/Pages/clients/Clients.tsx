@@ -74,6 +74,12 @@ const Clients = () => {
 
   console.log(GetClientsQuery?.data?.data);
 
+     useEffect(() => {
+       if (auth.accessToken) {
+         GetClientsQuery.refetch();
+       }
+     }, [auth?.accessToken]);
+
   useEffect(() => {
     setData(GetClientsQuery?.data?.data);
   }, [GetClientsQuery.data]);

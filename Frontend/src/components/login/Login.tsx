@@ -27,7 +27,8 @@ const Login = () => {
         localStorage.setItem("Invoice_AccessToken", data.accessToken);
         localStorage.setItem("Invoice_RefreshToken", data.refreshToken);
         setLoginOpen(false);
-        query.invalidateQueries(["invoices","estimates"])
+        query.invalidateQueries(['invoices','estimates'])
+        query.refetchQueries(['invoices', 'estimates']);
       } else {
         messageApi.open({
           type: "error",
@@ -59,10 +60,10 @@ const Login = () => {
     <div>
       {contextHolder}
       <MainModal isOpen={loginopen} setIsOpen={setLoginOpen} title="">
-        <div className="flex-col justify-center  flex items-center">
+        <div className="flex-col justify-center flex items-center">
           <h3 className="text-2xl font-bold mb-5">Login to your Account</h3>
-          <p className="text-lg font-semibold flex self  mb-5">
-            Welcome Back, we hope you're <br /> having a great day.
+          <p className="text-lg font-bold flex mb-5">
+            Welcome Back.
           </p>
           <Form
             name="login-form"

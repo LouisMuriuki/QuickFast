@@ -57,6 +57,12 @@ const Invoices = () => {
       }),
   });
 
+   useEffect(() => {
+     if (auth.accessToken) {
+       GetInvoicesQuery.refetch();
+     }
+   }, [auth?.accessToken]);
+
   useEffect(()=>{
     setData(GetInvoicesQuery?.data?.data)
   },[GetInvoicesQuery.data])

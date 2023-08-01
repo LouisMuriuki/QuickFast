@@ -54,10 +54,10 @@ const MainLayout = () => {
   console.log(getUserQuery.data);
 
   useEffect(() => {
-    if (auth.accessToken && !auth.username) {
+    if (auth.accessToken) {
       getUserQuery.refetch();
     }
-  }, [auth.accessToken, auth.username]);
+  }, [auth?.accessToken]);
 
   useEffect(() => {
     setAuth((prev) => ({

@@ -101,7 +101,7 @@ const Register = () => {
           wrapperCol={{ span: 30 }}
         >
           <Form.Item
-            label="UserName"
+            label="Username"
             name="username"
             rules={[
               { required: true, message: "Please enter your username" },
