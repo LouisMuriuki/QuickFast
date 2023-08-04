@@ -54,6 +54,8 @@ interface ExtrasContextProps {
   setEmailErrors: React.Dispatch<React.SetStateAction<emailerrors>>;
   phoneerrors: phoneerrors;
   setPhoneErrors: React.Dispatch<React.SetStateAction<phoneerrors>>;
+  notifications: boolean;
+  setNotifications: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ExtrasContext = createContext<ExtrasContextProps>({
@@ -69,6 +71,8 @@ const ExtrasContext = createContext<ExtrasContextProps>({
   setEmailErrors: () => {},
   phoneerrors: initialPhoneErrors,
   setPhoneErrors: () => {},
+  notifications:true,
+  setNotifications:() => {},
 });
 export const ExtrasContextProvider = ({ children }: any) => {
   const [clientmodalisopen, setClientmodalIsOpen] = useState(false);
@@ -77,6 +81,7 @@ export const ExtrasContextProvider = ({ children }: any) => {
   const [clientdatamode, setClientDataMode] = useState("");
   const [emailerrors, setEmailErrors] = useState(initialEmailErrors);
   const [phoneerrors, setPhoneErrors] = useState(initialPhoneErrors);
+  const [notifications,setNotifications]=useState(true)
   return (
     <ExtrasContext.Provider
       value={{
@@ -92,6 +97,8 @@ export const ExtrasContextProvider = ({ children }: any) => {
         setEmailErrors,
         phoneerrors,
         setPhoneErrors,
+        notifications,
+        setNotifications,
       }}
     >
       {children}

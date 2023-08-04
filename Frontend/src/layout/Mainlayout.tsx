@@ -12,6 +12,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useContext } from "react";
 import { SettingsContext } from "../Context/SettingsContext";
 import ProfilePopup from "../components/popup/ProfilePopup";
+import Notifications from "../components/Notifications/Notifications";
+import ExtrasContext from "../Context/ExtrasContext";
 
 const { Header, Content, Footer } = Layout;
 
@@ -26,6 +28,7 @@ const config: ThemeConfig = {
 };
 
 const MainLayout = () => {
+  const { notifications } = useContext(ExtrasContext);
   const axiosprivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
@@ -107,6 +110,7 @@ const MainLayout = () => {
   return (
     <ConfigProvider theme={config}>
       <Layout className="layout min-w-full">
+        {notifications ? <Notifications /> : ""}
         <Header className="p-0 m-0" style={{ display: "flex" }}>
           <AppNav />
         </Header>
