@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import ViewOptions from "./components/Email";
 import Currency from "./components/Currency";
 // import Tax from "./components/Tax";
 import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
@@ -14,7 +13,7 @@ const SideBar = ({state,id}:props) => {
   return (
     <div className="flex flex-col py-16 px-4">
       <div className="mb-10">
-        {generateinvoicetype === "Email" ? <ViewOptions /> : <Download state={state } id={id}/>}
+        {generateinvoicetype === "PDF" && <Download state={state } id={id}/>}
       </div>
       {/* <div className="mb-10">
         <Tax />

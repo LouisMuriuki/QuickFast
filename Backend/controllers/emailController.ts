@@ -6,9 +6,9 @@ dotenv.config();
 
 const sendEmail = async (
   req: {
-    query: {
-      email: {
-        ownerId:string,
+    body: {
+      emailSend: {
+        ownerId: string;
         from: string;
         to: string;
         subject: string;
@@ -24,14 +24,23 @@ const sendEmail = async (
   },
   res: any
 ) => {
-  const { ownerId, from, to, subject, cc, body, attachment } = req.query.email;
+  console.log(req);
+  const { ownerId, from, to, subject, cc, body, attachment } =
+    req.body.emailSend;
+
   let mailTransporter = nodemailer.createTransport({
     service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
     auth: {
-      from: process.env.EMAIL,
-      pass: process.env.EMAILPASS,
+      user: process.env.EMAIL,
+      type: "OAuth2",
+      clientId: process.env.CLIENTID,
+      clientSecret: process.env.CLIENTSECRET,
+      refreshToken: process.env.REFRESHTOKEN,
+      accessToken: process.env.ACCESSTOKEN,
     },
-  }as SMTPTransport.Options);
+  } as SMTPTransport.Options);
 
   let details = {
     from,
@@ -39,13 +48,7 @@ const sendEmail = async (
     cc,
     subject,
     text: body,
-    attachments: [
-      {
-        filename: attachment.filename,
-        content: attachment.content,
-        encoding: attachment.encoding,
-      },
-    ],
+    attachments: [attachment],
   };
   try {
     mailTransporter.sendMail(details, (err) => {
@@ -53,18 +56,26 @@ const sendEmail = async (
         console.log("it has an error", err);
         return res.status(500).json({ success: false, error: err });
       } else {
-        const savedemail=Email.create({ownerId,...details})
+        const savedemail = Email.create({
+          ownerId,
+          from,
+          to,
+          cc,
+          subject,
+          text: body,
+          attachments: attachment,
+        });
         console.log("email is sent");
-        if(savedemail){
-            return res
+        if (savedemail) {
+          return res
             .status(200)
             .json({ success: true, data: savedemail, status: 200 });
         }
       }
     });
   } catch (error) {
-    console.log("error",error);
+    console.log("error", error);
   }
 };
 
-export {sendEmail}
+export { sendEmail };

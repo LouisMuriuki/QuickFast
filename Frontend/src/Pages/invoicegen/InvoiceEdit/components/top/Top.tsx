@@ -36,12 +36,12 @@ const Top = () => {
     formData.append("upload_preset", upload_preset);
     axios
       .post(`https://api.cloudinary.com/v1_1/${cloudinary_name}/image/upload`, formData)
-      .then((res) => {
+      .then((res: { data: { url: any; }; }) => {
         console.log(res);
         onSuccess(res?.data);
         setFormInfo((prev) => ({ ...prev, logo: res?.data?.url }));
       })
-      .catch((error) => {
+      .catch((error: any) => {
         // Handle error case
         onError(error);
         console.error("Upload failed");

@@ -16,7 +16,7 @@ import Email from "../../components/Email/Email";
 const InvoiceGen = () => {
   const { state } = useLocation();
   const { name, data, root } = state;
-  console.log(data);
+  const { generateinvoicetype } = useContext(InvoiceFormContext);
   const {
     selectedoptions,
     setFormInfo,
@@ -118,7 +118,7 @@ const InvoiceGen = () => {
   return (
     <div className=" max-w-full  flex container ">
       <div className="flex flex-col w-full">
-        <Email />
+        {generateinvoicetype === "Email"&&<Email />}
         <div className="flex flex-col md:flex-row w-full">
           <div className="flex flex-col w-full md:w-3/4 md:m-5 m-2">
             <InvoiceTop />

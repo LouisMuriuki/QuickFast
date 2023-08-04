@@ -2,7 +2,7 @@ import Package from "../mongo/models/PackageSchema.ts";
 
 const savePackages = async (req: any, res: any) => {
   try {
-    const packages= [
+    const packages = [
       {
         packageName: "Free",
         features: [""],
@@ -26,16 +26,16 @@ const savePackages = async (req: any, res: any) => {
         features: [""],
         price: 2,
         maxinvoices: 100,
-      }
+      },
     ];
-    let newpackage
+    let newpackage;
     if (packages && packages.length) {
       for (const item of packages) {
         const existingpackage = await Package.findOne({
           packageName: item.packageName,
         });
         if (!existingpackage) {
-          newpackage=await Package.create({
+          newpackage = await Package.create({
             packageName: item.packageName,
             features: item.features,
             price: item.price,
@@ -45,14 +45,10 @@ const savePackages = async (req: any, res: any) => {
         }
       }
     }
-    res
-      .status(200)
-      .json({ status: 200, data: newpackage, sucess: true });
+    res.status(200).json({ status: 200, data: newpackage, sucess: true });
   } catch (error) {
     console.log(error.message, "here");
-    res
-      .status(500)
-      .json({ status: 500, error: error.message, sucess: false });
+    res.status(500).json({ status: 500, error: error.message, sucess: false });
   }
 };
 
@@ -63,9 +59,7 @@ const getPackages = async (req: any, res: any) => {
       .status(200)
       .json({ status: 200, data: existingPackages, success: true });
   } catch (error) {
-    res
-      .status(500)
-      .json({ status: 500, error: error.message, success: false });
+    res.status(500).json({ status: 500, error: error.message, success: false });
   }
 };
 

@@ -61,6 +61,7 @@ const getClients = async (
         return res.status(500).json({ success: false, error: "no such page" });
       }
     }
+    const invoiceLength = await Client.find({ ownerId }).countDocuments();
     const currentClients = await Client.find({ ownerId })
       .skip(skip)
       .limit(limit);
@@ -68,7 +69,7 @@ const getClients = async (
       success: true,
       data: currentClients,
       status: 200,
-      total: doclength,
+      total: invoiceLength,
       current: page,
     });
   } catch (error) {

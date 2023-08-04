@@ -36,7 +36,9 @@ interface DataType {
   total_billed?: number;
   email?: string;
   address?: string;
+  number?: string;
   city?: Date;
+  status: string;
   zipcode?: number;
   paid?: string;
   country?: string;
@@ -81,28 +83,41 @@ const DataTable = (props: TableListProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const MenuItems = [
-    {
-      key: "1",
-      label: `${
-        location.pathname === "/invoices"
-          ? "Mark as completed"
-          : "Mark as closed"
-      }`,
-    },
-    {
-      key: "2",
-      label: "Email",
-    },
-    {
-      key: "3",
-      label: "View",
-    },
-    {
-      key: "4",
-      label: "Delete",
-    },
-  ];
+  const generateMenuItems = (status: string) => {
+    const commonItems = [
+      {
+        key: "2",
+        label: "Email",
+      },
+      {
+        key: "3",
+        label: "View",
+      },
+      {
+        key: "4",
+        label: "Delete",
+      },
+    ];
+
+    if (location.pathname === "/invoices") {
+      return [
+        status !== "Completed" && {
+          key: "1",
+          label: "Mark as completed",
+        },
+        ...commonItems,
+      ];
+    } else {
+      return [
+        status !== "Closed" && {
+          key: "1",
+          label: "Mark as closed",
+        },
+        ...commonItems,
+      ];
+    }
+  };
+
   const ClientMenuItems = [
     {
       key: "1",
@@ -484,7 +499,7 @@ const DataTable = (props: TableListProps) => {
         const invoicetotal = invoices?.map((invoice, i) => {
           return (
             <div key={i}>
-              <span>{invoice.forminfo.currency}</span>
+              <span>{invoice.forminfo.currency +" "}</span>
               <span>{invoice.forminfo.total?.toLocaleString()}</span>
             </div>
           );
@@ -493,15 +508,35 @@ const DataTable = (props: TableListProps) => {
       },
     },
     {
+      title: "Status",
+      dataIndex: "status",
+      render: (_, record) => {
+        const status = record.status;
+        return (
+          <span
+            className={
+              status === "Completed"
+                ? "text-[#32CD32] font-semibold"
+                : "text-[#ffbb28] font-semibold"
+            }
+          >
+            {status}
+          </span>
+        );
+      },
+    },
+    {
       title: "Actions",
       key: "action",
       render: (_, record) => {
+        console.log(record);
         return (
           <Space size="middle" style={{ backgroundColor: "white" }}>
             {/* @ts-ignore  */}
             <Dropdown.Button
               menu={{
-                items: MenuItems,
+                //@ts-expect-error
+                items: generateMenuItems(record.status),
                 onClick: onMenuClick(record),
               }}
             >
@@ -560,12 +595,30 @@ const DataTable = (props: TableListProps) => {
         const estimatetotal = estimates?.map((estimate, i) => {
           return (
             <div key={i}>
-              <span>{estimate.forminfo.currency}</span>
+              <span>{estimate.forminfo.currency + " "}</span>
               <span>{estimate.forminfo.total.toLocaleString()}</span>
             </div>
           );
         });
         return <div>{estimatetotal}</div>;
+      },
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (_, record) => {
+        const status = record.status;
+        return (
+          <span
+            className={
+              status === "Closed"
+                ? "text-[#32CD32] font-semibold"
+                : "text-[#ffbb28] font-semibold"
+            }
+          >
+            {status}
+          </span>
+        );
       },
     },
     {
@@ -577,7 +630,8 @@ const DataTable = (props: TableListProps) => {
             {/* @ts-ignore  */}
             <Dropdown.Button
               menu={{
-                items: MenuItems,
+                //@ts-expect-error
+                items: generateMenuItems(record.status),
                 onClick: onMenuClick(record),
               }}
             >

@@ -48,7 +48,7 @@ export interface Description {
   taxrate: number;
   additional: string;
 }
- export const initialdescription: Description = {
+export const initialdescription: Description = {
   description: "",
   rate: undefined as unknown as number,
   qty: 1,
@@ -131,7 +131,7 @@ export const InvoiceFormContext = createContext<FormContextType>({
 const FormContextProvider = ({ children }: any) => {
   const [segmentedoptions, setSegmentedOptions] = useState(["Edit", "Preview"]);
   const [selectedoptions, setSelectedOptions] = useState("");
-  const [generateinvoicetype, setgenerateInvoiceType] = useState("Email");
+  const [generateinvoicetype, setgenerateInvoiceType] = useState("PDF");
   const [fromdata, setFromdata] = useState(initialFromData);
   const [todata, setTodata] = useState(initialToData);
   const [forminfo, setFormInfo] = useState(initialFormInfo);

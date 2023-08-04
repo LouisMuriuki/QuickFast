@@ -3,32 +3,26 @@ import mongoose from "mongoose";
 const emailSchema = new mongoose.Schema({
   ownerId: { type: String, required: true },
   from: {
-    email: {
-      type: String,
-      required: true,
-    },
+    type: String,
+    required: true,
   },
   to: {
-    email: {
-      type: String,
-      required: true,
-    },
+    type: String,
+    required: true,
   },
   cc: [
     {
-      email: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: false,
     },
   ],
   subject: {
     type: String,
-    required: true,
+    required: false,
   },
   text: {
     type: String,
-    required: true,
+    required: false,
   },
   isRead: {
     type: Boolean,
@@ -44,7 +38,7 @@ const emailSchema = new mongoose.Schema({
       required: true,
     },
     encoding: {
-      type: Number,
+      type: String,
       required: true,
     },
   },

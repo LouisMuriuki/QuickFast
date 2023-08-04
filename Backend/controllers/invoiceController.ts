@@ -69,6 +69,7 @@ const getInvoices = async (
         res.status(500).json({ success: true, data: "no such page" });
       }
     }
+    const invoiceLength = await Invoice.find({ ownerId }).countDocuments();
     const AllInvoices =
       statusquery === "All"
         ? await Invoice.find({ ownerId }).skip(skip).limit(limit)
@@ -77,7 +78,7 @@ const getInvoices = async (
       success: true,
       data: AllInvoices,
       status: 200,
-      total: doclength,
+      total: invoiceLength,
       current: page,
     });
   } catch (error) {

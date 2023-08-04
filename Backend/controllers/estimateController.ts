@@ -70,6 +70,7 @@ const getEstimates = async (
         return res.status(500).json({ success: true, data: "no such page" });
       }
     }
+    const estimateLength = await Estimate.find({ ownerId }).countDocuments();
     const AllEstimates =
       statusquery === "All"
         ? await Estimate.find({ ownerId }).skip(skip).limit(limit)
@@ -78,7 +79,7 @@ const getEstimates = async (
       success: true,
       data: AllEstimates,
       status: 200,
-      total: doclength,
+      total: estimateLength,
       current: page,
     });
   } catch (error) {

@@ -10,7 +10,7 @@ const generateRefreshToken = async (req: any, res: any) => {
   }
 
   const storedToken = await RefreshToken.findOne({ refreshToken });
-  console.log(storedToken)
+  console.log(storedToken);
   if (!storedToken) {
     return res.status(400).json({ error: "Not found" });
   }
