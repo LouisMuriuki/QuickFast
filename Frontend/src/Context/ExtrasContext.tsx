@@ -42,6 +42,8 @@ const initialEmailErrors = {
   ccerror: false,
 };
 interface ExtrasContextProps {
+  ismodalOpen: boolean;
+  setisModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   clientdatamode: string;
   setClientDataMode: React.Dispatch<React.SetStateAction<string>>;
   clientmodalisopen: boolean;
@@ -60,6 +62,8 @@ interface ExtrasContextProps {
 
 const ExtrasContext = createContext<ExtrasContextProps>({
   clientdatamode: "",
+  ismodalOpen:false,
+  setisModalOpen:()=>{},
   setClientDataMode: () => {},
   clientmodalisopen: false,
   setClientmodalIsOpen: () => {},
@@ -79,12 +83,15 @@ export const ExtrasContextProvider = ({ children }: any) => {
   const [profilemodalisopen, setProfileModalisOpen] = useState(false);
   const [clientdata, setClientData] = useState(initialClientData);
   const [clientdatamode, setClientDataMode] = useState("");
+  const [ismodalOpen, setisModalOpen]=useState(false);
   const [emailerrors, setEmailErrors] = useState(initialEmailErrors);
   const [phoneerrors, setPhoneErrors] = useState(initialPhoneErrors);
   const [notifications,setNotifications]=useState(true)
   return (
     <ExtrasContext.Provider
       value={{
+        ismodalOpen,
+        setisModalOpen,
         clientdatamode,
         setClientDataMode,
         clientmodalisopen,

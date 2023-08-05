@@ -36,10 +36,10 @@ const Login = () => {
         });
       }
     },
-    onError(error: { message: string }) {
+    onError(error: { response: any }) {
       messageApi.open({
         type: "error",
-        content: error.message,
+        content: error.response.data.data,
       });
     },
   });

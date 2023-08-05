@@ -20,7 +20,7 @@ const registerUser = async (
   if (!username || !email || !password || !packageId) {
     return res
       .status(500)
-      .json({ sucess: false, error: "some fields are missing" });
+      .json({ success: false, message: "some fields are missing" });
   }
   try {
     const existinguser = await User.findOne({ email });

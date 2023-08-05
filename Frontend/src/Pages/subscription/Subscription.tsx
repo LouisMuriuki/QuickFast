@@ -1,7 +1,28 @@
-import SubscriptionTable from "./SubscriptionTable";
+import SubscriptionTable from "./components/SubscriptionTable";
 import { Carousel } from "react-responsive-carousel";
+import {useContext }from "react"
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
+import CustomModal from "../../components/popup/customModal";
+import ExtrasContext from "../../Context/ExtrasContext";
 const Subscription = () => {
+  const { ismodalOpen, setisModalOpen }=useContext(ExtrasContext)
+  const {auth}=useAuth()
+  const axiosprivate=useAxiosPrivate()
+  const subscriptionRequest = async (id:string) => {
+    const res = await axiosprivate.post(
+      `/subscription/payment?packageId=${id}ownerId=${auth.userId}`,
+      {
+        headers: { Authorization: "Bearer " + auth.accessToken },
+      }
+    );
+    console.log(res);
+    return res.data;
+  };
+  
+
+
  
   return (
     <div className="flex items-center justify-center " >
@@ -129,6 +150,9 @@ const Subscription = () => {
           </div>
         </Carousel>
         <SubscriptionTable />
+        <CustomModal>
+          <p>Loading...</p>
+        </CustomModal>
       </div>
     </div>
   );

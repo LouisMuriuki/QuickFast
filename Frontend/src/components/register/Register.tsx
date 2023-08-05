@@ -17,9 +17,10 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [starterpackageID, setStarterPackageID] = useState("");
   const getPackages = async () => {
-    const res = await axiosInstance.get(`/packages/getpackages`);
+    const res = await axiosInstance.get(`/packages/getpackages?all=${true}`);
     return res.data;
   };
+ 
   const GetPackageQuery = useQuery({
     queryKey: ["packages"],
     queryFn: () => getPackages(),
@@ -48,18 +49,19 @@ const Register = () => {
           setRegisterOpen(false);
           setLoginOpen(true);
         }, 1000);
-        query.invalidateQueries(["invoices","estimates"])
+        query.invalidateQueries(["invoices", "estimates"]);
       } else {
         messageApi.open({
           type: "error",
-          content: "Account Creation failed, Please try again ",
+          content: data.response.data.error,
         });
       }
     },
-    onError(error: { message: string }) {
+    onError(error: { response: { data: { message: string } } }) {
+      console.log(error);
       messageApi.open({
         type: "error",
-        content: error.message,
+        content: error.response.data.message,
       });
     },
   });

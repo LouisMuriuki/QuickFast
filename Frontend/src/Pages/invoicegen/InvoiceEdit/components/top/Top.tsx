@@ -65,6 +65,7 @@ const Top = () => {
           className="flex w-[75%]"
           value={forminfo.title}
           size="large"
+          disabled
           onChange={(e) => {
             setFormInfo((prev) => ({ ...prev, title: e.target.value }));
           }}
