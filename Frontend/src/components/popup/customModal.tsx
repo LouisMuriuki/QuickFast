@@ -1,22 +1,29 @@
 import { Modal } from "antd";
 import ExtrasContext from "../../Context/ExtrasContext";
 import { useContext } from "react";
-const CustomModal = ({children}) => {
-    const {ismodalOpen,setisModalOpen}=useContext(ExtrasContext)
+import { AiOutlineClose } from "react-icons/ai";
+const CustomModal = ({ children, height, width, icon }: any) => {
+  const { ismodalOpen, setisModalOpen } = useContext(ExtrasContext);
 
-    const handleCancel=()=>{
-
-    }
+  const handleCancel = () => {
+    setisModalOpen(false)
+  };
   return (
     <Modal
       open={ismodalOpen}
-      onCancel={handleCancel}
       closable={false}
-      bodyStyle={{ height: 200 }}
-      width={200}
+      bodyStyle={{ height: height }}
+      width={width}
       footer={null}
-      className="flex flex-wrap max-w-[200px]"
-    >{children}</Modal>
+      className="relative"
+    >
+      {icon && (
+        <div onClick={handleCancel} className="absolute top-2 right-3 cursor-pointer">
+          <AiOutlineClose color="red" size={20} />
+        </div>
+      )}
+      {children}
+    </Modal>
   );
 };
-export default CustomModal
+export default CustomModal;

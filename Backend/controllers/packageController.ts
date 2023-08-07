@@ -98,10 +98,10 @@ const savePackages = async (req: any, res: any) => {
         }
       }
     }
-    res.status(200).json({ status: 200, data: newpackage, sucess: true });
+    res.status(200).json({ status: 200, data: newpackage, success: true });
   } catch (error) {
     console.log(error.message, "here");
-    res.status(500).json({ status: 500, error: error.message, sucess: false });
+    res.status(500).json({ status: 500, error: error.message, success: false });
   }
 };
 
