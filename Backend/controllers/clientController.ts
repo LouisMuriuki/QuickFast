@@ -2,20 +2,15 @@ import Client from "../mongo/models/ClientSchema.ts";
 
 const addClient = async (req: { body: any }, res: any) => {
   try {
-    const email = req.body.email;
-    const phone = req.body.phone;
-    const currentClient = await Client.findOne({ phone });
-    if (currentClient) {
+    const { email, ownerId } = req.body;
+    console.log(req.body)
+
+    const currentClient = await Client.findOne({ email });
+    if (currentClient.ownerId === ownerId) {
       return res
         .status(400)
         .json({ success: true, data: "client already exists", status: 200 });
-    }
-    if (currentClient.email === email) {
-      return res
-        .status(402)
-        .json({ success: true, data: "email already exists", status: 200 });
-    }
-    if (!currentClient) {
+    } else {
       const newClient = await Client.create(req.body);
       return res
         .status(200)

@@ -7,7 +7,7 @@ import "dayjs/locale/en";
 const InvoicePreview = () => {
   let number = [0];
   const { forminfo, todata, fromdata, description } = useContext(InvoiceFormContext);
-  number = forminfo?.terms === "none" ? [0] : (forminfo?.terms?.match(/\d+/g) || []).map(Number);
+  number = forminfo?.terms === "receipt" ? [0] : (forminfo?.terms?.match(/\d+/g) || []).map(Number);
   console.log(number);
   const formattedDate = dayjs(forminfo?.date).format("dddd, MMMM DD, YYYY");
   const formattedDueDate = dayjs(forminfo?.date)

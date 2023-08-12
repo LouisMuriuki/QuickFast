@@ -186,10 +186,10 @@ const Download = ({ state, id }: stateprops) => {
     console.log(result)
     try {
       setLoading(true);
-      const data = result();
+      const data = await result();
       console.log(data);
       //@ts-expect-error
-      easyinvoice.download("Invoice.pdf", data.pdf);
+      return easyinvoice.download("Invoice.pdf", data.pdf);
     } catch (error:any) {
       message.error(error);
     }finally{

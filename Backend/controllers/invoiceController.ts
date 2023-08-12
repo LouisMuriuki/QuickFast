@@ -6,12 +6,10 @@ const addInvoice = async (req: { body: any }, res: any, next: any) => {
   const client = req.body.invoice[0].todata;
   try {
     const email = client.email;
-    const phone = client.phone;
-    const currentClient = await Client.findOne({ phone,email });
-    if (!currentClient) {
+    const currentClient = await Client.findOne({ email });
+    if (currentClient.ownerId !== client.ownerId) {
       await Client.create(client);
     }
-
     const newInvoice = await Invoice.create(req.body);
     return res
       .status(200)

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Segmented, Button, Space } from "antd";
 import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
 
@@ -10,6 +10,12 @@ const InvoiceTop = () => {
     generateinvoicetype,
     setgenerateInvoiceType,
   } = useContext(InvoiceFormContext);
+
+  useEffect(() => {
+    return () => {
+      setgenerateInvoiceType("PDF");
+    };
+  }, []);
 
   return (
     <div className="flex flex-row ite justify-between pt-4 pb-2">

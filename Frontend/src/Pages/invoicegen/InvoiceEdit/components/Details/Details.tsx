@@ -23,7 +23,6 @@ const InvoiceDetails = () => {
     setFormInfo((prev) => ({ ...prev, terms: value }));
   };
   const options = [
-    { value: "none", label: "None" },
     { value: "receipt", label: "Due on Receipt" },
   ];
 

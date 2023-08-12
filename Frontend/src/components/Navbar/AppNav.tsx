@@ -1,37 +1,35 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Avatar, Button } from "antd";
-import AuthContext, { initialauth } from "../../Context/AuthContext";
+import AuthContext from "../../Context/AuthContext";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import ExtrasContext from "../../Context/ExtrasContext";
 import { IoSettingsOutline } from "react-icons/io5";
 import { TbReceipt, TbReceipt2 } from "react-icons/tb";
 import { BsPeopleFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
-import { useQueryClient } from "@tanstack/react-query";
 const AppNav = () => {
-  const { setLoginOpen, setRegisterOpen, auth, setAuth } =
-    useContext(AuthContext);
+  const { setLoginOpen, setRegisterOpen, auth } = useContext(AuthContext);
   const { setProfileModalisOpen } = useContext(ExtrasContext);
-  const query = useQueryClient();
+  // const query = useQueryClient();
   const [nav, setNav] = useState(false);
   const handlenav = () => {
     setNav((prev) => !prev);
   };
 
-  const logout = () => {
-    query.removeQueries()    
-    setAuth(initialauth);
-    localStorage.removeItem("Invoice_AccessToken"),
-    localStorage.removeItem("Invoice_RefreshToken");
-  };
+  // const logout = () => {
+  //   query.removeQueries()
+  //   setAuth(initialauth);
+  //   localStorage.removeItem("Invoice_AccessToken"),
+  //   localStorage.removeItem("Invoice_RefreshToken");
+  // };
   return (
     <IconContext.Provider value={{ color: "white", size: "18px" }}>
       <div className="flex">
         <nav className="">
           <div className="flex md:max-full md:mx-auto px-4 sm:px-0 lg:px-8 w-screen ">
             <div className="flex items-center justify-between w-full ">
-              <div className="flex items-center h-16 ">
+              <div className="flex items-center h-20 ">
                 <div className="flex items-center">
                   <div className="flex items-center justify-center">
                     <div
@@ -40,45 +38,69 @@ const AppNav = () => {
                     >
                       <AiOutlineMenu color="white" size={25} />
                     </div>
-                    <Link to="/" className="text-white text-xl font-semibold">
+                    <NavLink
+                      to="/"
+                      className="text-white text-xl font-semibold"
+                    >
                       Logo
-                    </Link>
+                    </NavLink>
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
-                      <Link
+                      <NavLink
+                        style={{ textDecoration: "none" }}
                         to="invoices"
-                        className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                            : "text-gray-300 hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        }
                       >
                         <TbReceipt2 />
                         Invoices
-                      </Link>
-                      <Link
+                      </NavLink>
+                      <NavLink
                         to="estimates"
-                        className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                            : "text-gray-300  hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        }
                       >
                         <TbReceipt />
                         Estimates
-                      </Link>
-                      <Link
+                      </NavLink>
+                      <NavLink
                         to="clients"
-                        className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                            : "text-gray-300  hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        }
                       >
                         <BsPeopleFill />
                         Clients
-                      </Link>
-                      <Link
+                      </NavLink>
+                      <NavLink
                         to="reports"
-                        className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                            : "text-gray-300  hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        }
                       >
                         Reports
-                      </Link>
-                      <Link
+                      </NavLink>
+                      <NavLink
                         to="/settings"
-                        className="text-gray-300 hover:text-white px-3 py-2 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                            : "text-gray-300  hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                        }
                       >
                         <IoSettingsOutline /> Settings
-                      </Link>
+                      </NavLink>
                     </div>
                   </div>
                 </div>
@@ -107,12 +129,12 @@ const AppNav = () => {
                 </div>
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
-                    <Link
+                    <NavLink
                       to="/#"
                       className="text-gray-300 hover:text-white px- py-2 rounded-md transition duration-200"
                     >
                       {auth.username}
-                    </Link>
+                    </NavLink>
                     {auth.accessToken && (
                       <Avatar
                         size={40}
@@ -126,14 +148,7 @@ const AppNav = () => {
                       />
                     )}
                     {auth.accessToken ? (
-                      <Button
-                        type="primary"
-                        danger
-                        onClick={() => logout()}
-                        className="flex items-center justify-center text border-red-500  bg-red-500 hover:bg-red-500 text-white hover:outline-white hover:text-white px-3 py-2 rounded-md "
-                      >
-                        LogOut
-                      </Button>
+                      ""
                     ) : (
                       <Button
                         type="primary"
@@ -178,11 +193,11 @@ const AppNav = () => {
                   >
                     <div className=" h-screen">
                       <div className="flex w-full items-center justify-between">
-                        <Link to="/">
+                        <NavLink to="/">
                           <h3 className="flex items-center justify-center text-xl font-bold">
                             Logo
                           </h3>
-                        </Link>
+                        </NavLink>
                         <div
                           onClick={handlenav}
                           className="rounded-full shadow-sm  p-3 cursor-pointer"
@@ -192,7 +207,7 @@ const AppNav = () => {
                       </div>
                       <div className="py-4 flex-col">
                         <ul className="uppercase font-kalam font-bold">
-                          <Link to="invoices">
+                          <NavLink to="invoices">
                             <li
                               onClick={() => {
                                 setNav(false);
@@ -201,8 +216,8 @@ const AppNav = () => {
                             >
                               Invoices
                             </li>
-                          </Link>
-                          <Link to="estimates">
+                          </NavLink>
+                          <NavLink to="estimates">
                             <li
                               onClick={() => {
                                 setNav(false);
@@ -211,8 +226,8 @@ const AppNav = () => {
                             >
                               Estimates
                             </li>
-                          </Link>
-                          <Link to="clients">
+                          </NavLink>
+                          <NavLink to="clients">
                             <li
                               onClick={() => {
                                 setNav(false);
@@ -221,8 +236,8 @@ const AppNav = () => {
                             >
                               Clients
                             </li>
-                          </Link>
-                          <Link to="reports">
+                          </NavLink>
+                          <NavLink to="reports">
                             <li
                               onClick={() => {
                                 setNav(false);
@@ -231,8 +246,8 @@ const AppNav = () => {
                             >
                               Reports
                             </li>
-                          </Link>
-                          <Link to="/settings">
+                          </NavLink>
+                          <NavLink to="/settings">
                             <li
                               onClick={() => {
                                 setNav(false);
@@ -241,7 +256,7 @@ const AppNav = () => {
                             >
                               Settings
                             </li>
-                          </Link>
+                          </NavLink>
                         </ul>
                       </div>
                     </div>

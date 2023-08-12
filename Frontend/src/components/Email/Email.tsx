@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { Input, Button, message } from "antd";
+import { useContext, useState } from "react";
+import { Input, Button, message, Typography } from "antd";
 import {
   handleEmailBlur,
   validateEmail,
   validatePhone,
 } from "../../utils/validator";
+import { AiOutlineClose } from "react-icons/ai";
 import useAuth from "../../hooks/useAuth";
 import ExtrasContext from "../../Context/ExtrasContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -26,15 +27,17 @@ interface email {
   attachment: attachment;
 }
 const Email = () => {
+  const { Text } = Typography;
   const { forminfo, todata, fromdata, description } =
     useContext(InvoiceFormContext);
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
+  const [showtext, setShowText] = useState(true);
   const axiosprivate = useAxiosPrivate();
   const { emailerrors, setEmailErrors } = useContext(ExtrasContext);
   const { auth } = useAuth();
   const [ccEmails, setCCEmails] = useState<string[]>([""]); // Initialize with one empty CC field
-  const [email, setEmail] = useState({
+  const [email, setEmail] = useState<email>({
     ownerId: auth.userId,
     from: auth.email,
     cc: ccEmails,
@@ -64,18 +67,44 @@ const Email = () => {
     setCCEmails(updatedCCEmails);
   };
   const Download = async () => {
-    const result = useInvoiceGenerator(forminfo, todata, fromdata, description);
-    console.log(result);
-    let data;
-    try {
-      setLoading(true);
-      data = await result();
-    } catch (error: any) {
-      message.error(error);
-    } finally {
-      setLoading(false);
+    if (
+      fromdata.name === "" ||
+      todata.name === "" ||
+      (fromdata.email.length > 0 && !validateEmail(fromdata.email)) ||
+      (todata.email.length > 0 && !validateEmail(todata.email)) ||
+      !validatePhone(todata.phone) ||
+      !validatePhone(fromdata.phone) ||
+      forminfo.date === "" ||
+      forminfo.number === "" ||
+      description[0].description === "" ||
+      !(typeof description[0].qty === "number") ||
+      !(typeof description[0].amount === "number")
+    ) {
+      console.log(forminfo);
+      messageApi.open({
+        type: "error",
+        content: "Please ensure the fields are filled correctly",
+      });
+      return;
+    } else {
+      const result = useInvoiceGenerator(
+        forminfo,
+        todata,
+        fromdata,
+        description
+      );
+      console.log(result);
+      let data;
+      try {
+        setLoading(true);
+        data = await result();
+      } catch (error: any) {
+        message.error(error);
+      } finally {
+        setLoading(false);
+      }
+      return data && data.pdf;
     }
-    return data && data.pdf;
   };
 
   const sendEmail = async ({ email, pdf }: any) => {
@@ -114,10 +143,10 @@ const Email = () => {
         setCCEmails([""]);
       }
     },
-    onError(error: { message: string }) {
+    onError(error: { response: any }) {
       messageApi.open({
         type: "error",
-        content: error.message,
+        content: error.response.statusText,
       });
     },
   });
@@ -125,29 +154,15 @@ const Email = () => {
   const handleSend = () => {
     const refreshToken = localStorage.getItem("Invoice_RefreshToken");
     if (auth.userId) {
-      if (
-        fromdata.name === "" ||
-        todata.name === "" ||
-        (fromdata.email.length > 0 && !validateEmail(fromdata.email)) ||
-        (todata.email.length > 0 && !validateEmail(todata.email)) ||
-        !validatePhone(todata.phone) ||
-        !validatePhone(fromdata.phone) ||
-        forminfo.date === "" ||
-        forminfo.number === "" ||
-        description[0].description === "" ||
-        !(typeof description[0].qty === "number") ||
-        !(typeof description[0].amount === "number")
-      ) {
-        console.log(forminfo);
-        messageApi.open({
-          type: "error",
-          content: "Please ensure the fields are filled correctly",
-        });
-        return;
-      } else {
+      if (validateEmail(email.to)) {
         Download().then((pdf) => {
           console.log(pdf);
           sendEmailMutation.mutate({ email, pdf });
+        });
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "Seems the provided email is incorrect",
         });
       }
     } else if (!refreshToken) {
@@ -169,12 +184,25 @@ const Email = () => {
       <h1 className="text-2xl font-bold mb-10 flex items-center justify-center">
         Send Invoice Email
       </h1>
-      <p className="mb-10 rounded bg-[#ffc069] w-max text-white p-1">
-        {" "}
-        Generated invoices/estimates will be attached{" "}
-      </p>
+      {showtext ? (
+        <p className="mb-10 rounded flex items-center gap-2 bg-[#ffc069] w-max text-white p-1">
+          Generated invoices/estimates will be attached
+          <span className="cursor-pointer">
+            <AiOutlineClose
+              size={18}
+              color={"red"}
+              onClick={() => {
+                setShowText(false);
+              }}
+            />
+          </span>
+        </p>
+      ) : (
+        ""
+      )}
       <div className="flex flex-col space-y-4">
         <Input.Group>
+          <Text>Receipient Email:</Text>
           <Input
             value={email.to}
             type="email"
@@ -192,6 +220,7 @@ const Email = () => {
             }
           />
         </Input.Group>
+        <Text>CC:</Text>
         {ccEmails.map((ccEmail, index) => (
           <Input.Group key={index}>
             <div className="flex gap-1 md:gap-2">
@@ -231,6 +260,7 @@ const Email = () => {
         ))}
 
         <Input.Group>
+          <Text>Subject:</Text>
           <Input
             placeholder="Subject"
             value={email.subject}
@@ -241,6 +271,7 @@ const Email = () => {
           />
         </Input.Group>
         <Input.Group>
+          <Text>Body:</Text>
           <Input.TextArea
             onChange={(e) => {
               setEmail((prev) => ({ ...prev, body: e.target.value }));

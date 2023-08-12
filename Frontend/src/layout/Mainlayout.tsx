@@ -111,7 +111,7 @@ const MainLayout = () => {
     <ConfigProvider theme={config}>
       <Layout className="layout min-w-full">
         {notifications ? <Notifications /> : ""}
-        <Header className="p-0 m-0" style={{ display: "flex" }}>
+        <Header className="p-0 m-0 pb-2 sticky top-0 z-10" style={{ display: "flex" }}>
           <AppNav />
         </Header>
         <Content className="overflow-hidden px-[5px] md:px-[50px]">

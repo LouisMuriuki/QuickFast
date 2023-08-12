@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import ExtrasContext from "../../Context/ExtrasContext";
 import { initialauth } from "../../Context/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 // import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const ProfilePopup = () => {
   const { profilemodalisopen, setProfileModalisOpen } =
     useContext(ExtrasContext);
+      const query = useQueryClient();
   const { auth, setAuth } = useAuth();
   //   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -51,6 +53,7 @@ const ProfilePopup = () => {
   //   };
 
   const logout = () => {
+    query.removeQueries();    
     setAuth(initialauth);
     localStorage.removeItem("Invoice_AccessToken"),
       localStorage.removeItem("Invoice_RefreshToken");
@@ -59,7 +62,7 @@ const ProfilePopup = () => {
   return (
     <>
       <Modal
-        style={{ position: "absolute", top: 60, right: 20 }}
+        style={{ position: "absolute", top: 100, right: 15 }}
         open={profilemodalisopen}
         onCancel={handleCancel}
         closable={false}
