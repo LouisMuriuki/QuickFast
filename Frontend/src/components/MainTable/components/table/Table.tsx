@@ -15,6 +15,7 @@ import {
   Description,
   FormInfo,
   FromData,
+  InvoiceFormContext,
   ToData,
 } from "../../../../Context/InvoiceFormContext";
 import type { MenuProps } from "antd";
@@ -69,6 +70,7 @@ const DataTable = (props: TableListProps) => {
   const [messageApi, contextHolder] = message.useMessage();
   const { setClientData, setClientmodalIsOpen, setClientDataMode } =
     useContext(ExtrasContext);
+  const { setgenerateInvoiceType } = useContext(InvoiceFormContext);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
@@ -306,6 +308,29 @@ const DataTable = (props: TableListProps) => {
             : markEstimateClosedMutation.mutate(record);
           break;
         case "2":
+          location.pathname === "/invoices"
+            ? [
+                navigate("/invoices/new", {
+                  state: {
+                    data: record,
+                    name: "invoices",
+                    root: "invoice",
+                    type: "email",
+                  },
+                }),
+                setgenerateInvoiceType("Email"),
+              ]
+            : [
+                navigate("/estimates/new", {
+                  state: {
+                    data: record,
+                    name: "estimates",
+                    root: "estimate",
+                    type: "email",
+                  },
+                }),
+                setgenerateInvoiceType("Email"),
+              ];
           break;
         case "3":
           location.pathname === "/invoices"
@@ -499,7 +524,7 @@ const DataTable = (props: TableListProps) => {
         const invoicetotal = invoices?.map((invoice, i) => {
           return (
             <div key={i}>
-              <span>{invoice.forminfo.currency +" "}</span>
+              <span>{invoice.forminfo.currency + " "}</span>
               <span>{invoice.forminfo.total?.toLocaleString()}</span>
             </div>
           );

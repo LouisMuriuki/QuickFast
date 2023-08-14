@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Segmented, Button, Space } from "antd";
 import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
+import { useLocation } from "react-router";
 
 const InvoiceTop = () => {
   const {
@@ -10,12 +11,18 @@ const InvoiceTop = () => {
     generateinvoicetype,
     setgenerateInvoiceType,
   } = useContext(InvoiceFormContext);
+  const { state } = useLocation();
+  const {type } = state;
 
   useEffect(() => {
     return () => {
-      setgenerateInvoiceType("PDF");
+      if (!type) {
+        setgenerateInvoiceType("PDF");
+      } else {
+        setgenerateInvoiceType("Email");
+      }
     };
-  }, []);
+  }, [type]);
 
   return (
     <div className="flex flex-row ite justify-between pt-4 pb-2">

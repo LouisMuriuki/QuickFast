@@ -67,44 +67,18 @@ const Email = () => {
     setCCEmails(updatedCCEmails);
   };
   const Download = async () => {
-    if (
-      fromdata.name === "" ||
-      todata.name === "" ||
-      (fromdata.email.length > 0 && !validateEmail(fromdata.email)) ||
-      (todata.email.length > 0 && !validateEmail(todata.email)) ||
-      !validatePhone(todata.phone) ||
-      !validatePhone(fromdata.phone) ||
-      forminfo.date === "" ||
-      forminfo.number === "" ||
-      description[0].description === "" ||
-      !(typeof description[0].qty === "number") ||
-      !(typeof description[0].amount === "number")
-    ) {
-      console.log(forminfo);
-      messageApi.open({
-        type: "error",
-        content: "Please ensure the fields are filled correctly",
-      });
-      return;
-    } else {
-      const result = useInvoiceGenerator(
-        forminfo,
-        todata,
-        fromdata,
-        description
-      );
-      console.log(result);
-      let data;
-      try {
-        setLoading(true);
-        data = await result();
-      } catch (error: any) {
-        message.error(error);
-      } finally {
-        setLoading(false);
-      }
-      return data && data.pdf;
+    const result = useInvoiceGenerator(forminfo, todata, fromdata, description);
+    console.log(result);
+    let data;
+    try {
+      setLoading(true);
+      data = await result();
+    } catch (error: any) {
+      message.error(error);
+    } finally {
+      setLoading(false);
     }
+    return data && data.pdf;
   };
 
   const sendEmail = async ({ email, pdf }: any) => {
@@ -151,7 +125,7 @@ const Email = () => {
     },
   });
 
-  const handleSend = () => {
+  const validateAndDownload = () => {
     const refreshToken = localStorage.getItem("Invoice_RefreshToken");
     if (auth.userId) {
       if (validateEmail(email.to)) {
@@ -162,7 +136,7 @@ const Email = () => {
       } else {
         messageApi.open({
           type: "error",
-          content: "Seems the provided email is incorrect",
+          content: "Invalid Email address",
         });
       }
     } else if (!refreshToken) {
@@ -176,6 +150,31 @@ const Email = () => {
         type: "error",
         content: "Please login to finish up your invoice",
       });
+    }
+  };
+
+  const handleSend = () => {
+    if (
+      fromdata.name === "" ||
+      todata.name === "" ||
+      (fromdata.email.length > 0 && !validateEmail(fromdata.email)) ||
+      (todata.email.length > 0 && !validateEmail(todata.email)) ||
+      !validatePhone(todata.phone) ||
+      !validatePhone(fromdata.phone) ||
+      forminfo.date === "" ||
+      forminfo.number === "" ||
+      description[0].description === "" ||
+      !(typeof description[0].qty === "number") ||
+      !(typeof description[0].amount === "number")
+    ) {
+      console.log(forminfo);
+      messageApi.open({
+        type: "error",
+        content: "Please ensure the fields are filled correctly",
+      });
+      return;
+    } else {
+      validateAndDownload();
     }
   };
   return (

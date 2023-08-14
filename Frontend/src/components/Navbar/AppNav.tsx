@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Avatar, Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
@@ -11,6 +11,7 @@ import { IconContext } from "react-icons";
 const AppNav = () => {
   const { setLoginOpen, setRegisterOpen, auth } = useContext(AuthContext);
   const { setProfileModalisOpen } = useContext(ExtrasContext);
+  const navigate=useNavigate()
   // const query = useQueryClient();
   const [nav, setNav] = useState(false);
   const handlenav = () => {
@@ -81,7 +82,7 @@ const AppNav = () => {
                         <BsPeopleFill />
                         Clients
                       </NavLink>
-                      <NavLink
+                      {/* <NavLink
                         to="reports"
                         className={({ isActive }) =>
                           isActive
@@ -90,7 +91,7 @@ const AppNav = () => {
                         }
                       >
                         Reports
-                      </NavLink>
+                      </NavLink> */}
                       <NavLink
                         to="/settings"
                         className={({ isActive }) =>
@@ -153,7 +154,7 @@ const AppNav = () => {
                       <Button
                         type="primary"
                         onClick={() => setLoginOpen(true)}
-                        className="flex items-center text-white justify-center text border-white hover:border-blue-500 text-blue-500 px-3 py-2 rounded-md transition duration-200"
+                        className="flex items-center text-white justify-center text border-white hover:border-blue-500 px-3 py-2 rounded-md transition duration-200"
                       >
                         Login
                       </Button>
@@ -170,7 +171,8 @@ const AppNav = () => {
                     {auth.userId && (
                       <Button
                         type="primary"
-                        className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200"
+                        className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200" 
+                        onClick={()=>navigate("/subscription")}
                       >
                         Upgrade Now
                       </Button>

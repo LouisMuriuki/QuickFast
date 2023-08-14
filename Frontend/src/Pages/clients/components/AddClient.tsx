@@ -118,23 +118,25 @@ const AddClient = () => {
       <MainModal
         isOpen={clientmodalisopen}
         setIsOpen={setClientmodalIsOpen}
-        title={"Add Client"}
+        title={"ADD CLIENT"}
       >
         <FormComponent
           tolabels={tolabels}
           origin="Add Client"
           data={clientdata}
         />
-        <Button
-          onClick={handleSubmit}
-          type="primary"
-          loading={
-            addClientMutation.isLoading || updateClientMutation.isLoading
-          }
-          className="flex flex-row-reverse border-blue-500 bg-blue-500 text-white"
-        >
-          {clientdatamode === "Add" ? "Add" : "Update"}
-        </Button>
+        <div className="flex w-full items-center justify-center">
+          <Button
+            onClick={handleSubmit}
+            type="primary"
+            loading={
+              addClientMutation.isLoading || updateClientMutation.isLoading
+            }
+            className="flex items-center justify-center w-1/4  border-blue-500 bg-blue-500 text-white"
+          >
+            {clientdatamode === "Add" ? "Add" : "Update"}
+          </Button>
+        </div>
       </MainModal>
     </div>
   );
