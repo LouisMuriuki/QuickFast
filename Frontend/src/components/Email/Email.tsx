@@ -12,6 +12,7 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useMutation } from "@tanstack/react-query";
 import { useInvoiceGenerator } from "../../hooks/useInvoiceGenerator";
 import { InvoiceFormContext } from "../../Context/InvoiceFormContext";
+import { useNavigate } from "react-router";
 interface attachment {
   filename: string;
   content: string;
@@ -27,6 +28,7 @@ interface email {
   attachment: attachment;
 }
 const Email = () => {
+  const navigate = useNavigate();
   const { Text } = Typography;
   const { forminfo, todata, fromdata, description } =
     useContext(InvoiceFormContext);
@@ -154,31 +156,41 @@ const Email = () => {
   };
 
   const handleSend = () => {
-    if (
-      fromdata.name === "" ||
-      todata.name === "" ||
-      (fromdata.email.length > 0 && !validateEmail(fromdata.email)) ||
-      (todata.email.length > 0 && !validateEmail(todata.email)) ||
-      !validatePhone(todata.phone) ||
-      !validatePhone(fromdata.phone) ||
-      forminfo.date === "" ||
-      forminfo.number === "" ||
-      description[0].description === "" ||
-      !(typeof description[0].qty === "number") ||
-      !(typeof description[0].amount === "number")
-    ) {
-      console.log(forminfo);
+    if (auth.package === "Basic") {
       messageApi.open({
-        type: "error",
-        content: "Please ensure the fields are filled correctly",
+        type: "info",
+        content: "Please upgrade your plan to use the email feature",
       });
-      return;
+      setTimeout(() => {
+        navigate("/subscription");
+      }, 2000);
     } else {
-      validateAndDownload();
+      if (
+        fromdata.name === "" ||
+        todata.name === "" ||
+        (fromdata.email.length > 0 && !validateEmail(fromdata.email)) ||
+        (todata.email.length > 0 && !validateEmail(todata.email)) ||
+        !validatePhone(todata.phone) ||
+        !validatePhone(fromdata.phone) ||
+        forminfo.date === "" ||
+        forminfo.number === "" ||
+        description[0].description === "" ||
+        !(typeof description[0].qty === "number") ||
+        !(typeof description[0].amount === "number")
+      ) {
+        console.log(forminfo);
+        messageApi.open({
+          type: "error",
+          content: "Please ensure the fields are filled correctly",
+        });
+        return;
+      } else {
+        validateAndDownload();
+      }
     }
   };
   return (
-    <div className="w-2/3 mx-auto my-10 shadow-md p-5 md:p-10">
+    <div className="w-full mx-auto my-10 shadow-md p-5 md:p-10">
       {contextHolder}
       <h1 className="text-2xl font-bold mb-10 flex items-center justify-center">
         Send Invoice Email

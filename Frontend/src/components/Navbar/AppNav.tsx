@@ -8,12 +8,16 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { TbReceipt, TbReceipt2 } from "react-icons/tb";
 import { BsPeopleFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
+import goldverified from "../../../assets/images/gold.png"
+import verified from "../../../assets/images/verified.png"
+import quickfast from "../../../assets/images/quick_fast.png"
 const AppNav = () => {
   const { setLoginOpen, setRegisterOpen, auth } = useContext(AuthContext);
   const { setProfileModalisOpen } = useContext(ExtrasContext);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   // const query = useQueryClient();
   const [nav, setNav] = useState(false);
+  const [alias, setAlias] = useState<string>("");
   const handlenav = () => {
     setNav((prev) => !prev);
   };
@@ -43,65 +47,54 @@ const AppNav = () => {
                       to="/"
                       className="text-white text-xl font-semibold"
                     >
-                      Logo
+                      <img
+                        src={quickfast}
+                        className="h-14 mb-2"
+                        alt="quickfast invoices"
+                      />
                     </NavLink>
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
-                      <NavLink
-                        style={{ textDecoration: "none" }}
-                        to="invoices"
-                        className={({ isActive }) =>
-                          isActive
-                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                            : "text-gray-300 hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                        }
-                      >
-                        <TbReceipt2 />
-                        Invoices
-                      </NavLink>
-                      <NavLink
-                        to="estimates"
-                        className={({ isActive }) =>
-                          isActive
-                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                            : "text-gray-300  hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                        }
-                      >
-                        <TbReceipt />
-                        Estimates
-                      </NavLink>
-                      <NavLink
-                        to="clients"
-                        className={({ isActive }) =>
-                          isActive
-                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                            : "text-gray-300  hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                        }
-                      >
-                        <BsPeopleFill />
-                        Clients
-                      </NavLink>
-                      {/* <NavLink
-                        to="reports"
-                        className={({ isActive }) =>
-                          isActive
-                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                            : "text-gray-300  hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                        }
-                      >
-                        Reports
-                      </NavLink> */}
-                      <NavLink
-                        to="/settings"
-                        className={({ isActive }) =>
-                          isActive
-                            ? "text-white bg-[#FFA500] h-10 hover:text-white px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                            : "text-gray-300  hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
-                        }
-                      >
-                        <IoSettingsOutline /> Settings
-                      </NavLink>
+                      {[
+                        {
+                          to: "invoices",
+                          icon: TbReceipt2,
+                          text: "Invoices",
+                        },
+                        {
+                          to: "estimates",
+                          icon: TbReceipt,
+                          text: "Estimates",
+                        },
+                        {
+                          to: "clients",
+                          icon: BsPeopleFill,
+                          text: "Clients",
+                        },
+                        //{ to: "reports", text: "Reports" },
+                        {
+                          to: "/settings",
+                          icon: IoSettingsOutline,
+                          text: "Settings",
+                        },
+                      ].map((link, index) => (
+                        <NavLink
+                          onClick={() => setAlias(link.text)}
+                          key={index}
+                          to={link.to}
+                          className={({ isActive }) =>
+                            isActive
+                              ? "text-[#FFA500] hover:text-[#FFA500] h-10 px-3 py-1 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                              : "text-gray-300 hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
+                          }
+                        >
+                          <link.icon
+                            color={alias === link.text ? "#FFA500" : "#fffff0"}
+                          />
+                          {link.text}
+                        </NavLink>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -119,13 +112,22 @@ const AppNav = () => {
                       }
                     />
                   ) : (
-                    <Button
-                      type="primary"
-                      onClick={() => setRegisterOpen(true)}
-                      className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200"
-                    >
-                      Sign up
-                    </Button>
+                    <div className="flex gap-1">
+                      <Button
+                        type="primary"
+                        onClick={() => setLoginOpen(true)}
+                        className="flex items-center text-white justify-center text border-white hover:border-blue-500 px-3 py-2 rounded-md transition duration-200"
+                      >
+                        Login
+                      </Button>
+                      <Button
+                        type="primary"
+                        onClick={() => setRegisterOpen(true)}
+                        className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200"
+                      >
+                        Sign up
+                      </Button>
+                    </div>
                   )}
                 </div>
                 <div className="hidden md:block">
@@ -134,11 +136,23 @@ const AppNav = () => {
                       to="/#"
                       className="text-gray-300 hover:text-white px- py-2 rounded-md transition duration-200"
                     >
-                      {auth.username}
+                      <div className="flex items-center justify-center gap-1">
+                        {auth.username}
+                        {auth.userId && (
+                          <img
+                            src={
+                              auth.package === "Free" ? verified : goldverified
+                            }
+                            style={{}}
+                            className="h-5"
+                            alt="quickfast invoices"
+                          />
+                        )}
+                      </div>
                     </NavLink>
                     {auth.accessToken && (
                       <Avatar
-                        size={40}
+                        size={32}
                         className="cursor-pointer flex self-center"
                         onClick={() => {
                           setProfileModalisOpen(true);
@@ -171,8 +185,8 @@ const AppNav = () => {
                     {auth.userId && (
                       <Button
                         type="primary"
-                        className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200" 
-                        onClick={()=>navigate("/subscription")}
+                        className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200"
+                        onClick={() => navigate("/subscription")}
                       >
                         Upgrade Now
                       </Button>
@@ -182,83 +196,54 @@ const AppNav = () => {
                 <div
                   className={
                     nav
-                      ? "md:hidden fixed left-0 top-0 w-full h-screen bg-white"
+                      ? "md:hidden fixed left-0 top-0 w-full h-screen bg-[#001529]"
                       : ""
                   }
                 >
                   <div
                     className={
                       nav
-                        ? "fixed left-0 top-0 w-full h-sceen bg-[#fff] p-10 ease-in duration-500"
+                        ? "fixed left-0 top-0 w-full h-sceen bg-[#001529] p-10 ease-in duration-500"
                         : "fixed left-[-100%] top-0 p-10 ease-in duration-500"
                     }
                   >
                     <div className=" h-screen">
                       <div className="flex w-full items-center justify-between">
                         <NavLink to="/">
-                          <h3 className="flex items-center justify-center text-xl font-bold">
-                            Logo
-                          </h3>
+                          <img
+                            src={quickfast}
+                            style={{}}
+                            className="h-14 mb-3"
+                            alt="quickfast invoices"
+                          />
                         </NavLink>
                         <div
                           onClick={handlenav}
                           className="rounded-full shadow-sm  p-3 cursor-pointer"
                         >
-                          <AiOutlineClose />
+                          <AiOutlineClose color={"#FFA500"} />
                         </div>
                       </div>
                       <div className="py-4 flex-col">
                         <ul className="uppercase font-kalam font-bold">
-                          <NavLink to="invoices">
-                            <li
-                              onClick={() => {
-                                setNav(false);
-                              }}
-                              className="py-4 text-sm"
-                            >
-                              Invoices
-                            </li>
-                          </NavLink>
-                          <NavLink to="estimates">
-                            <li
-                              onClick={() => {
-                                setNav(false);
-                              }}
-                              className="py-4 text-sm"
-                            >
-                              Estimates
-                            </li>
-                          </NavLink>
-                          <NavLink to="clients">
-                            <li
-                              onClick={() => {
-                                setNav(false);
-                              }}
-                              className="py-4 text-sm"
-                            >
-                              Clients
-                            </li>
-                          </NavLink>
-                          <NavLink to="reports">
-                            <li
-                              onClick={() => {
-                                setNav(false);
-                              }}
-                              className="py-4 text-sm"
-                            >
-                              Reports
-                            </li>
-                          </NavLink>
-                          <NavLink to="/settings">
-                            <li
-                              onClick={() => {
-                                setNav(false);
-                              }}
-                              className="py-4 text-sm"
-                            >
-                              Settings
-                            </li>
-                          </NavLink>
+                          {[
+                            { to: "invoices", text: "Invoices" },
+                            { to: "estimates", text: "Estimates" },
+                            { to: "clients", text: "Clients" },
+                            // { to: "reports", text: "Reports" },
+                            { to: "/settings", text: "Settings" },
+                          ].map((link, index) => (
+                            <NavLink key={index} to={link.to}>
+                              <li
+                                onClick={() => {
+                                  setNav(false);
+                                }}
+                                className="py-4 text-sm text-[#FFA500]"
+                              >
+                                {link.text}
+                              </li>
+                            </NavLink>
+                          ))}
                         </ul>
                       </div>
                     </div>

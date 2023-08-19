@@ -12,13 +12,16 @@ import estimateRoute from "./routes/estimateRoute.ts";
 import packageRoute from "./routes/packageRoute.ts";
 import emailRoute from "./routes/emailRoute.ts";
 import paymentRoute from "./routes/paymentRoute.ts";
+import hooksRoute from "./routes/hooksRoute.ts";
+import './jobs/dailyjob.ts'
 dotenv.config();
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+// this hook has to be called before the express.json otherwise will fail
+app.use("/fastinvoice/api/v1/hooks", hooksRoute);
 app.use(express.json({ limit: "50mb" }));
-
 app.use("/fastinvoice/api/v1/auth", authRoute);
 app.use("/fastinvoice/api/v1/client", clientRoute);
 app.use("/fastinvoice/api/v1/users", userRoute);
@@ -29,6 +32,7 @@ app.use("/fastinvoice/api/v1/settings", settingsRoute);
 app.use("/fastinvoice/api/v1/packages", packageRoute);
 app.use("/fastinvoice/api/v1/emails", emailRoute);
 app.use("/fastinvoice/api/v1/subscription", paymentRoute);
+
 
 const StartServer = () => {
   try {

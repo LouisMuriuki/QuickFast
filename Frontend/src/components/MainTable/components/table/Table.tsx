@@ -92,10 +92,6 @@ const DataTable = (props: TableListProps) => {
         label: "Email",
       },
       {
-        key: "3",
-        label: "View",
-      },
-      {
         key: "4",
         label: "Delete",
       },
@@ -107,6 +103,10 @@ const DataTable = (props: TableListProps) => {
           key: "1",
           label: "Mark as completed",
         },
+        {
+          key: "3",
+          label: "View",
+        },
         ...commonItems,
       ];
     } else {
@@ -114,6 +114,10 @@ const DataTable = (props: TableListProps) => {
         status !== "Closed" && {
           key: "1",
           label: "Mark as closed",
+        },
+        {
+          key: "3",
+          label: "View & Edit",
         },
         ...commonItems,
       ];
@@ -335,10 +339,20 @@ const DataTable = (props: TableListProps) => {
         case "3":
           location.pathname === "/invoices"
             ? navigate("/invoices/new", {
-                state: { data: record, name: "invoices", root: "invoice" },
+                state: {
+                  data: record,
+                  name: "invoices",
+                  root: "invoice",
+                  packagename: auth.package,
+                },
               })
             : navigate("/estimates/new", {
-                state: { data: record, name: "estimates", root: "estimate" },
+                state: {
+                  data: record,
+                  name: "estimates",
+                  root: "estimate",
+                  packagename: auth.package,
+                },
               });
           break;
         case "4":

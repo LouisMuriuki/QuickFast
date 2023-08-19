@@ -12,11 +12,13 @@ import SideBar from "../../components/Sidebar/SideBar";
 import { useLocation } from "react-router";
 import { SettingsContext } from "../../Context/SettingsContext";
 import Email from "../../components/Email/Email";
+import { message } from "antd";
 
 const InvoiceGen = () => {
   const { state } = useLocation();
-  const { name, data, root } = state;
+  const { name, data, root, packagename } = state;
   const { generateinvoicetype } = useContext(InvoiceFormContext);
+  const [messageApi, contextHolder] = message.useMessage();
   const {
     selectedoptions,
     setFormInfo,
@@ -101,6 +103,18 @@ const InvoiceGen = () => {
     } else if (data && root === "client") {
       setSegmentedOptions(["Edit", "Preview"]);
       setSelectedOptions("Edit");
+    } else if (
+      data &&
+      name === "estimates" &&
+      root === "estimate" &&
+      packagename === "Basic"
+    ) {
+      messageApi.open({
+        type: "info",
+        content: "Please upgrade your plan to edit this estimate",
+      });
+      setSegmentedOptions(["Preview"]);
+      setSelectedOptions("Preview");
     } else if (data && name === "estimates" && root === "estimate") {
       setSegmentedOptions(["Edit", "Preview"]);
       setSelectedOptions("Preview");
@@ -117,8 +131,9 @@ const InvoiceGen = () => {
 
   return (
     <div className=" max-w-full  flex container ">
+      {contextHolder}
       <div className="flex flex-col w-full">
-        {generateinvoicetype === "Email"&&<Email />}
+        {generateinvoicetype === "Email" && <Email />}
         <div className="flex flex-col md:flex-row w-full">
           <div className="flex flex-col w-full md:w-3/4 md:m-5 m-2">
             <InvoiceTop />

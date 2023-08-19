@@ -17,7 +17,7 @@ const InvoicePreview = () => {
   
 
   return (
-    <div className="flex flex-col bg-white w-full h-auto p-4 md:p-10 shadow-lg">
+    <div className="flex flex-col bg-white w-full h-auto p-1 md:p-10 shadow-lg">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-start">
           <img
@@ -27,7 +27,9 @@ const InvoicePreview = () => {
           />
         </div>
         <div>
-          <p className="text-3xl font-semibold mb-3">{forminfo.title}</p>
+          <p className="text-xl md:text-3xl font-semibold mb-3">
+            {forminfo.title}
+          </p>
         </div>
       </div>
       <div className="flex flex-col items-end">
@@ -39,12 +41,14 @@ const InvoicePreview = () => {
         <p className="mb-1 text-sm md:text-base">{fromdata.website}</p>
       </div>
       <hr className="h-px my-8 bg-gray-200 border-1 w-full dark:bg-gray-700" />
-      <div className="flex justify-between mb-6">
+      <div className="flex justify-between gap-10 mb-6">
         <div className="flex flex-col">
-          <h3 className="text-base font-bold mb-2">BILLED TO:</h3>
+          <h3 className="text-base font-bold mt-[-32px] mb-2">BILLED TO:</h3>
 
           <div>
-            <p className="mb-1 text-sm md:text-base font-bold">{todata?.name}</p>
+            <p className="mb-1 text-sm md:text-base font-bold">
+              {todata?.name}
+            </p>
             <p className="mb-1 text-sm md:text-base">{todata?.phone}</p>
             <p className="mb-1 text-sm md:text-base">{todata?.email}</p>
             <p className="mb-1 text-sm md:text-base">{todata?.address}</p>
@@ -53,16 +57,24 @@ const InvoicePreview = () => {
           </div>
         </div>
         <div className="flex flex-col">
-          <div className="flex mb-1">
-            <h1 className="font-bold text-sm md:text-base mr-0 md:mr-2 ">INVOICE NUMBER:</h1>
-            <p className="text-gray-600 text-sm md:text-base">{forminfo.number}</p>
+          <div className="flex mb-1 gap-[2px]">
+            <h1 className="font-bold text-sm md:text-base mr-0 md:mr-2 ">
+              INVOICE NUMBER:
+            </h1>
+            <p className="text-gray-600 text-sm md:text-base">
+              {forminfo.number}
+            </p>
           </div>
           <div className="flex mb-1 text-sm md:text-base">
-            <h3 className="font-bold mr-0 md:mr-2 text-sm md:text-base">INVOICE DATE:</h3>
+            <h3 className="font-bold mr-0 md:mr-2 text-sm md:text-base">
+              INVOICE DATE:
+            </h3>
             <p>{forminfo.date ? formattedDate : null}</p>
           </div>
           <div className="flex mb-1 text-sm md:text-base">
-            <h3 className="font-bold mr-0 md:mr-2  text-sm md:text-base">DUE DATE:</h3>
+            <h3 className="font-bold mr-0 md:mr-2  text-sm md:text-base">
+              DUE DATE:
+            </h3>
             <p>{forminfo.date ? formattedDueDate : null}</p>
           </div>
         </div>
@@ -73,7 +85,9 @@ const InvoicePreview = () => {
           <h5 className="font-bold text-sm md:text-base">Description</h5>
         </div>
         <div className="col-span-2">
-          <h5 className="flex items-center justify-end font-bold text-sm md:text-base">Quantity</h5>
+          <h5 className="flex items-center justify-end font-bold text-sm md:text-base">
+            Quantity
+          </h5>
         </div>
         <div className="col-span-2">
           <h5 className="flex items-center justify-end font-bold text-sm md:text-base">
@@ -81,10 +95,14 @@ const InvoicePreview = () => {
           </h5>
         </div>
         <div className="col-span-2 md:col-span-1">
-          <h5 className="flex items-center justify-end font-bold text-sm md:text-base">Tax</h5>
+          <h5 className="flex items-center justify-end font-bold text-sm md:text-base">
+            Tax
+          </h5>
         </div>
         <div className="col-span-2">
-          <h5 className="flex items-center justify-end font-bold text-sm md:text-base">Amount</h5>
+          <h5 className="flex items-center justify-end font-bold text-sm md:text-base">
+            Amount
+          </h5>
         </div>
       </div>
       {description.map((desc, i) => {
@@ -101,16 +119,18 @@ const InvoicePreview = () => {
                 <p>{desc?.qty}</p>
               </div>
               <div className="flex  justify-end col-span-2">
-                <p>{(desc?.rate)?.toLocaleString()}</p>
+                <p>{desc?.rate?.toLocaleString()}</p>
               </div>
               <div className="flex  justify-end col-span-2 md:col-span-1">
                 <p>{`${desc?.taxrate}.00%`}</p>
               </div>
               <div className="flex  justify-end col-span-2">
-                <h5>{(
-                      desc?.qty * desc?.rate +
-                      (desc.taxrate * (desc?.qty * desc?.rate)) / 100
-                    )?.toLocaleString()}</h5>
+                <h5>
+                  {(
+                    desc?.qty * desc?.rate +
+                    (desc.taxrate * (desc?.qty * desc?.rate)) / 100
+                  )?.toLocaleString()}
+                </h5>
               </div>
             </div>{" "}
             <Divider dashed />
@@ -127,8 +147,12 @@ const InvoicePreview = () => {
         </div>
         <div className="flex  justify-end col-span-3 md:col-span-2">
           <div className="grid-rows-2">
-            <p>{forminfo.currency} {forminfo.subTotal?.toLocaleString()}</p>
-            <p className="font-bold">{forminfo.currency} {forminfo.total?.toLocaleString()}</p>
+            <p>
+              {forminfo.currency} {forminfo.subTotal?.toLocaleString()}
+            </p>
+            <p className="font-bold">
+              {forminfo.currency} {forminfo.total?.toLocaleString()}
+            </p>
           </div>
         </div>
       </div>

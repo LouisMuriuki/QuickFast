@@ -1,17 +1,19 @@
 import { useContext } from "react";
 import { Button, Modal } from "antd";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import ExtrasContext from "../../Context/ExtrasContext";
 import { initialauth } from "../../Context/AuthContext";
 import { useQueryClient } from "@tanstack/react-query";
+import verified from "../../../assets/images/verified.png";
+import goldverified from "../../../assets/images/gold.png";
+
 // import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const ProfilePopup = () => {
   const { profilemodalisopen, setProfileModalisOpen } =
     useContext(ExtrasContext);
-      const query = useQueryClient();
+  const query = useQueryClient();
   const { auth, setAuth } = useAuth();
   //   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ const ProfilePopup = () => {
   //   };
 
   const logout = () => {
-    query.removeQueries();    
+    query.removeQueries();
     setAuth(initialauth);
     localStorage.removeItem("Invoice_AccessToken"),
       localStorage.removeItem("Invoice_RefreshToken");
@@ -73,27 +75,34 @@ const ProfilePopup = () => {
       >
         <div className="flex flex-col ">
           <div className="flex flex-col items-center mb-1 p-0">
-            <p className="p-0 my-1 text-sm md:text-base">{auth.username}</p>
-            <p className="flex flex-wrap p-0 my-1 text-sm md:text-base">
+            <p className="flex gap-1 p-0 my-1 text-sm md:text-base font-semibold">
+              {auth.username}
+              {auth.userId && (
+                <img
+                  src={auth.package === "Free" ? verified : goldverified}
+                  style={{}}
+                  className="h-5"
+                  alt="quickfast invoices"
+                />
+              )}
+            </p>
+            <p className="flex flex-wrap p-0 my-1 text-sm md:text-base font-semibold">
               {auth.email}
             </p>
-            <p className="flex flex-wrap p-0 my-1 text-sm md:text-base">
-             {` ${auth.package} Tier`}
+            <p className="flex flex-wrap p-0 my-1 text-sm md:text-base font-semibold">
+              {` ${auth.package} Tier`}
             </p>
           </div>
           <div className="my-2 flex flex-col">
             <div className="flex items-center my-1">
-              <div className="flex w-1/4 ">
-                <UserOutlined className="text-blue-500" />
-              </div>
-              <div className="flex w-3/4">
+              <div className="flex w-full">
                 <Button
-                  className="flex border-blue-500 bg-blue-500 justify-start text-sm md:text-base"
+                  className="flex border-blue-500 bg-blue-500 justify-center text-sm md:text-base"
                   type="primary"
                   block
                   onClick={() => [
                     setProfileModalisOpen(false),
-                    navigate("/account"),
+                    navigate("/subscription"),
                   ]}
                 >
                   Upgrade
@@ -101,12 +110,9 @@ const ProfilePopup = () => {
               </div>
             </div>
             <div className="flex items-center my-1">
-              <div className="flex w-1/4">
-                <LogoutOutlined className="text-red-500" />
-              </div>
-              <div className="flex w-3/4">
+              <div className="flex w-full">
                 <Button
-                  className="flex bg-red-500 hover:bg-red-500 justify-start text-sm md:text-base"
+                  className="flex bg-red-500 hover:bg-red-500 justify-center text-sm md:text-base"
                   type="primary"
                   danger
                   block

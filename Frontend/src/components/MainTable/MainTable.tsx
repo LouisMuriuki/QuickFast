@@ -5,6 +5,8 @@ import DataTable from "./components/table/Table";
 import { useLocation, useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import useWindowDimensions from "../../hooks/useWindoDimensions";
+import { PlusOutlined } from "@ant-design/icons";
+
 interface TableListProps {
   data?: any;
   tableInfo?: any;
@@ -26,6 +28,7 @@ const MainTable = ({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   let text = "";
+
   if (location.pathname === "/invoices") {
     text = "Add Invoice";
   } else if (location.pathname === "/estimates") {
@@ -50,7 +53,7 @@ const MainTable = ({
   };
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   return (
     <div ref={containerRef} className="flex flex-col max-w-7xl">
       <div className="flex items-center justify-between px-2 py-4">
@@ -66,16 +69,20 @@ const MainTable = ({
             Refetch();
           }}
         />
-        <Button
-          size={width < 768 ? "middle" :"large"}
-          type="primary"
-          onClick={() => {
-            navigateTo(text);
-          }}
-          className="border-blue-500 bg-blue-500 text-white "
-        >
-          {text}
-        </Button>
+        <div>
+         
+          <Button
+            icon={<PlusOutlined />}
+            size={width < 768 ? "middle" : "large"}
+            type="primary"
+            onClick={() => {
+              navigateTo(text);
+            }}
+            className="border-blue-500 bg-blue-500 text-white "
+          >
+            {text}
+          </Button>
+        </div>
       </div>
       <div className="px-2">
         <DataTable
