@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { validateEmail, validatePhone } from "../../../utils/validator";
 import { useInvoiceGenerator } from "../../../hooks/useInvoiceGenerator";
 import easyinvoice from "easyinvoice";
+import Register from "../../register/Register";
 interface stateprops {
   state: string;
   id?: string | number;
@@ -19,7 +20,7 @@ interface dataProps {
 }
 const Download = ({ state, id }: stateprops) => {
   const [messageApi, contextHolder] = message.useMessage();
-  const { auth } = useAuth();
+  const { auth, setRegisterOpen } = useAuth();
   const [data, setData] = useState<dataProps>({
     ownerId: auth?.accessToken,
     invoice: [],
@@ -160,16 +161,20 @@ const Download = ({ state, id }: stateprops) => {
           type: "error",
           content: "Please ensure the fields are filled correctly",
         });
+
         return;
       } else {
         uploadMutation.mutate();
         Download();
       }
     } else if (!refreshToken) {
+       setTimeout(() => {
+         setRegisterOpen(true);
+       }, 1000);
       messageApi.open({
         type: "error",
         content:
-          "Seems we dont recognise you, please signup to use fast-invoice",
+          "Seems we dont recognise you, please signup to use QuickFast invoices",
       });
     } else {
       messageApi.open({
@@ -183,22 +188,23 @@ const Download = ({ state, id }: stateprops) => {
 
   const Download = async () => {
     const result = useInvoiceGenerator(forminfo, todata, fromdata, description);
-    console.log(result)
+    console.log(result);
     try {
       setLoading(true);
       const data = await result();
       console.log(data);
       //@ts-expect-error
       return easyinvoice.download("Invoice.pdf", data.pdf);
-    } catch (error:any) {
+    } catch (error: any) {
       message.error(error);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col">
+      <Register />
       {contextHolder}
       <p className="flex font-semibold">DOWNLOAD PDF</p>
       <Divider className="border border-black mt-1" />

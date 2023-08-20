@@ -62,8 +62,16 @@ const Login = () => {
       {contextHolder}
       <MainModal isOpen={loginopen} setIsOpen={setLoginOpen} title="">
         <div className="flex-col justify-center flex items-center">
-          <h3 className="text-2xl font-bold mb-5">Login to your Account</h3>
-          <p className="text-lg font-bold flex mb-5">Welcome Back.</p>
+          <div className="w-full flex items-center justify-center ">
+            <h3 className="text-2xl text-[#FFA500] font-bold mb-5">
+              Login to your Account
+            </h3>
+          </div>
+
+          <p className="text-lg text-[#001529] font-bold flex mb-5">
+            Welcome Back.
+          </p>
+
           <Form
             name="login-form"
             initialValues={{ remember: true }}

@@ -130,12 +130,12 @@ const InvoiceGen = () => {
   console.log(data);
 
   return (
-    <div className=" max-w-full  flex container ">
+    <div className="max-w-full p-2 flex container ">
       {contextHolder}
       <div className="flex flex-col w-full">
         {generateinvoicetype === "Email" && <Email />}
         <div className="flex flex-col md:flex-row w-full">
-          <div className="flex flex-col w-full md:w-3/4 md:m-5 m-2">
+          <div className="flex flex-col w-full md:w-3/4 md:m-5 m-1">
             <InvoiceTop />
             {selectedoptions === "Edit" ? (
               <InvoiceEdit

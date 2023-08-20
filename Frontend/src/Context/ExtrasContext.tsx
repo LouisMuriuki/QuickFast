@@ -96,12 +96,16 @@ export const ExtrasContextProvider = ({ children }: any) => {
   const { auth } = useAuth();
   useEffect(() => {
     const remainigdays = auth.days;
-    if (remainigdays === 0) {
-      setNotifications(true);
-      setNotificationText("Your Current plan is expired😓");
-    } else if (remainigdays <= 5) {
-      setNotifications(true);
-      setNotificationText(`Your Current plan is expiring in ${remainigdays} days`);
+    if (remainigdays) {
+      if (remainigdays === 0) {
+        setNotifications(true);
+        setNotificationText("Your Current plan is expired😓");
+      } else if (remainigdays <= 5) {
+        setNotifications(true);
+        setNotificationText(
+          `Your Current plan is expiring in ${remainigdays} days`
+        );
+      }
     }
   }, [auth]);
 

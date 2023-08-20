@@ -13,13 +13,13 @@ const InvoicePreview = () => {
       ? [0]
       : (forminfo?.terms?.match(/\d+/g) || []).map(Number);
   console.log(number);
-  const formattedDate = dayjs(forminfo?.date).format("dddd, MMMM DD, YYYY");
+  const formattedDate = dayjs(forminfo?.date).format("DD/M/YYYY");
   const formattedDueDate = dayjs(forminfo?.date)
     .add(+number[0], "day")
-    .format("dddd, MMMM DD, YYYY");
+    .format("DD/M/YYYY");
 
   return (
-    <div className="flex flex-col bg-white w-full h-auto p-1 md:p-10 shadow-lg">
+    <div className="flex flex-col bg-white w-full h-auto p-2 md:p-10 shadow-lg">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-start">
           <img
@@ -43,7 +43,7 @@ const InvoicePreview = () => {
         <p className="mb-1 text-sm md:text-base">{fromdata.website}</p>
       </div>
       <hr className="h-px my-8 bg-gray-200 border-1 w-full dark:bg-gray-700" />
-      <div className="flex justify-between gap-10 mb-6">
+      <div className="flex justify-between gap-10 mb-56">
         <div className="flex flex-col">
           <h3 className="text-base font-bold mt-[-32px] mb-2">BILLED TO:</h3>
 
@@ -81,7 +81,7 @@ const InvoicePreview = () => {
           </div>
         </div>
       </div>
-      <hr className="h-px my-8 bg-gray-200 border-1 w-full dark:bg-gray-700" />
+    
       <div className="border border-y-stone-950 border-x-white  grid grid-cols-12 p-1 mb-3">
         <div className="col-span-4 md:col-span-5">
           <h5 className="font-bold text-sm md:text-base">Description</h5>

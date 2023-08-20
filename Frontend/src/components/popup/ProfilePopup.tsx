@@ -104,7 +104,9 @@ const ProfilePopup = () => {
                   block
                   onClick={() => [
                     setProfileModalisOpen(false),
-                    navigate("/subscription"),
+                    navigate("/subscription", {
+                      state: { from: location, message: "" },
+                    }),
                   ]}
                 >
                   Upgrade

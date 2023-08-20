@@ -9,7 +9,7 @@ import axiosInstance from "../../axios";
 const Register = () => {
   const { setRegisterOpen, setLoginOpen, registeropen } =
     useContext(AuthContext);
-  const query=useQueryClient()
+  const query = useQueryClient();
   const [messageApi, contextHolder] = message.useMessage();
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ const Register = () => {
     const res = await axiosInstance.get(`/packages/getpackages?all=${true}`);
     return res.data;
   };
- 
+
   const GetPackageQuery = useQuery({
     queryKey: ["packages"],
     queryFn: () => getPackages(),
@@ -84,100 +84,105 @@ const Register = () => {
     setRegisterOpen(false);
   };
   return (
-    <MainModal
-      isOpen={registeropen}
-      setIsOpen={setRegisterOpen}
-      title=""
-    >
+    <MainModal isOpen={registeropen} setIsOpen={setRegisterOpen} title="">
       {contextHolder}
-      <div className="flex flex-col justify-center items-center">
-        <h3 className="text-2xl font-bold mb-5">Sign Up</h3>
-        <p className="text-lg font-semibold flex self  mb-5">
-          You're a few seconds away from <br />creating your first invoice
+      <div className="flex flex-col  items-center">
+        <h3 className="text-2xl font-bold mb-5 text-[#FFA500]">Sign Up</h3>
+        <p className="text-lg font-semibold flex self text-center mb-5">
+          You're a few seconds away from <br />
+          creating your first invoice
         </p>
-        <Form
-          name="register-form"
-          onFinish={handleSubmit}
-          className="w-80"
-          labelCol={{ span: 10 }}
-          wrapperCol={{ span: 30 }}
-        >
-          <Form.Item
-            label="Username"
-            name="username"
-            rules={[
-              { required: true, message: "Please enter your username" },
-              () => ({
-                validator(_, value) {
-                  if (value.trim().length < 2) {
-                    return Promise.reject(
-                      "username should be more than 2 letters"
-                    );
-                  }
-                  return Promise.resolve();
-                },
-              }),
-            ]}
+        <div className="flex md:ml-[-45px]">
+          <Form
+            name="register-form"
+            onFinish={handleSubmit}
+            className="w-80"
+            labelCol={{ span: 10 }}
+            wrapperCol={{ span: 30 }}
           >
-            <Input
-              value={username}
-              onChange={(e) => setUserName(e.target.value)}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              { required: true, message: "Please enter your email address" },
-              { type: "email", message: "Please enter a valid email address" },
-            ]}
-          >
-            <Input value={email} onChange={(e) => setEmail(e.target.value)} />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please enter your password" }]}
-          >
-            <Input.Password
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Confirm Password"
-            name="confirmPassword"
-            rules={[
-              { required: true, message: "Please confirm your password" },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
+            <Form.Item
+              label="Username"
+              name="username"
+              rules={[
+                { required: true, message: "Please enter your username" },
+                () => ({
+                  validator(_, value) {
+                    if (value.trim().length < 2) {
+                      return Promise.reject(
+                        "username should be more than 2 letters"
+                      );
+                    }
                     return Promise.resolve();
-                  }
-                  return Promise.reject("passwords does not match");
-                },
-              }),
-            ]}
-          >
-            <Input.Password
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              loading={RegisterMutation.isLoading}
-              type="primary"
-              htmlType="submit"
-              className="w-full border-blue-500 text-blue-500"
+                  },
+                }),
+              ]}
             >
-              Register
-            </Button>
-          </Form.Item>
-        </Form>
+              <Input
+                value={username}
+                onChange={(e) => setUserName(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: "Please enter your email address" },
+                {
+                  type: "email",
+                  message: "Please enter a valid email address",
+                },
+              ]}
+            >
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+            </Form.Item>
+
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Please enter your password" },
+              ]}
+            >
+              <Input.Password
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Confirm Password"
+              name="confirmPassword"
+              rules={[
+                { required: true, message: "Please confirm your password" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject("passwords does not match");
+                  },
+                }),
+              ]}
+            >
+              <Input.Password
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                loading={RegisterMutation.isLoading}
+                type="primary"
+                htmlType="submit"
+                className="w-full border-blue-500 text-blue-500"
+              >
+                Register
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+
         <div>
           <p>
             Already have an account? <Button onClick={Login}>Login</Button>

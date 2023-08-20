@@ -28,6 +28,7 @@ const AppNav = () => {
   //   localStorage.removeItem("Invoice_AccessToken"),
   //   localStorage.removeItem("Invoice_RefreshToken");
   // };
+ 
   return (
     <IconContext.Provider value={{ color: "white", size: "18px" }}>
       <div className="flex">
@@ -89,10 +90,13 @@ const AppNav = () => {
                               : "text-gray-300 hover:text-[#FFA500] px-3 py-2 h-10 rounded-md transition duration-200 flex items-center justify-center gap-1"
                           }
                         >
-                          <link.icon
-                            color={alias === link.text ? "#FFA500" : "#fffff0"}
-                          />
-                          {link.text}
+                            <link.icon
+                              color={
+                                alias === link.text ? "#FFA500" : "#fffff0"
+                              }
+                            />
+                            {link.text}
+                    
                         </NavLink>
                       ))}
                     </div>
