@@ -14,6 +14,7 @@ import InvoiceGen from "./Pages/invoicegen/InvoiceGen";
 import Persistlogin from "./utils/PersistLogin";
 import NotFound from "./Pages/NotFound/NotFound";
 import Subscription from "./Pages/subscription/Subscription";
+import RequirePayment from "./utils/RequirePayment";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,16 +23,51 @@ const router = createBrowserRouter(
       <Route path="/" element={<MainLayout />}>
         <Route path="invoices">
           <Route index element={<Invoices />} />
-          <Route path="new" element={<InvoiceGen />} />
+          <Route
+            path="new"
+            element={
+              <RequirePayment>
+                <InvoiceGen />
+              </RequirePayment>
+            }
+          />
         </Route>
         <Route path="estimates">
           <Route index element={<Estimates />} />
-          <Route path="new" element={<InvoiceGen />} />
+          <Route
+            path="new"
+            element={
+              <RequirePayment>
+                <InvoiceGen />
+              </RequirePayment>
+            }
+          />
         </Route>
         <Route path="clients" element={<Clients />} />
-        <Route path="reports" element={<Reports />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path="*" element={<NotFound />} />
+        <Route
+          path="reports"
+          element={
+            <RequirePayment>
+              <Reports />
+            </RequirePayment>
+          }
+        />
+        <Route
+          path="settings"
+          element={
+            <RequirePayment>
+              <Settings />
+            </RequirePayment>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <RequirePayment>
+              <NotFound />
+            </RequirePayment>
+          }
+        />
         <Route path="subscription" element={<Subscription />} />
       </Route>
     </Route>

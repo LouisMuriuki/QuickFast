@@ -11,6 +11,7 @@ interface authProps {
   maxinvoices:number,
   packageprice:number,
   overflow:number,
+  days:number
 
 }
 export const initialauth: authProps = {
@@ -25,6 +26,7 @@ export const initialauth: authProps = {
   maxinvoices:0,
   packageprice:0,
   overflow:0,
+  days:0
 };
 interface contextProps {
   accountlocked: boolean;

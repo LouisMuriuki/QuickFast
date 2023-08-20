@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import useAuth from "../hooks/useAuth";
 interface ClientData {
   [key: string]: string;
   name: string;
@@ -58,12 +59,14 @@ interface ExtrasContextProps {
   setPhoneErrors: React.Dispatch<React.SetStateAction<phoneerrors>>;
   notifications: boolean;
   setNotifications: React.Dispatch<React.SetStateAction<boolean>>;
+  notificationText: string;
+  setNotificationText: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ExtrasContext = createContext<ExtrasContextProps>({
   clientdatamode: "",
-  ismodalOpen:false,
-  setisModalOpen:()=>{},
+  ismodalOpen: false,
+  setisModalOpen: () => {},
   setClientDataMode: () => {},
   clientmodalisopen: false,
   setClientmodalIsOpen: () => {},
@@ -75,18 +78,33 @@ const ExtrasContext = createContext<ExtrasContextProps>({
   setEmailErrors: () => {},
   phoneerrors: initialPhoneErrors,
   setPhoneErrors: () => {},
-  notifications:true,
-  setNotifications:() => {},
+  notifications: true,
+  setNotifications: () => {},
+  notificationText: "",
+  setNotificationText: () => {},
 });
 export const ExtrasContextProvider = ({ children }: any) => {
   const [clientmodalisopen, setClientmodalIsOpen] = useState(false);
   const [profilemodalisopen, setProfileModalisOpen] = useState(false);
   const [clientdata, setClientData] = useState(initialClientData);
   const [clientdatamode, setClientDataMode] = useState("");
-  const [ismodalOpen, setisModalOpen]=useState(false);
+  const [ismodalOpen, setisModalOpen] = useState(false);
   const [emailerrors, setEmailErrors] = useState(initialEmailErrors);
   const [phoneerrors, setPhoneErrors] = useState(initialPhoneErrors);
-  const [notifications,setNotifications]=useState(true)
+  const [notifications, setNotifications] = useState(false);
+  const [notificationText, setNotificationText] = useState("");
+  const { auth } = useAuth();
+  useEffect(() => {
+    const remainigdays = auth.days;
+    if (remainigdays === 0) {
+      setNotifications(true);
+      setNotificationText("Your Current plan is expired😓");
+    } else if (remainigdays <= 5) {
+      setNotifications(true);
+      setNotificationText(`Your Current plan is expiring in ${remainigdays} days`);
+    }
+  }, [auth]);
+
   return (
     <ExtrasContext.Provider
       value={{
@@ -106,6 +124,8 @@ export const ExtrasContextProvider = ({ children }: any) => {
         setPhoneErrors,
         notifications,
         setNotifications,
+        notificationText,
+        setNotificationText,
       }}
     >
       {children}

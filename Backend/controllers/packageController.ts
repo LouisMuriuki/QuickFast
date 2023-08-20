@@ -106,7 +106,6 @@ const savePackages = async (req: any, res: any) => {
 };
 
 const getPackages = async (req: any, res: any) => {
-  console.log(req)
   const { all } = req.query;
   if (all) {
     try {

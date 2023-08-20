@@ -1,4 +1,4 @@
-import  { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import MainModal from "../Reusables/MainModal";
 import { Form, Input, message, Button } from "antd";
 import AuthContext from "../../Context/AuthContext";
@@ -8,7 +8,7 @@ import { userLogin } from "../../api/authCalls";
 const Login = () => {
   const { setLoginOpen, setRegisterOpen, loginopen, setAuth } =
     useContext(AuthContext);
-    const query=useQueryClient()
+  const query = useQueryClient();
   const [messageApi, contextHolder] = message.useMessage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,12 +23,13 @@ const Login = () => {
           refreshToken: data.refreshToken,
           userId: data.data._id,
           username: data.data.username,
+          days: data.data.days,
         }));
         localStorage.setItem("Invoice_AccessToken", data.accessToken);
         localStorage.setItem("Invoice_RefreshToken", data.refreshToken);
         setLoginOpen(false);
-        query.invalidateQueries(['invoices','estimates'])
-        query.refetchQueries(['invoices', 'estimates']);
+        query.invalidateQueries(["invoices", "estimates"]);
+        query.refetchQueries(["invoices", "estimates"]);
       } else {
         messageApi.open({
           type: "error",
@@ -62,9 +63,7 @@ const Login = () => {
       <MainModal isOpen={loginopen} setIsOpen={setLoginOpen} title="">
         <div className="flex-col justify-center flex items-center">
           <h3 className="text-2xl font-bold mb-5">Login to your Account</h3>
-          <p className="text-lg font-bold flex mb-5">
-            Welcome Back.
-          </p>
+          <p className="text-lg font-bold flex mb-5">Welcome Back.</p>
           <Form
             name="login-form"
             initialValues={{ remember: true }}

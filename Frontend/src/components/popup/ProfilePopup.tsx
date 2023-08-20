@@ -7,12 +7,14 @@ import { initialauth } from "../../Context/AuthContext";
 import { useQueryClient } from "@tanstack/react-query";
 import verified from "../../../assets/images/verified.png";
 import goldverified from "../../../assets/images/gold.png";
+import useWindowDimensions from "../../hooks/useWindoDimensions";
 
 // import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const ProfilePopup = () => {
   const { profilemodalisopen, setProfileModalisOpen } =
     useContext(ExtrasContext);
+  const { width } = useWindowDimensions();
   const query = useQueryClient();
   const { auth, setAuth } = useAuth();
   //   const axiosPrivate = useAxiosPrivate();
@@ -64,7 +66,7 @@ const ProfilePopup = () => {
   return (
     <>
       <Modal
-        style={{ position: "absolute", top: 100, right: 15 }}
+        style={{ position: "absolute", top: 100, right: width < 768 ? 15 : 30 }}
         open={profilemodalisopen}
         onCancel={handleCancel}
         closable={false}

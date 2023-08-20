@@ -19,14 +19,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    packageId:{
-      type:String,
+    packageId: {
+      type: String,
     },
-    location:{
-      type:String,
+    location: {
+      type: String,
     },
-    totalbilled:{type:Number,default:0}
-
+    days: { type: Number, default: 30 },
+    overflow: { type: Number, default: 30 },
+    totalbilled: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

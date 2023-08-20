@@ -10,11 +10,28 @@ import PaymentFailed from "../../../assets/lottie/failed.json";
 import PaymentSuccess from "../../../assets/lottie/success.json";
 import useWindowDimensions from "../../hooks/useWindoDimensions";
 import quickfast from "../../../assets/images/quick_fast2.png";
+import { useLocation } from "react-router";
+import { notification } from "antd";
 const Subscription = () => {
-  const { ismodalOpen, setisModalOpen } = useContext(ExtrasContext);
+  const { setisModalOpen } = useContext(ExtrasContext);
   const params = new URLSearchParams(location.search);
+  const { auth } = useAuth();
   const responseparam = params.get("successfulpayment");
   const { width } = useWindowDimensions();
+  const { state } = useLocation();
+  const { message } = state;
+  const [api, contextHolder] = notification.useNotification();
+  useEffect(() => {
+    if (message === "Payment_Required") {
+      api.open({
+        message: `Dear ${auth?.username}`,
+        description:
+          "Please subscribe to one of our customer friendly packages to continue using QuickFast Invoces, We value you👌",
+        duration: 0,
+      });
+    }
+  }, [message, auth.username]);
+
   console.log(responseparam);
   useEffect(() => {
     if (responseparam !== null) {
@@ -22,11 +39,10 @@ const Subscription = () => {
     }
   }, [responseparam]);
 
-  const { auth } = useAuth();
-
   return (
     <div className="flex  items-center justify-center overflow-scroll ">
       <div className="flex flex-col items-center justify-center py-5">
+        {contextHolder}
         <img
           src={quickfast}
           style={{}}
@@ -179,7 +195,7 @@ const Subscription = () => {
           </Carousel>
         )}
         <SubscriptionTable />
-        <CustomModal height={width<768?300:600} width={900} icon={true}>
+        <CustomModal height={width < 768 ? 300 : 600} width={900} icon={true}>
           <div className="flex-col items-center justify-center gap:3]">
             <h5
               className={`font-semibold text-lg flex items-center justify-center ${

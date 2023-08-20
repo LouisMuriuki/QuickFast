@@ -6,7 +6,6 @@ const PackageSchema = new mongoose.Schema(
     features: [{ type: String }],
     price: { type: Number },
     maxInvoices: { type: Number },
-    days: { type: Number, default: 30 },
   },
   { timestamps: true }
 );

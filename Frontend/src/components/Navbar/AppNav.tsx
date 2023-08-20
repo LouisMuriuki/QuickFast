@@ -8,9 +8,9 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { TbReceipt, TbReceipt2 } from "react-icons/tb";
 import { BsPeopleFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
-import goldverified from "../../../assets/images/gold.png"
-import verified from "../../../assets/images/verified.png"
-import quickfast from "../../../assets/images/quick_fast.png"
+import goldverified from "../../../assets/images/gold.png";
+import verified from "../../../assets/images/verified.png";
+import quickfast from "../../../assets/images/quick_fast.png";
 const AppNav = () => {
   const { setLoginOpen, setRegisterOpen, auth } = useContext(AuthContext);
   const { setProfileModalisOpen } = useContext(ExtrasContext);
@@ -182,15 +182,22 @@ const AppNav = () => {
                         Sign up
                       </Button>
                     )}
-                    {auth.userId && (
-                      <Button
-                        type="primary"
-                        className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200"
-                        onClick={() => navigate("/subscription")}
-                      >
-                        Upgrade Now
-                      </Button>
-                    )}
+                    {auth.userId &&
+                      (auth.package === "Executive" ? (
+                        ""
+                      ) : (
+                        <Button
+                          type="primary"
+                          className="flex items-center justify-center border-blue-500 bg-blue-500 text-white  hover:text-white px-3 py-2 rounded-md transition duration-200"
+                          onClick={() =>
+                            navigate("/subscription", {
+                              state: { from: location, message: "" },
+                            })
+                          }
+                        >
+                          Upgrade Now
+                        </Button>
+                      ))}
                   </div>
                 </div>
                 <div

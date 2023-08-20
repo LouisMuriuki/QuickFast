@@ -3,8 +3,12 @@ dotenv.config();
 import Stripe from "stripe";
 import StripePayment from "../mongo/models/stripepaymentschema.ts";
 import User from "../mongo/models/UserSchema.ts";
-import Package from "../mongo/models/PackageSchema.ts";
-import {setownerID,setpackageID,getownerID,getpackageID} from "../utils/memoryStorage.ts"
+import {
+  setownerID,
+  setpackageID,
+  getownerID,
+  getpackageID,
+} from "../utils/memoryStorage.ts";
 interface StripePayment {
   ownerId: string;
   amount: number;
@@ -27,9 +31,9 @@ const recievePaymentRequest = async (
 ) => {
   let priceid;
   const { ownerId, packageId, packagename } = req.body;
-  console.log(packagename)
-  setpackageID(packageId)
-  setownerID(ownerId)
+  console.log(packagename);
+  setpackageID(packageId);
+  setownerID(ownerId);
   console.log(req.body);
   const basicprice = "price_1NgorsD9wPjxIqyfJKP3zWci";
   const premiumplan = "price_1NgouWD9wPjxIqyfpyAfBBtd";
@@ -69,51 +73,63 @@ const successfulCheckout = async (req: any, res: any) => {
   const sig = req.headers["stripe-signature"];
   let event;
   try {
-    event = stripe.webhooks.constructEvent(payload, sig, signingsecret);
+    event = stripe.webhooks.constructEvent(payload, sig, signingsecret)
   } catch (error) {
     console.log("here", error.message);
     res.status(400).json({ sucess: false });
   }
   console.log(event.data.object);
-  const ownerID=getownerID()
-  const packageID=getpackageID()
-  //@ts-expect-error
-  const paymentIntentSucceeded: StripePayment = event.data.object;
+  const ownerID = getownerID();
+  const packageID = getpackageID();
+
+  const paymentIntentSucceeded = event.data.object as Stripe.Charge; 
+  console.log(event.type)
+  console.log(paymentIntentSucceeded)
   switch (event.type) {
     case "payment_intent.succeeded":
       await StripePayment.create({
         ownerId: ownerID,
-        amount: paymentIntentSucceeded.amount,
-        amount_received: paymentIntentSucceeded.amount_received,
+        amount: paymentIntentSucceeded.amount / 100,
+        // @ts-expect-error
+        amount_received: paymentIntentSucceeded.amount_received / 100,
         created: paymentIntentSucceeded.created,
         currency: paymentIntentSucceeded.currency,
         customer: paymentIntentSucceeded.customer,
         id: paymentIntentSucceeded.id,
         payment_method: paymentIntentSucceeded.payment_method,
         status: paymentIntentSucceeded.status,
+        invoice: paymentIntentSucceeded.invoice,
+        // @ts-expect-error
+        latest_charge: paymentIntentSucceeded.latest_charge,
       });
+
+      const updateduser = await User.findById(ownerID);
       const body = {
         packageId: packageID,
+        days: 30,
+        totalbilled: (updateduser.totalbilled +=
+          paymentIntentSucceeded.amount / 100),
       };
-      await User.findByIdAndUpdate(ownerID, body, {
-        new: true,
-        upsert: true, //important
-        runValidators: true,
-      });
-      await Package.findByIdAndUpdate(
-        packageID,
-        { days: 30 },
-        {
-          new: true,
-          upsert: true, //important
-          runValidators: true,
+      if (updateduser) {
+        updateduser.packageId = body.packageId;
+        updateduser.days = body.days;
+        updateduser.totalbilled = body.totalbilled;
+        try {
+          const savedUser = await updateduser.save();
+          console.log("User updated:", savedUser);
+        } catch (error) {
+          console.error("Error updating user:", error);
         }
-      );
+      } else {
+        console.log("User not found");
+      }
+
       break;
     case "payment_intent.payment_failed":
       await StripePayment.create({
         ownerId: ownerID,
         amount: paymentIntentSucceeded.amount,
+        // @ts-expect-error
         amount_received: paymentIntentSucceeded.amount_received,
         created: paymentIntentSucceeded.created,
         currency: paymentIntentSucceeded.currency,
@@ -121,6 +137,9 @@ const successfulCheckout = async (req: any, res: any) => {
         id: paymentIntentSucceeded.id,
         payment_method: paymentIntentSucceeded.payment_method,
         status: paymentIntentSucceeded.status,
+        invoice: paymentIntentSucceeded.invoice,
+        // @ts-expect-error
+        latest_charge: paymentIntentSucceeded.latest_charge,
       });
       break;
     // ... handle other event types

@@ -11,7 +11,7 @@ export const useInvoiceGenerator = (
 ) => {
   let number = [0];
   number =
-    forminfo?.terms === "none"
+    forminfo?.terms === "receipt"
       ? [0]
       : (forminfo?.terms?.match(/\d+/g) || []).map(Number);
   console.log(number);

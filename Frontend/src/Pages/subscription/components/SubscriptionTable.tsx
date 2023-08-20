@@ -79,7 +79,7 @@ const SubscriptionTable = () => {
   ) => {
     subscriptionMutation.mutate({ ownerId, packageId, packagename });
   };
-   
+
   return (
     <div className="container mx-10">
       {contextHolder}
@@ -126,13 +126,10 @@ const SubscriptionTable = () => {
               Basic: 1,
               Premium: 2,
               Executive: 3,
-              // Add more tiers and their levels as needed
             };
-
             // Calculate whether the button should be hidden or not
-            // @ts-expect-error
-            const hideButton =tierLevels[auth.package] > tierLevels[packageinfo.packageName];
-
+            const hideButton = // @ts-expect-error
+              tierLevels[auth.package] > tierLevels[packageinfo.packageName];
             return (
               <div
                 key={packageinfo._id}
@@ -156,7 +153,7 @@ const SubscriptionTable = () => {
                     );
                   })}
                 </ul>
-                {packageinfo.packageName === auth.package ? (
+                {auth.days > 0 && packageinfo.packageName === auth.package ? (
                   ""
                 ) : (
                   <button

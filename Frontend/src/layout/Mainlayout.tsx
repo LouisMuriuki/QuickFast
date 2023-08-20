@@ -72,7 +72,8 @@ const MainLayout = () => {
       package: getUserQuery.data?.data?.packageType.packageName,
       price: getUserQuery.data?.data?.packageType.price,
       maxinvoices: getUserQuery.data?.data?.packageType.maxInvoices,
-      overflow: getUserQuery.data?.data?.packageType.overflow,
+      overflow: getUserQuery.data?.data?.currentUser.overflow,
+      days: getUserQuery.data?.data?.currentUser.days,
     }));
   }, [getUserQuery.data]);
 

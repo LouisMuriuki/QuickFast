@@ -1,14 +1,15 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { ReactNode, useContext } from "react";
-import AuthContext from "../Context/AuthContext";
-interface Props{
-  children:ReactNode
+import { ReactNode } from "react";
+import useAuth from "../hooks/useAuth";
+interface Props {
+  children: ReactNode;
 }
-const RequirePayment = ({children}:Props) => {
+const RequirePayment = ({ children }: Props) => {
   const location = useLocation();
-  const { accountlocked } = useContext(AuthContext);
-  return accountlocked ? (
-    <Navigate to="/account" state={{ from: location }} replace />
+  const { auth } = useAuth();
+  const remainigdays = auth.days;
+  return auth.userId && remainigdays === 0 ? (
+    <Navigate to="/subscription" state={{ from: location, message:"Payment_Required" }} replace />
   ) : (
     <>{children}</>
   );

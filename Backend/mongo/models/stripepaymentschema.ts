@@ -23,6 +23,12 @@ const stripePaymentSchema = new mongoose.Schema(
     id: {
       type: String,
     },
+    invoice: {
+      type: String,
+    },
+    latest_charge: {
+      type: String,
+    },
     status: {
       type: String,
     },
