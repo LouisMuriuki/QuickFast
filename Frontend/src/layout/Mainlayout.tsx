@@ -9,11 +9,12 @@ import AddClient from "../Pages/clients/components/AddClient";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { SettingsContext } from "../Context/SettingsContext";
 import ProfilePopup from "../components/popup/ProfilePopup";
 import Notifications from "../components/Notifications/Notifications";
 import ExtrasContext from "../Context/ExtrasContext";
+import { HiOutlineChevronDoubleUp } from "react-icons/hi";
 
 const { Header, Content, Footer } = Layout;
 
@@ -33,11 +34,35 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { auth, setAuth } = useAuth();
+  
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   const { setBizInfo, setCustomizeInfo, set_ID } = useContext(SettingsContext);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleScroll = () => {
+    console.log(window.scrollY);
+    if (window.scrollY > 200) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    console.log(window.innerHeight)
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const getUser = async () => {
     const response = await axiosprivate.get(
@@ -132,6 +157,18 @@ const MainLayout = () => {
           <Login />
           <Register />
           <AddClient />
+          {isVisible ? (
+            <FloatButton
+              type="primary"
+              className=" border-blue-500"
+              tooltip="Scroll to top"
+              style={{ left: 74, bottom: 74 }}
+              icon={<HiOutlineChevronDoubleUp />}
+              onClick={scrollToTop}
+            />
+          ) : (
+            ""
+          )}
           <FloatButton icon={<CommentOutlined />} />
           {auth.accessToken && <ProfilePopup />}
         </Content>

@@ -4,14 +4,6 @@
     color: white;
   }
  */
-.ant-modal-content{
-  margin: 0px;
-  line-height: 0px;
-  padding: 0;
-}
-.ant-modal-body{
-  padding: 0px;
-}
 .ant-modal-close-x{
   color: red;
 }

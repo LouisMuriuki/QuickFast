@@ -32,7 +32,7 @@ const InvoiceTop = () => {
           options={segmentedoptions}
           value={selectedoptions}
           defaultValue={segmentedoptions[0]}
-          className="bg-blue-400"
+          className="bg-blue-400 custom-segment"
           onChange={(e) => {
             setSelectedOptions(e.toString());
           }}

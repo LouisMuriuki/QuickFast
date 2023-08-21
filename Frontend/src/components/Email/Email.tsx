@@ -196,7 +196,7 @@ const Email = () => {
         Send Invoice Email
       </h1>
       {showtext ? (
-        <p className="mb-10 rounded flex items-center gap-2 bg-[#ffc069] w-max text-white p-1">
+        <p className="mb-10 rounded flex items-center gap-2 bg-[#FFA500] w-max text-white p-1">
           Generated invoices/estimates will be attached
           <span className="cursor-pointer">
             <AiOutlineClose

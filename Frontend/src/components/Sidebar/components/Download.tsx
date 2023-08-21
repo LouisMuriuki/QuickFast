@@ -6,8 +6,8 @@ import useAuth from "../../../hooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
 import { validateEmail, validatePhone } from "../../../utils/validator";
 import { useInvoiceGenerator } from "../../../hooks/useInvoiceGenerator";
+import { DownloadOutlined } from "@ant-design/icons";
 import easyinvoice from "easyinvoice";
-import Register from "../../register/Register";
 interface stateprops {
   state: string;
   id?: string | number;
@@ -168,9 +168,9 @@ const Download = ({ state, id }: stateprops) => {
         Download();
       }
     } else if (!refreshToken) {
-       setTimeout(() => {
-         setRegisterOpen(true);
-       }, 1000);
+      setTimeout(() => {
+        setRegisterOpen(true);
+      }, 1000);
       messageApi.open({
         type: "error",
         content:
@@ -204,13 +204,13 @@ const Download = ({ state, id }: stateprops) => {
 
   return (
     <div className="flex flex-col">
-      <Register />
       {contextHolder}
       <p className="flex font-semibold">DOWNLOAD PDF</p>
       <Divider className="border border-black mt-1" />
       <p>Download PDF document</p>
       <div className="flex items-center justify-center pt-4 w-full ">
         <Button
+          icon={<DownloadOutlined />}
           type="primary"
           loading={loading || uploadMutation.isLoading}
           onClick={() => {

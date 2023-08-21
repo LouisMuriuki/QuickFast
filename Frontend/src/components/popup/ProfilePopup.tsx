@@ -96,23 +96,27 @@ const ProfilePopup = () => {
             </p>
           </div>
           <div className="my-2 flex flex-col">
-            <div className="flex items-center my-1">
-              <div className="flex w-full">
-                <Button
-                  className="flex border-blue-500 bg-blue-500 justify-center text-sm md:text-base"
-                  type="primary"
-                  block
-                  onClick={() => [
-                    setProfileModalisOpen(false),
-                    navigate("/subscription", {
-                      state: { from: location, message: "" },
-                    }),
-                  ]}
-                >
-                  Upgrade
-                </Button>
+            {auth.package === "Executive" ? (
+              ""
+            ) : (
+              <div className="flex items-center my-1">
+                <div className="flex w-full">
+                  <Button
+                    className="flex border-blue-500 bg-blue-500 justify-center text-sm md:text-base"
+                    type="primary"
+                    block
+                    onClick={() => [
+                      setProfileModalisOpen(false),
+                      navigate("/subscription", {
+                        state: { from: location, message: "" },
+                      }),
+                    ]}
+                  >
+                    Upgrade
+                  </Button>
+                </div>
               </div>
-            </div>
+            )}
             <div className="flex items-center my-1">
               <div className="flex w-full">
                 <Button
